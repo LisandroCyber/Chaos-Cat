@@ -14,10 +14,6 @@ private:
 
 	static sf::Texture cargarTextura();
 
-	void setPeso(float peso);
-	void setRuido(float ruido);
-	void setDificultad(float dificultad);
-
 public:
 	
 	ObjetoChico();
@@ -25,9 +21,5 @@ public:
 	void draw(sf::RenderTarget& target,
 		sf::RenderStates states) const override;
 
-	float getPeso() const;
-	float getRuido() const;
-	float getDificultad() const;
-
-	void tirarTaza();
+	
 };

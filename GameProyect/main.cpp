@@ -17,6 +17,7 @@ int main() {
 
     Personaje gato;
     ObjetoChico taza;
+ 
 
     while (window.isOpen()) {
        
