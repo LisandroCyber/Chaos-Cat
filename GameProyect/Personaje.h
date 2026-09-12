@@ -15,6 +15,8 @@ public:
     void update();
     float getPosx();
     float getPosy();
+    sf::FloatRect getGlobalBounds() const;
+    void mover(const sf::Vector2f& desplazamiento);
 
     void draw(sf::RenderTarget& target,
         sf::RenderStates states) const override;

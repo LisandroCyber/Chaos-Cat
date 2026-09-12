@@ -147,3 +147,13 @@ float Personaje::getPosx() {
 float Personaje::getPosy() {
     return _sprite.getPosition().y;
 }
+
+sf::FloatRect Personaje::getGlobalBounds() const
+{
+    return _sprite.getGlobalBounds();
+}
+
+void Personaje::mover(const sf::Vector2f& desplazamiento)
+{
+    _sprite.move(desplazamiento);
+}

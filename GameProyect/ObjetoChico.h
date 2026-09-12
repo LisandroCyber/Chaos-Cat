@@ -18,6 +18,8 @@ public:
 	
 	ObjetoChico();
 
+	sf::FloatRect getGlobalBounds() const;
+
 	void draw(sf::RenderTarget& target,
 		sf::RenderStates states) const override;
 };

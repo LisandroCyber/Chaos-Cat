@@ -29,3 +29,8 @@ void ObjetoChico::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
 	target.draw(_sprite, states);
 }
+
+sf::FloatRect ObjetoChico::getGlobalBounds() const
+{
+	return _sprite.getGlobalBounds();
+}
