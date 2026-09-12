@@ -1,197 +1,84 @@
-🐱 Chaos Cat
+# 🐱 Chaos Cat
 
-Chaos Cat es un videojuego 2D desarrollado en C++ utilizando SFML 3, como proyecto de aprendizaje y práctica de Programación Orientada a Objetos.
+**Chaos Cat** es un juego arcade 2D en desarrollo, creado en C++ con SFML 3. Controlás a un gato que quiere tirar objetos de las mesas de distintas habitaciones de una casa sin que su dueño lo atrape.
 
-El jugador controla a un gato que se mueve por una mesa mientras interactúa con distintos objetos del escenario.
+Cada habitación será un nivel: habrá una cantidad de objetos por tirar y un tiempo límite. El dueño estará en la misma habitación, ocupado con sus cosas, pero podrá darse vuelta para vigilar al gato. Hacer caer un objeto provocará ruido y llamará su atención.
 
-🚧 Proyecto en desarrollo — actualmente se están implementando y mejorando las mecánicas principales del juego.
+> **Estado:** prototipo jugable de movimiento y renderizado. Las reglas de sigilo, los niveles y el sistema de puntuación que se describen a continuación son el diseño previsto; todavía no están implementados.
 
-🎮 Concepto
+## 🎮 Cómo se jugará
 
-En Chaos Cat, el jugador controla a un gato con el objetivo de causar el mayor caos posible sobre una mesa.
+1. El gato se moverá sobre la mesa de la habitación y empujará los objetos para hacerlos caer.
+2. El dueño hará otras actividades, pero podrá darse vuelta en cualquier momento. Se evalúa avisar al jugador con una animación o un sonido antes de que mire.
+3. Cuando un objeto caiga, hará ruido y el dueño se dará vuelta necesariamente.
+4. Mientras el dueño esté mirando, el gato deberá permanecer quieto: si se mueve, será descubierto y perderá. Después de aproximadamente **3 segundos**, el dueño volverá a su actividad.
+5. Para completar un nivel, habrá que tirar los objetos requeridos antes de que se agote el tiempo, sin ser descubierto.
 
-El juego busca combinar movimiento, interacción con objetos y diferentes mecánicas de gameplay en una experiencia con estética de videojuego arcade.
+La idea es combinar el caos de tirar cosas con una mecánica de «quedarse inmóvil» en el momento justo.
 
-La idea principal es que el gato pueda desplazarse por el escenario e interactuar con objetos que se encuentran sobre la mesa.
+### Variante avanzada por definir
 
-✨ Características actuales
-🐱 Personaje controlable.
-🎮 Movimiento en cuatro direcciones.
-🏃 Diferentes velocidades de movimiento.
-🐌 Modo agachado.
-🔄 Cambio de orientación del personaje.
-🧱 Límites de movimiento dentro del escenario.
-🖼️ Carga de texturas e imágenes.
-☕ Implementación inicial de objetos interactuables.
-🎯 Sistema básico de posición y movimiento.
-🖥️ Ventana de juego de 1280×720.
-⚡ Límite de 144 FPS.
+Se considera una alternativa para el momento posterior a tirar un objeto: darle al gato **3 segundos para esconderse** antes de que el dueño lo atrape. Esto requeriría una regla de detección distinta de la regla básica de quedarse quieto y **todavía no se decidió** si reemplazará esa regla o si será un modo/dificultad aparte.
 
-El personaje utiliza las teclas WASD para desplazarse, Shift para correr y Ctrl para moverse agachado.
+## ✅ Qué funciona hoy
 
-🕹️ Controles
-Tecla	Acción
-W	Moverse hacia arriba
-A	Moverse hacia la izquierda
-S	Moverse hacia abajo
-D	Moverse hacia la derecha
-SHIFT	Correr
-CTRL	Agacharse
-M	Mostrar la posición del gato en consola
-🛠️ Tecnologías
-C++
-SFML 3
-Visual Studio
-Programación Orientada a Objetos
-Git / GitHub
+- Ventana de 1280 × 720 con fondo, gato y una taza en pantalla.
+- Movimiento del gato en cuatro direcciones con WASD, con opciones de correr y agacharse.
+- Cambio de orientación horizontal del sprite y límites de movimiento dentro de la ventana.
+- Carga de imágenes y clases separadas para el personaje y el objeto.
+- Límite configurado de 144 FPS.
 
-SFML se utiliza para manejar principalmente:
+La taza se dibuja en pantalla, pero **todavía no se puede empujar ni tirar**. Tampoco hay dueño, niveles, temporizador, detección, sonido ni puntaje funcionales.
 
-Ventana del juego
-Renderizado 2D
-Sprites y texturas
-Entrada del teclado
-Bucle principal del juego
-📂 Estructura del proyecto
-GameProyect/
-│
-├── GameProyect/
-│   ├── images/
-│   │
-│   ├── SFML/
-│   │
-│   ├── main.cpp
-│   │
-│   ├── Personaje.h
-│   ├── Personaje.cpp
-│   │
-│   ├── ObjetoChico.h
-│   ├── ObjetoChico.cpp
-│   │
-│   ├── GameProyect.vcxproj
-│   └── GameProyect.vcxproj.filters
-│
-├── GameProyect.slnx
-├── cat.png.png
-├── .gitignore
-└── README.md
+### Controles actuales
 
-La lógica del personaje está separada en Personaje.h y Personaje.cpp, mientras que los objetos del escenario cuentan con su propia clase ObjetoChico.
+| Tecla | Acción |
+| --- | --- |
+| W / A / S / D | Mover al gato |
+| Shift izquierdo | Correr |
+| Ctrl izquierdo | Agacharse |
+| M | Mostrar la posición del gato en la consola |
 
-🧩 Programación Orientada a Objetos
+## 🧭 Dirección del proyecto
 
-El proyecto utiliza conceptos de POO para organizar las diferentes entidades del juego.
+### Próximas mecánicas
 
-Personaje
+- Colisiones e interacción para empujar objetos y hacerlos caer.
+- Sonido de caída y reacción del dueño ante el ruido.
+- Dueño con estados de actividad, aviso, vigilancia y retorno a su actividad.
+- Detección del movimiento del gato mientras es observado y condición de derrota.
+- Habitaciones como niveles, cada una con objetivos de objetos y tiempo límite.
+- Puntaje y pantallas de inicio, victoria y derrota.
 
-La clase Personaje se encarga de representar al gato y controlar:
+### Ideas para más adelante
 
-Su textura y sprite.
-Su posición.
-Su velocidad.
-El movimiento.
-La orientación del sprite.
-Los límites del escenario.
-Su renderizado.
+- Posiciones aleatorias de los objetos en cada partida.
+- Dificultades con más personas atentas al gato y patrones de movimiento distintos.
+- Modo infinito con aparición continua de objetos y contador de objetos tirados.
+- Recompensas por hitos, por ejemplo, tirar 50 objetos o alcanzar cierta puntuación.
+- Evaluar si el gato puede seguir tirando cosas mientras escapa del dueño.
+- Configuración de pantalla completa o ventana, volumen y elección entre WASD y flechas.
 
-La clase además hereda de sf::Drawable, permitiendo dibujar el personaje directamente mediante window.draw(gato).
+### Decisiones abiertas
 
-ObjetoChico
+- **Perspectiva visual:** vista desde arriba o de frente. El prototipo actual usa movimiento en cuatro direcciones; la cámara final aún no está definida.
+- **Aviso de vigilancia:** animación, sonido o ambos antes de que el dueño se dé vuelta espontáneamente.
+- **Esconderse tras el ruido:** definir si será una alternativa a quedarse quieto o una mecánica adicional.
 
-ObjetoChico representa objetos que forman parte del escenario y que posteriormente podrán utilizarse para implementar las mecánicas de interacción del juego.
+## 🛠️ Tecnologías y estructura
 
-🚀 Cómo ejecutar el proyecto
-Requisitos
+- C++ y programación orientada a objetos.
+- SFML 3 para ventana, gráficos y entrada de teclado.
+- Visual Studio para el proyecto actual.
 
-Para ejecutar el proyecto necesitás:
+`GameProyect/main.cpp` contiene el bucle principal; `Personaje.h/.cpp` implementa el gato y su movimiento; `ObjetoChico.h/.cpp` inicia la representación de los objetos. Las imágenes están en `GameProyect/images/` y la distribución de SFML incluida en el repositorio está en `GameProyect/SFML/`.
 
-Windows
-Visual Studio
-C++ instalado mediante Visual Studio
-SFML 3
-Ejecución
-Clonar el repositorio:
-git clone https://github.com/LisandroCyber/GameProyect.git
-Abrir la solución:
-GameProyect.slnx
-Verificar que las dependencias de SFML 3 estén correctamente configuradas.
-Compilar el proyecto.
-Ejecutar desde Visual Studio.
+## 🚀 Ejecutar el prototipo
 
-⚠️ Las rutas de los recursos gráficos son relativas al directorio de ejecución. Por ejemplo, el fondo se carga desde images/fondo.jpg y el personaje desde images/GatoNaranja.png.
+En Windows, abrí `GameProyect.slnx` con Visual Studio, verificá la configuración de SFML 3 y compilá el proyecto. Ejecutalo con `GameProyect/` como directorio de trabajo: las texturas se cargan mediante rutas relativas, como `images/fondo.jpg`, `images/GatoNaranja.png` e `images/TazaCafe.png`.
 
-🗺️ Roadmap
-✅ Implementado
+La configuración de rutas de SFML en el proyecto de Visual Studio contiene rutas absolutas del equipo donde se creó. Si compilás en otra computadora, tendrás que ajustarlas a tu instalación o a la carpeta `GameProyect/SFML/`.
 
-Ventana principal
+## 👨‍💻 Autor
 
-Renderizado del escenario
-
-Carga de texturas
-
-Personaje controlable
-
-Movimiento WASD
-
-Correr
-
-Agacharse
-
-Cambio de orientación
-
-Límites del escenario
-
-Primera implementación de objetos
-
-🔨 En desarrollo
-
-Interacción con objetos
-
-Objetos que puedan caer de la mesa
-
-Sistema de sonido
-
-Sistema de detección del dueño
-
-NPC dueño de la casa
-
-Sistema de puntuación
-
-Pantallas de inicio y Game Over
-
-Más objetos interactuables
-
-Mejoras visuales
-
-Animaciones del gato
-
-🎯 Objetivo del proyecto
-
-Este proyecto tiene como objetivo poner en práctica conocimientos de:
-
-C++
-Programación Orientada a Objetos
-Manejo de clases y objetos
-Herencia
-Encapsulamiento
-Manejo de sprites y texturas
-Entrada de usuario
-Lógica de videojuegos
-Organización de proyectos
-Uso de Git y GitHub
-
-Además, busca servir como proyecto práctico para continuar desarrollando conocimientos en programación y desarrollo de videojuegos.
-
-👨‍💻 Autor
-
-Lisandro Romero
-
-Estudiante de Técnico Universitario en Programación — UTN FRGP.
-
-Interesado principalmente en desarrollo de software, C++ y backend, utilizando proyectos personales como forma de continuar desarrollando experiencia práctica.
-
-📌 Estado del proyecto
-
-En desarrollo 🚧
-
-Este repositorio se actualiza progresivamente a medida que se incorporan nuevas mecánicas y sistemas al juego.
+Lisandro Romero — proyecto de aprendizaje de C++, SFML y desarrollo de videojuegos.
