@@ -19,7 +19,7 @@ Personaje::Personaje()
     : _texture(cargarTextura()), _sprite(_texture)
 {
     _velocity = { 4,4 };
-    _sprite.setPosition({ 100.f, 100.f });
+    _sprite.setPosition({ 579.f, 476.f });
     _sprite.setScale({ 0.3f, 0.3f });
     _velocity = {0,0};
 
