@@ -1,5 +1,6 @@
 #include <SFML/Graphics.hpp>
 #include "Personaje.h"
+#include <cstdlib>
 #include <iostream>
 
 sf::Texture Personaje::cargarTextura()
@@ -64,6 +65,17 @@ Personaje::Personaje()
 
 void Personaje::update()
 {
+    bool seMueve = procesarEntrada();
+
+    actualizarEstado(seMueve);
+    actualizarAnimacion(seMueve);
+    aplicarMovimiento();
+    actualizarSprite();
+    limitarMovimiento();
+}
+
+bool Personaje::procesarEntrada()
+{
     float velocidadActual = 2.2f;
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::LShift))
@@ -78,16 +90,29 @@ void Personaje::update()
     _velocity = { 0.f, 0.f };
     bool seMueve = false;
 
-
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A)) {
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A))
+    {
         _velocity.x = -velocidadActual;
         _sprite.setScale({ -_escala, _escala });
         seMueve = true;
     }
 
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D)) {
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D))
+    {
         _velocity.x = velocidadActual;
         _sprite.setScale({ _escala, _escala });
+        seMueve = true;
+    }
+
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W))
+    {
+        _velocity.y = -velocidadActual;
+        seMueve = true;
+    }
+
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S))
+    {
+        _velocity.y = velocidadActual;
         seMueve = true;
     }
 
@@ -96,6 +121,11 @@ void Personaje::update()
         saltar();
     }
 
+    return seMueve;
+}
+
+void Personaje::actualizarEstado(bool seMueve)
+{
     if (seMueve || _saltando || sf::Keyboard::isKeyPressed(sf::Keyboard::Key::LControl))
     {
         _contandoQuieto = false;
@@ -105,16 +135,7 @@ void Personaje::update()
     if (_saltando)
     {
         _estado = EstadoGato::Saltando;
-
-        _alturaSalto += _velocidadSalto;
-        _velocidadSalto += 0.5f;
-
-        if (_alturaSalto >= 0.f)
-        {
-            _alturaSalto = 0.f;
-            _velocidadSalto = 0.f;
-            _saltando = false;
-        }
+        actualizarSalto();
     }
     else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::LControl) && !sf::Keyboard::isKeyPressed(sf::Keyboard::Key::LShift))
     {
@@ -142,7 +163,23 @@ void Personaje::update()
             _estado = EstadoGato::Quieto;
         }
     }
+}
 
+void Personaje::actualizarSalto()
+{
+    _alturaSalto += _velocidadSalto;
+    _velocidadSalto += 0.5f;
+
+    if (_alturaSalto >= 0.f)
+    {
+        _alturaSalto = 0.f;
+        _velocidadSalto = 0.f;
+        _saltando = false;
+    }
+}
+
+void Personaje::actualizarAnimacion(bool seMueve)
+{
     if (_estado == EstadoGato::Caminando)
     {
         if (_relojCaminar.getElapsedTime().asSeconds() >= 0.18f)
@@ -170,49 +207,39 @@ void Personaje::update()
         _frameAgachado = 0;
         _relojAgachado.restart();
     }
+}
 
+void Personaje::aplicarMovimiento()
+{
     _sprite.move(_velocity);
-    actualizarSprite();
+}
 
+void Personaje::limitarMovimiento()
+{
     sf::FloatRect hitbox = getGlobalBounds();
-    float ancho = hitbox.size.x;
-    float alto = hitbox.size.y;
+    sf::Vector2f ajuste = { 0.f, 0.f };
 
-    float mitadAncho = ancho / 2.f;
-    float mitadAlto = alto / 2.f;
-
-    if (_sprite.getPosition().x - mitadAncho < 0)
+    if (hitbox.position.x < 0.f)
     {
-        _sprite.setPosition({
-            mitadAncho,
-            _sprite.getPosition().y
-            });
+        ajuste.x = -hitbox.position.x;
     }
 
-    if (_sprite.getPosition().x + mitadAncho > 1280)
+    if (hitbox.position.x + hitbox.size.x > 1280.f)
     {
-        _sprite.setPosition({
-            1280.f - mitadAncho,
-            _sprite.getPosition().y
-            });
+        ajuste.x = 1280.f - (hitbox.position.x + hitbox.size.x);
     }
 
-    if (_sprite.getPosition().y - mitadAlto < 0)
+    if (hitbox.position.y < 0.f)
     {
-        _sprite.setPosition({
-            _sprite.getPosition().x,
-            mitadAlto
-            });
+        ajuste.y = -hitbox.position.y;
     }
 
-    if (_sprite.getPosition().y + mitadAlto > 720)
+    if (hitbox.position.y + hitbox.size.y > 720.f)
     {
-        _sprite.setPosition({
-            _sprite.getPosition().x,
-            720.f - mitadAlto
-            });
+        ajuste.y = 720.f - (hitbox.position.y + hitbox.size.y);
     }
 
+    _sprite.move(ajuste);
 }
 
 void Personaje::actualizarSprite()

@@ -11,6 +11,7 @@ enum class EstadoGato {
 
 class Personaje : public sf::Drawable
 {
+private:
     sf::Texture _texture;
     sf::Sprite _sprite;
     sf::Vector2f _velocity;
@@ -33,11 +34,18 @@ class Personaje : public sf::Drawable
 
     static sf::Texture cargarTextura();
 
+    bool procesarEntrada();
+    void actualizarEstado(bool seMueve);
+    void actualizarSalto();
+    void actualizarAnimacion(bool seMueve);
+    void aplicarMovimiento();
+    void limitarMovimiento();
+    void actualizarSprite();
+
 public:
     Personaje();
 
     void update();
-    void actualizarSprite();
     void saltar();
 
     float getPosx();
@@ -48,6 +56,4 @@ public:
 
     void draw(sf::RenderTarget& target,
         sf::RenderStates states) const override;
-
-
 };
