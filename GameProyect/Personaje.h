@@ -44,6 +44,7 @@ private:
     void limitarMovimiento();
     void actualizarSprite();
     sf::Vector2f obtenerPosicionDibujo() const;
+    sf::Vector2f obtenerTamanoHitbox() const;
 
 public:
     Personaje();

@@ -1,24 +1,26 @@
 #include <SFML/Graphics.hpp>
 #include "ObjetoChico.h"
+#include <cstdlib>
 #include <iostream>
 
-sf::Texture ObjetoChico::cargarTextura()
+sf::Texture ObjetoChico::cargarTextura(const std::string& rutaTextura)
 {
 	sf::Texture textura;
 
-	if (!textura.loadFromFile("images/TazaCafe.png"))
+	if (!textura.loadFromFile(rutaTextura))
 	{
-		std::cout << "ERROR: NO SE PUDO CARGAR LA TAZA  ";
+		std::cout << "ERROR: NO SE PUDO CARGAR LA TEXTURA " << rutaTextura << '\n';
 		exit(-1);
 	}
 
 	return textura;
 }
 
-ObjetoChico::ObjetoChico() : _texture(cargarTextura()), _sprite(_texture)
+ObjetoChico::ObjetoChico(const std::string& rutaTextura, const sf::Vector2f& posicion, float escala)
+	: _texture(cargarTextura(rutaTextura)), _sprite(_texture)
 {
-	_sprite.setPosition({  458.f, 478.f });
-	_sprite.setScale({ 0.2f, 0.2f });
+	_sprite.setPosition(posicion);
+	_sprite.setScale({ escala, escala });
 	_sprite.setOrigin({ _sprite.getGlobalBounds().size.x / 2, 0 });
 	
 }

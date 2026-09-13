@@ -1,17 +1,19 @@
 #include "Juego.h"
+#include "Constantes.h"
 #include <cmath>
 #include <cstdlib>
 #include <iostream>
 
 Juego::Juego()
-    : _window(sf::VideoMode({ 1280, 720 }), "Chaos Cat SFML 3"),
+    : _window(sf::VideoMode({ ANCHO_VENTANA, ALTO_VENTANA }), "Chaos Cat SFML 3"),
       _spriteFondo(_texturaFondo),
+      _taza("images/TazaCafe.png", { 458.f, 478.f }, 0.2f),
       _tocandoTaza(false),
       _mostrarHitboxes(true)
 {
-    _window.setFramerateLimit(144);
+    _window.setFramerateLimit(LIMITE_FPS);
 
-    if (!_texturaFondo.loadFromFile("images/fondo.jpg"))
+    if (!_texturaFondo.loadFromFile("images/cocina.png"))
     {
         std::cout << "Error al cargar la imagen de fondo!" << std::endl;
         exit(-1);

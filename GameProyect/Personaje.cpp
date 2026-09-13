@@ -1,5 +1,6 @@
 #include <SFML/Graphics.hpp>
 #include "Personaje.h"
+#include "Constantes.h"
 #include <cstdlib>
 #include <iostream>
 
@@ -37,7 +38,7 @@ Personaje::Personaje()
     _espacioPresionadoAntes = false;
     _alturaVertical = 0.f;
     _velocidadVertical = 0.f;
-    _posicionPisoY = 720.f - (360.f * _escala) / 2.f;
+    _posicionPisoY = ALTO_VENTANA - (ALTO_BASE_HITBOX * _escala) / 2.f;
 
     //punto de origen del sprite en el frame (aca estaria en el centro)
     _sprite.setOrigin({
@@ -54,8 +55,8 @@ Personaje::Personaje()
     //con esto la posicion inicial siempre va a ser al costado inferior izquierdo de la pantalla
     float margenX = 0.f;
     float margenY = 0.f;
-    float anchoHitboxInicial = 360.f * _escala;
-    float altoHitboxInicial = 360.f * _escala;
+    float anchoHitboxInicial = ANCHO_BASE_HITBOX * _escala;
+    float altoHitboxInicial = ALTO_BASE_HITBOX * _escala;
 
     _sprite.setPosition({
         anchoHitboxInicial / 2.f + margenX,
@@ -79,15 +80,15 @@ void Personaje::update()
 
 bool Personaje::procesarEntrada()
 {
-    float velocidadActual = 2.2f;
+    float velocidadActual = VELOCIDAD_CAMINAR;
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::LShift))
     {
-        velocidadActual = 5.f; // CORRER
+        velocidadActual = VELOCIDAD_CORRER;
     }
     else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::LControl))
     {
-        velocidadActual = 0.75f; // AGACHADO
+        velocidadActual = VELOCIDAD_AGACHADO;
     }
 
     _velocity = { 0.f, 0.f };
@@ -107,7 +108,7 @@ bool Personaje::procesarEntrada()
         seMueve = true;
     }
 
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W))
+    /*if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W))
     {
         _velocity.y = -velocidadActual;
         seMueve = true;
@@ -117,7 +118,7 @@ bool Personaje::procesarEntrada()
     {
         _velocity.y = velocidadActual;
         seMueve = true;
-    }
+    }*/
 
     bool espacioPresionado = sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Space);
 
@@ -152,14 +153,14 @@ void Personaje::actualizarEstado(bool seMueve)
     }
     else
     {
-        //contandoQuieto es un reloj interno en el que, pasado 0.5 segundos, el gato vuelve a la posicion sentado
+        // El tiempo quieto determina cuando el gato vuelve a sentarse.
         if (!_contandoQuieto)
         {
             _relojQuieto.restart();
             _contandoQuieto = true;
             _estado = EstadoGato::Quieto;
         }
-        else if (_relojQuieto.getElapsedTime().asSeconds() >= 0.5f)
+        else if (_relojQuieto.getElapsedTime().asSeconds() >= TIEMPO_PARA_SENTARSE)
         {
             _estado = EstadoGato::Sentado;
         }
@@ -175,7 +176,7 @@ void Personaje::aplicarGravedad()
     if (!_enElPiso)
     {
         _alturaVertical += _velocidadVertical;
-        _velocidadVertical += 0.55f;
+        _velocidadVertical += GRAVEDAD;
 
         if (_sprite.getPosition().y + _alturaVertical >= _posicionPisoY)
         {
@@ -191,7 +192,7 @@ void Personaje::actualizarAnimacion(bool seMueve)
 {
     if (_estado == EstadoGato::Caminando)
     {
-        if (_relojCaminar.getElapsedTime().asSeconds() >= 0.18f)
+        if (_relojCaminar.getElapsedTime().asSeconds() >= DURACION_FRAME_CAMINAR)
         {
             _frameCaminar = (_frameCaminar + 1) % 2;
             _relojCaminar.restart();
@@ -205,7 +206,7 @@ void Personaje::actualizarAnimacion(bool seMueve)
 
     if (_estado == EstadoGato::Agachado && seMueve)
     {
-        if (_relojAgachado.getElapsedTime().asSeconds() >= 0.22f)
+        if (_relojAgachado.getElapsedTime().asSeconds() >= DURACION_FRAME_AGACHADO)
         {
             _frameAgachado = (_frameAgachado + 1) % 2;
             _relojAgachado.restart();
@@ -233,9 +234,9 @@ void Personaje::limitarMovimiento()
         ajuste.x = -hitbox.position.x;
     }
 
-    if (hitbox.position.x + hitbox.size.x > 1280.f)
+    if (hitbox.position.x + hitbox.size.x > ANCHO_VENTANA)
     {
-        ajuste.x = 1280.f - (hitbox.position.x + hitbox.size.x);
+        ajuste.x = ANCHO_VENTANA - (hitbox.position.x + hitbox.size.x);
     }
 
     if (hitbox.position.y < 0.f)
@@ -243,9 +244,9 @@ void Personaje::limitarMovimiento()
         ajuste.y = -hitbox.position.y;
     }
 
-    if (hitbox.position.y + hitbox.size.y > 720.f)
+    if (hitbox.position.y + hitbox.size.y > ALTO_VENTANA)
     {
-        ajuste.y = 720.f - (hitbox.position.y + hitbox.size.y);
+        ajuste.y = ALTO_VENTANA - (hitbox.position.y + hitbox.size.y);
     }
 
     _sprite.move(ajuste);
@@ -278,7 +279,7 @@ void Personaje::saltar()
     {
         _enElPiso = false;
         _alturaVertical = 0.f;
-        _velocidadVertical = -17.f;
+        _velocidadVertical = VELOCIDAD_INICIAL_SALTO;
     }
 }
 
@@ -301,67 +302,52 @@ float Personaje::getPosy() {
 float Personaje::getBaseY() const
 {
     float escalaY = _sprite.getScale().y < 0.f ? -_sprite.getScale().y : _sprite.getScale().y;
-    return obtenerPosicionDibujo().y + (360.f * escalaY) / 2.f;
+    return obtenerPosicionDibujo().y + (ALTO_BASE_HITBOX * escalaY) / 2.f;
 }
 
 
-//esto es para cambiar el hitbox del gato depende el sprite, el de saltando se necesita refactorizar y probablemente todo este bloque se necesite sacar
-//TODO: se esta volviendo muy cargado este metodo
+sf::Vector2f Personaje::obtenerTamanoHitbox() const
+{
+    // Medidas originales, antes de aplicar la escala del sprite.
+    switch (_estado)
+    {
+    case EstadoGato::Saltando:
+        return { 220.f, 140.f };
+    case EstadoGato::Agachado:
+        return { 300.f, 130.f };
+    case EstadoGato::Sentado:
+        return { 170.f, 220.f };
+    case EstadoGato::Caminando:
+        return { 220.f, 220.f };
+    case EstadoGato::Quieto:
+        return { 200.f, 220.f };
+    default:
+        return { ANCHO_BASE_HITBOX, ALTO_BASE_HITBOX };
+    }
+}
+
 sf::FloatRect Personaje::getGlobalBounds() const
 {
     float escalaX = _sprite.getScale().x < 0.f ? -_sprite.getScale().x : _sprite.getScale().x;
     float escalaY = _sprite.getScale().y < 0.f ? -_sprite.getScale().y : _sprite.getScale().y;
+    sf::Vector2f tamano = obtenerTamanoHitbox();
+    float ancho = tamano.x * escalaX;
+    float alto = tamano.y * escalaY;
     sf::Vector2f posicionDibujo = obtenerPosicionDibujo();
+    sf::Vector2f posicionHitbox = {
+        posicionDibujo.x - ancho / 2.f,
+        getBaseY() - alto
+    };
 
     if (_estado == EstadoGato::Saltando)
     {
-        float ancho = 220.f * escalaX;
-        float alto = 140.f * escalaY;
         float offsetX = 20.f * (_sprite.getScale().x < 0.f ? -escalaX : escalaX);
         float offsetY = 95.f * escalaY;
-
-        return sf::FloatRect(
-            {
-                posicionDibujo.x - ancho / 2.f + offsetX,
-                posicionDibujo.y - alto / 2.f + offsetY
-            },
-            { ancho, alto }
-        );
+        posicionHitbox.x += offsetX;
+        posicionHitbox.y = posicionDibujo.y - alto / 2.f + offsetY;
     }
 
-    float ancho = 360.f * escalaX;
-    float alto = 360.f * escalaY;
-
-    if (_estado == EstadoGato::Agachado)
-    {
-        ancho = 300.f * escalaX;
-        alto = 130.f * escalaY;
-    }
-    else if (_estado == EstadoGato::Sentado)
-    {
-        ancho = 170.f * escalaX;
-        alto = 220.f * escalaY;
-    }
-    else if (_estado == EstadoGato::Caminando)
-    {
-        ancho = 220.f * escalaX;
-        alto = 220.f * escalaY;
-    }
-    else if (_estado == EstadoGato::Quieto)
-    {
-        ancho = 200.f * escalaX;
-        alto = 220.f * escalaY;
-    }
-
-    float baseY = posicionDibujo.y + (360.f * escalaY) / 2.f;
-
-    return sf::FloatRect(
-        {
-            posicionDibujo.x - ancho / 2.f,
-            baseY - alto
-        },
-        { ancho, alto }
-    );
+    return sf::FloatRect(posicionHitbox, { ancho, alto });
 }
 
 void Personaje::mover(const sf::Vector2f& desplazamiento)
@@ -372,7 +358,7 @@ void Personaje::mover(const sf::Vector2f& desplazamiento)
 void Personaje::apoyarEn(float superficieY)
 {
     float escalaY = _sprite.getScale().y < 0.f ? -_sprite.getScale().y : _sprite.getScale().y;
-    float nuevaPosicionY = superficieY - (360.f * escalaY) / 2.f;
+    float nuevaPosicionY = superficieY - (ALTO_BASE_HITBOX * escalaY) / 2.f;
 
     _sprite.setPosition({ _sprite.getPosition().x, nuevaPosicionY });
     _alturaVertical = 0.f;

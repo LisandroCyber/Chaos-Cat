@@ -25,6 +25,7 @@
     <ClCompile Include="Personaje.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Constantes.h" />
     <ClInclude Include="Juego.h" />
     <ClInclude Include="ObjetoChico.h" />
     <ClInclude Include="Personaje.h" />
