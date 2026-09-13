@@ -7,7 +7,7 @@ Juego::Juego()
     : _window(sf::VideoMode({ 1280, 720 }), "Chaos Cat SFML 3"),
       _spriteFondo(_texturaFondo),
       _tocandoTaza(false),
-      _mostrarHitboxes(false)
+      _mostrarHitboxes(true)
 {
     _window.setFramerateLimit(144);
 
@@ -16,6 +16,8 @@ Juego::Juego()
         std::cout << "Error al cargar la imagen de fondo!" << std::endl;
         exit(-1);
     }
+
+    _spriteFondo.setTexture(_texturaFondo, true);
 }
 
 void Juego::ejecutar()

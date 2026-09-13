@@ -295,7 +295,7 @@ sf::FloatRect Personaje::getGlobalBounds() const
 
     if (_estado == EstadoGato::Saltando)
     {
-        float ancho = 360.f * escalaX;
+        float ancho = 220.f * escalaX;
         float alto = 140.f * escalaY;
         float offsetX = 20.f * (_sprite.getScale().x < 0.f ? -escalaX : escalaX);
         float offsetY = 95.f * escalaY;
