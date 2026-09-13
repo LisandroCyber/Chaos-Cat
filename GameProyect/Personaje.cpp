@@ -18,30 +18,46 @@ sf::Texture Personaje::cargarTextura()
 Personaje::Personaje()
     : _texture(cargarTextura()), _sprite(_texture)
 {
+    //frame del gato
     _frameAncho = 600;
     _frameAlto = 724;
 
-    _sprite.setPosition({ 100.f, 100.f });
+    //velocidad inicial, junto con otros atributos iniciados
     _sprite.setScale({ 0.3f, 0.3f });
     _velocity = { 0.f, 0.f };
 
-    _estado = EstadoGato::Quieto;
-    _contandoQuieto = false;
+    _estado = EstadoGato::Sentado;
+    _contandoQuieto = true;
 
     _saltando = false;
     _alturaSalto = 0.f;
     _velocidadSalto = 0.f;
 
+    //punto de origen del sprite en el frame (aca estaria en el centro)
     _sprite.setOrigin({
         _frameAncho / 2.f,
         _frameAlto / 2.f
     });
 
+    //al ser un sprite con multiples imagenes, este dice donde pararse para la primer imagen
     _sprite.setTextureRect(sf::IntRect(
         { 0, 0 },
         { _frameAncho, _frameAlto }
     ));
 
+    //con esto la posicion inicial siempre va a ser al costado inferior izquierdo de la pantalla
+    float escala = 0.3f;
+    float margenX = 0.f;
+    float margenY = 0.f;
+    float anchoHitboxInicial = 360.f * escala;
+    float altoHitboxInicial = 360.f * escala;
+
+    _sprite.setPosition({
+        anchoHitboxInicial / 2.f + margenX,
+        720.f - altoHitboxInicial / 2.f - margenY
+    });
+
+    actualizarSprite();
 }
 
 void Personaje::update()
@@ -93,6 +109,7 @@ void Personaje::update()
         _contandoQuieto = false;
     }
 
+    //configuracion del salto
     if (_saltando)
     {
         _estado = EstadoGato::Saltando;
@@ -107,10 +124,6 @@ void Personaje::update()
             _saltando = false;
         }
     }
-    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::C))
-    {
-        _estado = EstadoGato::Sentado;
-    }
     else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::LControl))
     {
         _estado = EstadoGato::Agachado;
@@ -121,6 +134,7 @@ void Personaje::update()
     }
     else
     {
+        //contandoQuieto es un reloj interno en el que, pasado 5 milisegundos, el gato vuelve a la posicion sentado
         if (!_contandoQuieto)
         {
             _relojQuieto.restart();
