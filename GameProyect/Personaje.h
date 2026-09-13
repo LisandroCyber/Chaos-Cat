@@ -18,13 +18,18 @@ class Personaje : public sf::Drawable
     EstadoGato _estado;
     int _frameAncho;
     int _frameAlto;
+    float _escala;
 
     bool _saltando;
     float _alturaSalto;
     float _velocidadSalto;
 
     sf::Clock _relojQuieto;
+    sf::Clock _relojCaminar;
+    sf::Clock _relojAgachado;
     bool _contandoQuieto;
+    int _frameCaminar;
+    int _frameAgachado;
 
     static sf::Texture cargarTextura();
 

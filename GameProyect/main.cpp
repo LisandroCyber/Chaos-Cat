@@ -20,7 +20,7 @@ int main() {
     ObjetoChico taza;
 
     bool tocandoTaza = false;
-    bool mostrarHitboxes = false; // DEBUG HITBOXES: cambiar a true para mostrarlos
+    bool mostrarHitboxes = true; // DEBUG HITBOXES: cambiar a true para mostrarlos
 
     while (window.isOpen()) {
        
