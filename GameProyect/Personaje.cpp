@@ -34,6 +34,7 @@ Personaje::Personaje()
     _frameAgachado = 0;
 
     _enElPiso = true;
+    _espacioPresionadoAntes = false;
     _alturaVertical = 0.f;
     _velocidadVertical = 0.f;
     _posicionPisoY = 720.f - (360.f * _escala) / 2.f;
@@ -118,10 +119,14 @@ bool Personaje::procesarEntrada()
         seMueve = true;
     }
 
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Space))
+    bool espacioPresionado = sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Space);
+
+    if (espacioPresionado && !_espacioPresionadoAntes)
     {
         saltar();
     }
+
+    _espacioPresionadoAntes = espacioPresionado;
 
     return seMueve;
 }

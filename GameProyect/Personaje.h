@@ -22,6 +22,7 @@ private:
     float _escala;
 
     bool _enElPiso;
+    bool _espacioPresionadoAntes;
     float _alturaVertical;
     float _velocidadVertical;
     float _posicionPisoY;
