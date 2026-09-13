@@ -33,9 +33,10 @@ Personaje::Personaje()
     _frameCaminar = 0;
     _frameAgachado = 0;
 
-    _saltando = false;
-    _alturaSalto = 0.f;
-    _velocidadSalto = 0.f;
+    _enElPiso = true;
+    _alturaVertical = 0.f;
+    _velocidadVertical = 0.f;
+    _posicionPisoY = 720.f - (360.f * _escala) / 2.f;
 
     //punto de origen del sprite en el frame (aca estaria en el centro)
     _sprite.setOrigin({
@@ -57,7 +58,7 @@ Personaje::Personaje()
 
     _sprite.setPosition({
         anchoHitboxInicial / 2.f + margenX,
-        720.f - altoHitboxInicial / 2.f - margenY
+        _posicionPisoY - margenY
     });
 
     actualizarSprite();
@@ -67,6 +68,7 @@ void Personaje::update()
 {
     bool seMueve = procesarEntrada();
 
+    aplicarGravedad();
     actualizarEstado(seMueve);
     actualizarAnimacion(seMueve);
     aplicarMovimiento();
@@ -126,16 +128,14 @@ bool Personaje::procesarEntrada()
 
 void Personaje::actualizarEstado(bool seMueve)
 {
-    if (seMueve || _saltando || sf::Keyboard::isKeyPressed(sf::Keyboard::Key::LControl))
+    if (seMueve || !_enElPiso || sf::Keyboard::isKeyPressed(sf::Keyboard::Key::LControl))
     {
         _contandoQuieto = false;
     }
 
-    //configuracion del salto
-    if (_saltando)
+    if (!_enElPiso)
     {
         _estado = EstadoGato::Saltando;
-        actualizarSalto();
     }
     else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::LControl) && !sf::Keyboard::isKeyPressed(sf::Keyboard::Key::LShift))
     {
@@ -165,16 +165,20 @@ void Personaje::actualizarEstado(bool seMueve)
     }
 }
 
-void Personaje::actualizarSalto()
+void Personaje::aplicarGravedad()
 {
-    _alturaSalto += _velocidadSalto;
-    _velocidadSalto += 0.5f;
-
-    if (_alturaSalto >= 0.f)
+    if (!_enElPiso)
     {
-        _alturaSalto = 0.f;
-        _velocidadSalto = 0.f;
-        _saltando = false;
+        _alturaVertical += _velocidadVertical;
+        _velocidadVertical += 0.55f;
+
+        if (_sprite.getPosition().y + _alturaVertical >= _posicionPisoY)
+        {
+            _sprite.setPosition({ _sprite.getPosition().x, _posicionPisoY });
+            _alturaVertical = 0.f;
+            _velocidadVertical = 0.f;
+            _enElPiso = true;
+        }
     }
 }
 
@@ -265,16 +269,20 @@ void Personaje::actualizarSprite()
 
 void Personaje::saltar()
 {
-    if (!_saltando)
+    if (_enElPiso)
     {
-        _saltando = true;
-        _velocidadSalto = -8.f;
+        _enElPiso = false;
+        _alturaVertical = 0.f;
+        _velocidadVertical = -17.f;
     }
 }
 
 void Personaje::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-    target.draw(_sprite, states);
+    sf::Sprite spriteDibujo = _sprite;
+    spriteDibujo.setPosition(obtenerPosicionDibujo());
+
+    target.draw(spriteDibujo, states);
 }
 
 float Personaje::getPosx() {
@@ -285,6 +293,12 @@ float Personaje::getPosy() {
     return _sprite.getPosition().y;
 }
 
+float Personaje::getBaseY() const
+{
+    float escalaY = _sprite.getScale().y < 0.f ? -_sprite.getScale().y : _sprite.getScale().y;
+    return obtenerPosicionDibujo().y + (360.f * escalaY) / 2.f;
+}
+
 
 //esto es para cambiar el hitbox del gato depende el sprite, el de saltando se necesita refactorizar y probablemente todo este bloque se necesite sacar
 //TODO: se esta volviendo muy cargado este metodo
@@ -292,6 +306,7 @@ sf::FloatRect Personaje::getGlobalBounds() const
 {
     float escalaX = _sprite.getScale().x < 0.f ? -_sprite.getScale().x : _sprite.getScale().x;
     float escalaY = _sprite.getScale().y < 0.f ? -_sprite.getScale().y : _sprite.getScale().y;
+    sf::Vector2f posicionDibujo = obtenerPosicionDibujo();
 
     if (_estado == EstadoGato::Saltando)
     {
@@ -302,8 +317,8 @@ sf::FloatRect Personaje::getGlobalBounds() const
 
         return sf::FloatRect(
             {
-                _sprite.getPosition().x - ancho / 2.f + offsetX,
-                _sprite.getPosition().y - alto / 2.f + offsetY
+                posicionDibujo.x - ancho / 2.f + offsetX,
+                posicionDibujo.y - alto / 2.f + offsetY
             },
             { ancho, alto }
         );
@@ -333,11 +348,11 @@ sf::FloatRect Personaje::getGlobalBounds() const
         alto = 220.f * escalaY;
     }
 
-    float baseY = _sprite.getPosition().y + (360.f * escalaY) / 2.f;
+    float baseY = posicionDibujo.y + (360.f * escalaY) / 2.f;
 
     return sf::FloatRect(
         {
-            _sprite.getPosition().x - ancho / 2.f,
+            posicionDibujo.x - ancho / 2.f,
             baseY - alto
         },
         { ancho, alto }
@@ -347,4 +362,33 @@ sf::FloatRect Personaje::getGlobalBounds() const
 void Personaje::mover(const sf::Vector2f& desplazamiento)
 {
     _sprite.move(desplazamiento);
+}
+
+void Personaje::apoyarEn(float superficieY)
+{
+    float escalaY = _sprite.getScale().y < 0.f ? -_sprite.getScale().y : _sprite.getScale().y;
+    float nuevaPosicionY = superficieY - (360.f * escalaY) / 2.f;
+
+    _sprite.setPosition({ _sprite.getPosition().x, nuevaPosicionY });
+    _alturaVertical = 0.f;
+    _velocidadVertical = 0.f;
+    _enElPiso = true;
+}
+
+void Personaje::iniciarCaidaSiEstaElevado()
+{
+    if (_enElPiso && _sprite.getPosition().y < _posicionPisoY - 1.f)
+    {
+        _enElPiso = false;
+        _alturaVertical = 0.f;
+        _velocidadVertical = 0.f;
+    }
+}
+
+sf::Vector2f Personaje::obtenerPosicionDibujo() const
+{
+    return {
+        _sprite.getPosition().x,
+        _sprite.getPosition().y + _alturaVertical
+    };
 }

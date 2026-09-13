@@ -67,6 +67,18 @@ void Juego::resolverColisionGatoTaza()
 {
     const sf::FloatRect areaTaza = _taza.getGlobalBounds();
     const sf::FloatRect areaGato = _gato.getGlobalBounds();
+    bool gatoApoyadoSobreTaza = false;
+
+    float gatoIzquierda = areaGato.position.x;
+    float gatoDerecha = areaGato.position.x + areaGato.size.x;
+    float baseGato = _gato.getBaseY();
+
+    float tazaIzquierda = areaTaza.position.x;
+    float tazaDerecha = areaTaza.position.x + areaTaza.size.x;
+    float tazaArriba = areaTaza.position.y;
+
+    bool seCruzanEnX = gatoDerecha > tazaIzquierda && gatoIzquierda < tazaDerecha;
+    bool gatoCercaDeArriba = baseGato >= tazaArriba - 8.f && baseGato <= tazaArriba + 30.f;
 
     if (areaGato.findIntersection(areaTaza))
     {
@@ -76,26 +88,25 @@ void Juego::resolverColisionGatoTaza()
             _tocandoTaza = true;
         }
 
-        float dx1 = areaTaza.position.x - (areaGato.position.x + areaGato.size.x);
-        float dx2 = (areaTaza.position.x + areaTaza.size.x) - areaGato.position.x;
-        float dy1 = areaTaza.position.y - (areaGato.position.y + areaGato.size.y);
-        float dy2 = (areaTaza.position.y + areaTaza.size.y) - areaGato.position.y;
-
-        float dx = (std::abs(dx1) < std::abs(dx2)) ? dx1 : dx2;
-        float dy = (std::abs(dy1) < std::abs(dy2)) ? dy1 : dy2;
-
-        if (std::abs(dx) < std::abs(dy))
+        if (seCruzanEnX && gatoCercaDeArriba)
         {
-            _gato.mover({ dx, 0.f });
-        }
-        else
-        {
-            _gato.mover({ 0.f, dy });
+            _gato.apoyarEn(tazaArriba);
+            gatoApoyadoSobreTaza = true;
         }
     }
     else
     {
         _tocandoTaza = false;
+
+        if (seCruzanEnX && gatoCercaDeArriba)
+        {
+            gatoApoyadoSobreTaza = true;
+        }
+    }
+
+    if (!gatoApoyadoSobreTaza)
+    {
+        _gato.iniciarCaidaSiEstaElevado();
     }
 }
 

@@ -21,9 +21,10 @@ private:
     int _frameAlto;
     float _escala;
 
-    bool _saltando;
-    float _alturaSalto;
-    float _velocidadSalto;
+    bool _enElPiso;
+    float _alturaVertical;
+    float _velocidadVertical;
+    float _posicionPisoY;
 
     sf::Clock _relojQuieto;
     sf::Clock _relojCaminar;
@@ -36,11 +37,12 @@ private:
 
     bool procesarEntrada();
     void actualizarEstado(bool seMueve);
-    void actualizarSalto();
+    void aplicarGravedad();
     void actualizarAnimacion(bool seMueve);
     void aplicarMovimiento();
     void limitarMovimiento();
     void actualizarSprite();
+    sf::Vector2f obtenerPosicionDibujo() const;
 
 public:
     Personaje();
@@ -50,9 +52,12 @@ public:
 
     float getPosx();
     float getPosy();
+    float getBaseY() const;
 
     sf::FloatRect getGlobalBounds() const;
     void mover(const sf::Vector2f& desplazamiento);
+    void apoyarEn(float superficieY);
+    void iniciarCaidaSiEstaElevado();
 
     void draw(sf::RenderTarget& target,
         sf::RenderStates states) const override;
