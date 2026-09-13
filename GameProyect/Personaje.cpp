@@ -6,7 +6,7 @@ sf::Texture Personaje::cargarTextura()
 {
     sf::Texture textura;
 
-    if (!textura.loadFromFile("images/GatoNaranja_spritesheet_7frames_fixed.png"))
+    if (!textura.loadFromFile("images/frames_gato_original.png"))
     {
         std::cout << "ERROR: NO SE PUDO CARGAR EL GATO\n";
         exit(-1);
