@@ -20,6 +20,7 @@ int main() {
     ObjetoChico taza;
 
     bool tocandoTaza = false;
+    bool mostrarHitboxes = true; // DEBUG HITBOXES: cambiar a false o borrar este bloque para ocultarlos
 
     while (window.isOpen()) {
        
@@ -65,8 +66,6 @@ int main() {
 
         window.clear(); 
         window.draw(spriteFondo);
-        
-        gato.update();
 
         window.draw(gato);         
         
@@ -76,6 +75,27 @@ int main() {
         }
         
         window.draw(taza);
+
+        // DEBUG HITBOXES: gato en verde, taza en rojo.
+        if (mostrarHitboxes)
+        {
+            const sf::FloatRect hitboxGato = gato.getGlobalBounds();
+            sf::RectangleShape rectGato(hitboxGato.size);
+            rectGato.setPosition(hitboxGato.position);
+            rectGato.setFillColor(sf::Color::Transparent);
+            rectGato.setOutlineColor(sf::Color::Green);
+            rectGato.setOutlineThickness(2.f);
+
+            const sf::FloatRect hitboxTaza = taza.getGlobalBounds();
+            sf::RectangleShape rectTaza(hitboxTaza.size);
+            rectTaza.setPosition(hitboxTaza.position);
+            rectTaza.setFillColor(sf::Color::Transparent);
+            rectTaza.setOutlineColor(sf::Color::Red);
+            rectTaza.setOutlineThickness(2.f);
+
+            window.draw(rectGato);
+            window.draw(rectTaza);
+        }
       
         window.display(); 
     }
