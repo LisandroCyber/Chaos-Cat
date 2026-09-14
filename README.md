@@ -13,11 +13,12 @@ Cuando un objeto caiga, hará ruido y el dueño se dará vuelta necesariamente.
 Mientras el dueño esté mirando, el gato deberá permanecer quieto: si se mueve, será descubierto y perderá. Después de aproximadamente 3 segundos, el dueño volverá a su actividad.
 Para completar un nivel, habrá que tirar los objetos requeridos antes de que se agote el tiempo, sin ser descubierto.
 La idea es combinar el caos de tirar cosas con una mecánica de «quedarse inmóvil» en el momento justo.
-## Rama de desarrollo
 
 ## Estado actual
 
-En la versión disponible en la rama `EnProceso` ya se encuentran implementadas las siguientes funciones:
+Todas las implementaciones y modificaciones se hacen en la rama `EnProceso`.
+
+## ✅ Qué funciona hoy
 
 - Movimiento del gato en cuatro direcciones.
 - Diferentes velocidades: caminar, correr y agacharse.
@@ -43,19 +44,6 @@ Actualmente, al tocar la taza se muestra el mensaje `TIRAR TAZA` en la consola. 
 | `Ctrl izquierdo` | Agacharse |
 | `Espacio` | Saltar |
 | `M` | Mostrar la posición del gato en la consola |
-
-
-El trabajo actual se realiza en la rama [`EnProceso`](https://github.com/LisandroCyber/Chaos-Cat/tree/EnProceso).
-
-## ✅ Qué funciona hoy
-
-- Ventana de 1280 × 720 con fondo, gato y una taza en pantalla.
-- Movimiento del gato en cuatro direcciones con WASD, con opciones de correr y agacharse.
-- Cambio de orientación horizontal del sprite y límites de movimiento dentro de la ventana.
-- Carga de imágenes y clases separadas para el personaje y el objeto.
-- Límite configurado de 144 FPS.
-
-La taza se dibuja en pantalla, pero **todavía no se puede empujar ni tirar**. Tampoco hay dueño, niveles, temporizador, detección, sonido ni puntaje funcionales.
 
 ### Decisiones abiertas
 
