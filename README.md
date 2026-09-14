@@ -6,6 +6,15 @@ El jugador controla a un gato travieso dentro de una casa. Su objetivo será rec
 
 > El proyecto se encuentra actualmente en desarrollo.
 
+🎮 Cómo se jugará
+El gato se moverá sobre la mesa de la habitación y empujará los objetos para hacerlos caer.
+El dueño hará otras actividades, pero podrá darse vuelta en cualquier momento. Se evalúa avisar al jugador con una animación o un sonido antes de que mire.
+Cuando un objeto caiga, hará ruido y el dueño se dará vuelta necesariamente.
+Mientras el dueño esté mirando, el gato deberá permanecer quieto: si se mueve, será descubierto y perderá. Después de aproximadamente 3 segundos, el dueño volverá a su actividad.
+Para completar un nivel, habrá que tirar los objetos requeridos antes de que se agote el tiempo, sin ser descubierto.
+La idea es combinar el caos de tirar cosas con una mecánica de «quedarse inmóvil» en el momento justo.
+## Rama de desarrollo
+
 ## Estado actual
 
 En la versión disponible en la rama `EnProceso` ya se encuentran implementadas las siguientes funciones:
@@ -35,17 +44,6 @@ Actualmente, al tocar la taza se muestra el mensaje `TIRAR TAZA` en la consola. 
 | `Espacio` | Saltar |
 | `M` | Mostrar la posición del gato en la consola |
 
-## Mecánica planeada
-
-Cada nivel representará una habitación diferente de la casa y tendrá una cantidad determinada de objetos que deberán tirarse dentro de un tiempo límite.
-
-El dueño estará en la misma habitación realizando otras tareas y podrá darse vuelta de forma inesperada. Una animación o un sonido podrán advertir al jugador antes de que esto ocurra.
-
-Cuando el dueño esté mirando, el gato deberá permanecer quieto. Si el jugador se mueve, será descubierto y perderá la partida.
-
-Al tirar un objeto, el ruido hará que el dueño se dé vuelta. Como mecánica avanzada, el gato tendrá unos segundos para esconderse antes de ser atrapado.
-
-## Rama de desarrollo
 
 El trabajo actual se realiza en la rama [`EnProceso`](https://github.com/LisandroCyber/Chaos-Cat/tree/EnProceso).
 
