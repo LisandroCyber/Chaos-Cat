@@ -34,7 +34,7 @@ Personaje::Personaje()
     _frameAgachado = 0;
 
     _enElPiso = true;
-    _espacioPresionadoAntes = false;
+    _wPresionadoAntes = false;
     _alturaVertical = 0.f;
     _velocidadVertical = 0.f;
     _posicionPisoY = 720.f - (360.f * _escala) / 2.f;
@@ -107,26 +107,15 @@ bool Personaje::procesarEntrada()
         seMueve = true;
     }
 
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W))
-    {
-        _velocity.y = -velocidadActual;
-        seMueve = true;
-    }
+    // W hace saltar al gato (se detecta solo al presionar, no al mantener).
+    bool wPresionado = sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W);
 
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S))
-    {
-        _velocity.y = velocidadActual;
-        seMueve = true;
-    }
-
-    bool espacioPresionado = sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Space);
-
-    if (espacioPresionado && !_espacioPresionadoAntes)
+    if (wPresionado && !_wPresionadoAntes)
     {
         saltar();
     }
 
-    _espacioPresionadoAntes = espacioPresionado;
+    _wPresionadoAntes = wPresionado;
 
     return seMueve;
 }

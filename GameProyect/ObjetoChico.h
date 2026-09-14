@@ -7,6 +7,9 @@ class ObjetoChico
 private:
 	sf::Texture _texture;
 	sf::Sprite _sprite;
+	sf::Vector2f _velocidad;
+	bool _tirado;
+	bool _visible;
 	
 	static sf::Texture cargarTextura();
 
@@ -15,7 +18,11 @@ public:
 	ObjetoChico();
 
 	sf::FloatRect getGlobalBounds() const;
-
+	void update();
 	void draw(sf::RenderTarget& target,
 		sf::RenderStates states) const override;
+
+	void tirar(float direccion);
+	void reiniciar();
+	bool estaTirado() const;
 };

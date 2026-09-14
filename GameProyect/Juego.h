@@ -20,6 +20,7 @@ private:
     void actualizar();
     void dibujar();
     void resolverColisionGatoTaza();
+    void procesarLanzamientoTaza();
     void dibujarHitboxes();
 
 public:
