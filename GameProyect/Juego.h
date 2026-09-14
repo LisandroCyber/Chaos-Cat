@@ -1,5 +1,6 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+#include "Humano.h"
 #include "Mueble.h"
 #include "Personaje.h"
 #include "ObjetoChico.h"
@@ -12,6 +13,7 @@ private:
     sf::Sprite _spriteFondo;
 
     Personaje _gato;
+    Humano _duenio;
     ObjetoChico _taza;
     Mueble _heladera;
     Mueble _mesa;

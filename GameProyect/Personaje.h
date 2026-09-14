@@ -33,6 +33,7 @@ private:
     sf::Clock _relojCaminar;
     sf::Clock _relojAgachado;
     sf::Clock _relojGolpe;
+
     bool _contandoQuieto;
     int _frameCaminar;
     int _frameAgachado;

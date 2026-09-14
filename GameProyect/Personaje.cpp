@@ -8,7 +8,7 @@ sf::Texture Personaje::cargarTextura()
 {
     sf::Texture textura;
 
-    if (!textura.loadFromFile("images/frames_gato_ataque.png"))
+    if (!textura.loadFromFile("images/frames_gato_original.png"))
     {
         std::cout << "ERROR: NO SE PUDO CARGAR EL GATO\n";
         exit(-1);
@@ -68,6 +68,7 @@ Personaje::Personaje()
     actualizarSprite();
 }
 
+//para ver el comportamiento del gato en cada frame, lee el teclado y aplica la "gravedad" para el gato
 void Personaje::update()
 {
     bool seMueve = procesarEntrada();

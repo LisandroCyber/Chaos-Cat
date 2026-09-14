@@ -7,6 +7,7 @@
 Juego::Juego()
     : _window(sf::VideoMode({ ANCHO_VENTANA, ALTO_VENTANA }), "Chaos Cat SFML 3"),
       _spriteFondo(_texturaFondo),
+      _duenio("images/frames_humano.png", { 672.f, 664.f }, 600, 724, { 0.7f, 0.82f }),
       _taza("images/TazaCafe.png", { 458.f, 490.f }, 0.2f),
       _heladera("images/heladera.png", { 3.f, 300.f }, { 0.25f, 0.272f },
           { { 177.f, 40.f }, { 695.f, 1459.f } }),
@@ -71,6 +72,7 @@ void Juego::dibujar()
     _window.clear();
     _window.draw(_spriteFondo);
     _window.draw(_heladera);
+    _window.draw(_duenio);
     _window.draw(_mesa);
     _window.draw(_gato);
     _window.draw(_taza);
