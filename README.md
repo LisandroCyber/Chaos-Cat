@@ -120,6 +120,3 @@ Se considera una alternativa para el momento posterior a tirar un objeto: darle 
 - **Aviso de vigilancia:** animación, sonido o ambos antes de que el dueño se dé vuelta espontáneamente.
 - **Esconderse tras el ruido:** definir si será una alternativa a quedarse quieto o una mecánica adicional.
 
-## 👨‍💻 Autor
-
-Lisandro Romero — proyecto de aprendizaje de C++, SFML y desarrollo de videojuegos.
