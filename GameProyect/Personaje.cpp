@@ -397,3 +397,20 @@ sf::Vector2f Personaje::obtenerPosicionDibujo() const
         _sprite.getPosition().y + _alturaVertical
     };
 }
+
+// Metodo para colisionar la parte superior de la hitbox del gato,
+// contra la parte inferior de la hitbox del objeto
+
+void Personaje::chocarTecho(float yTecho)
+{
+    sf::FloatRect hitbox = getGlobalBounds();
+    float alto = hitbox.size.y;
+
+    float nuevaPosicionDibujoY = yTecho + alto / 2.f;
+
+    _alturaVertical = 0.f;
+    _sprite.setPosition({ _sprite.getPosition().x, nuevaPosicionDibujoY });
+
+    _velocidadVertical = 2.f;
+    _enElPiso = false;
+}

@@ -58,8 +58,8 @@ public:
     sf::FloatRect getGlobalBounds() const;
     void mover(const sf::Vector2f& desplazamiento);
     void apoyarEn(float superficieY);
+    void chocarTecho(float yTecho);
     void iniciarCaidaSiEstaElevado();
 
-    void draw(sf::RenderTarget& target,
-        sf::RenderStates states) const override;
+    void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
 };

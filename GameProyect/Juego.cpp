@@ -46,6 +46,7 @@ void Juego::actualizar()
     _gato.update();
     resolverColisionGatoTaza();
 
+    // M para mostrar posision del gato (para debug)
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::M))
     {
         std::cout << "Posision en x: " << _gato.getPosx() << std::endl;
@@ -67,18 +68,25 @@ void Juego::resolverColisionGatoTaza()
 {
     const sf::FloatRect areaTaza = _taza.getGlobalBounds();
     const sf::FloatRect areaGato = _gato.getGlobalBounds();
+    // tolerancia en px de las medidas necesarias para la colision superior
+    const float TOLERANCIA_ABAJO = 8.f;
+    const float TOLERANCIA_ARRIBA = 30.f;
     bool gatoApoyadoSobreTaza = false;
 
-    float gatoIzquierda = areaGato.position.x;
-    float gatoDerecha = areaGato.position.x + areaGato.size.x;
+    float gatoIzquierdaHit = areaGato.position.x;
+    float gatoDerechaHit = areaGato.position.x + areaGato.size.x;
+    float gatoArribaHit = areaGato.position.y + areaGato.size.y; 
     float baseGato = _gato.getBaseY();
 
-    float tazaIzquierda = areaTaza.position.x;
-    float tazaDerecha = areaTaza.position.x + areaTaza.size.x;
-    float tazaArriba = areaTaza.position.y;
+    float tazaIzquierdaHit = areaTaza.position.x;
+    float tazaDerechaHit = areaTaza.position.x + areaTaza.size.x;
+    float tazaArribaHit = areaTaza.position.y;
+    float tazaAbajoHit = tazaArribaHit + areaTaza.size.y;
 
-    bool seCruzanEnX = gatoDerecha > tazaIzquierda && gatoIzquierda < tazaDerecha;
-    bool gatoCercaDeArriba = baseGato >= tazaArriba - 8.f && baseGato <= tazaArriba + 30.f;
+    bool seCruzanEnX = gatoDerechaHit > tazaIzquierdaHit && gatoIzquierdaHit < tazaDerechaHit;
+    bool gatoCercaDeArriba = baseGato >= tazaArribaHit - TOLERANCIA_ABAJO && baseGato <= tazaArribaHit + TOLERANCIA_ARRIBA;
+    
+    bool gatoGolpeaTecho = gatoArribaHit <= tazaAbajoHit + TOLERANCIA_ARRIBA && gatoArribaHit >= tazaAbajoHit - TOLERANCIA_ABAJO;
 
     if (areaGato.findIntersection(areaTaza))
     {
@@ -87,11 +95,18 @@ void Juego::resolverColisionGatoTaza()
             std::cout << "TIRAR TAZA" << std::endl;
             _tocandoTaza = true;
         }
-
+        // si se cruzan en X y el gato cae sobre la parte superior de la taza -> Apoyado obre taza
         if (seCruzanEnX && gatoCercaDeArriba)
         {
-            _gato.apoyarEn(tazaArriba);
+            _gato.apoyarEn(tazaArribaHit);
             gatoApoyadoSobreTaza = true;
+        }
+        // si se cruzan en X y la cabeza pega con la parte inferior de la taza -> chocar techo
+        else if (seCruzanEnX && gatoGolpeaTecho)
+        {
+            _gato.chocarTecho(tazaAbajoHit);
+            _tocandoTaza = false;
+            
         }
     }
     else
