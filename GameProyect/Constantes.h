@@ -20,3 +20,5 @@ const float VELOCIDAD_INICIAL_SALTO = -17.f;
 const float TIEMPO_PARA_SENTARSE = 0.5f;
 const float DURACION_FRAME_CAMINAR = 0.18f;
 const float DURACION_FRAME_AGACHADO = 0.22f;
+const float DURACION_FRAME_GOLPE = 0.10f;
+const float DURACION_GOLPE = 0.20f;

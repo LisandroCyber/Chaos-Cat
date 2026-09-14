@@ -90,9 +90,9 @@ void Juego::resolverColisionesGato()
 bool Juego::resolverColisionGatoTaza()
 {
     const sf::FloatRect areaTaza = _taza.getGlobalBounds();
-    const sf::FloatRect areaGato = _gato.getGlobalBounds();
+    const sf::FloatRect areaGolpe = _gato.getHitboxGolpe();
 
-    if (areaGato.findIntersection(areaTaza))
+    if (_gato.estaGolpeando() && areaGolpe.findIntersection(areaTaza))
     {
         if (!_tocandoTaza)
         {
@@ -154,6 +154,17 @@ void Juego::dibujarHitboxes()
 
     _window.draw(rectGato);
     _window.draw(rectTaza);
+
+    if (_gato.estaGolpeando())
+    {
+        const sf::FloatRect hitboxGolpe = _gato.getHitboxGolpe();
+        sf::RectangleShape rectGolpe(hitboxGolpe.size);
+        rectGolpe.setPosition(hitboxGolpe.position);
+        rectGolpe.setFillColor(sf::Color::Transparent);
+        rectGolpe.setOutlineColor(sf::Color::Cyan);
+        rectGolpe.setOutlineThickness(2.f);
+        _window.draw(rectGolpe);
+    }
 
     const sf::FloatRect hitboxHeladera = _heladera.getGlobalBounds();
     sf::RectangleShape rectHeladera(hitboxHeladera.size);

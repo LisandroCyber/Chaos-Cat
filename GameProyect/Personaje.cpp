@@ -8,7 +8,7 @@ sf::Texture Personaje::cargarTextura()
 {
     sf::Texture textura;
 
-    if (!textura.loadFromFile("images/frames_gato_original.png"))
+    if (!textura.loadFromFile("images/frames_gato_ataque.png"))
     {
         std::cout << "ERROR: NO SE PUDO CARGAR EL GATO\n";
         exit(-1);
@@ -33,9 +33,11 @@ Personaje::Personaje()
     _contandoQuieto = true;
     _frameCaminar = 0;
     _frameAgachado = 0;
+    _frameGolpe = 0;
 
     _enElPiso = true;
     _espacioPresionadoAntes = false;
+    _ePresionadaAntes = false;
     _alturaVertical = 0.f;
     _velocidadVertical = 0.f;
     _posicionPisoY = ALTO_VENTANA - (ALTO_BASE_HITBOX * _escala) / 2.f;
@@ -94,6 +96,20 @@ bool Personaje::procesarEntrada()
     _velocity = { 0.f, 0.f };
     bool seMueve = false;
 
+    const bool ePresionada = sf::Keyboard::isKeyPressed(sf::Keyboard::Key::E);
+
+    if (ePresionada && !_ePresionadaAntes && _enElPiso && _estado != EstadoGato::Golpeando)
+    {
+        golpear();
+    }
+
+    _ePresionadaAntes = ePresionada;
+
+    if (_estado == EstadoGato::Golpeando)
+    {
+        return false;
+    }
+
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A))
     {
         _velocity.x = -velocidadActual;
@@ -134,6 +150,16 @@ bool Personaje::procesarEntrada()
 
 void Personaje::actualizarEstado(bool seMueve)
 {
+    if (_estado == EstadoGato::Golpeando)
+    {
+        if (_relojGolpe.getElapsedTime().asSeconds() < DURACION_GOLPE)
+        {
+            return;
+        }
+
+        _contandoQuieto = false;
+    }
+
     if (seMueve || !_enElPiso || sf::Keyboard::isKeyPressed(sf::Keyboard::Key::LControl))
     {
         _contandoQuieto = false;
@@ -190,6 +216,12 @@ void Personaje::aplicarGravedad()
 
 void Personaje::actualizarAnimacion(bool seMueve)
 {
+    if (_estado == EstadoGato::Golpeando)
+    {
+        _frameGolpe = _relojGolpe.getElapsedTime().asSeconds() < DURACION_FRAME_GOLPE ? 0 : 1;
+        return;
+    }
+
     if (_estado == EstadoGato::Caminando)
     {
         if (_relojCaminar.getElapsedTime().asSeconds() >= DURACION_FRAME_CAMINAR)
@@ -266,6 +298,8 @@ void Personaje::actualizarSprite()
         frame = 5;
     else if (_estado == EstadoGato::Sentado)
         frame = 6;
+    else if (_estado == EstadoGato::Golpeando)
+        frame = 7 + _frameGolpe;
 
     _sprite.setTextureRect(sf::IntRect(
         { frame * _frameAncho, 0 },
@@ -281,6 +315,19 @@ void Personaje::saltar()
         _alturaVertical = 0.f;
         _velocidadVertical = VELOCIDAD_INICIAL_SALTO;
     }
+}
+
+void Personaje::golpear()
+{
+    _estado = EstadoGato::Golpeando;
+    _frameGolpe = 0;
+    _relojGolpe.restart();
+    _contandoQuieto = false;
+}
+
+bool Personaje::estaGolpeando() const
+{
+    return _estado == EstadoGato::Golpeando;
 }
 
 void Personaje::draw(sf::RenderTarget& target, sf::RenderStates states) const
@@ -315,6 +362,8 @@ sf::Vector2f Personaje::obtenerTamanoHitbox() const
         return { 220.f, 140.f };
     case EstadoGato::Agachado:
         return { 300.f, 130.f };
+    case EstadoGato::Golpeando:
+        return { 210.f, 140.f };
     case EstadoGato::Sentado:
         return { 170.f, 220.f };
     case EstadoGato::Caminando:
@@ -348,6 +397,21 @@ sf::FloatRect Personaje::getGlobalBounds() const
     }
 
     return sf::FloatRect(posicionHitbox, { ancho, alto });
+}
+
+sf::FloatRect Personaje::getHitboxGolpe() const
+{
+    const float escalaX = _sprite.getScale().x < 0.f ? -_sprite.getScale().x : _sprite.getScale().x;
+    const float escalaY = _sprite.getScale().y < 0.f ? -_sprite.getScale().y : _sprite.getScale().y;
+    const float ancho = 100.f * escalaX;
+    const float alto = 100.f * escalaY;
+    const float desplazamientoPata = 35.f * escalaX;
+    const bool miraDerecha = _sprite.getScale().x > 0.f;
+    const float x = miraDerecha
+        ? obtenerPosicionDibujo().x + desplazamientoPata
+        : obtenerPosicionDibujo().x - desplazamientoPata - ancho;
+
+    return { { x, getBaseY() - alto }, { ancho, alto } };
 }
 
 void Personaje::mover(const sf::Vector2f& desplazamiento)
