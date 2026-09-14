@@ -44,7 +44,14 @@ void Juego::procesarEventos()
 void Juego::actualizar()
 {
     _gato.update();
+    _taza.update();
     resolverColisionGatoTaza();
+
+    // R permite volver a colocar la taza para probar el lanzamiento otra vez.
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::R))
+    {
+        _taza.reiniciar();
+    }
 
     // M para mostrar posision del gato (para debug)
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::M))
@@ -66,6 +73,15 @@ void Juego::dibujar()
 
 void Juego::resolverColisionGatoTaza()
 {
+    // Una vez lanzada, la taza se mueve libremente y deja de funcionar
+    // como superficie de colision para el gato.
+    if (_taza.estaTirado())
+    {
+        _gato.iniciarCaidaSiEstaElevado();
+        _tocandoTaza = false;
+        return;
+    }
+
     const sf::FloatRect areaTaza = _taza.getGlobalBounds();
     const sf::FloatRect areaGato = _gato.getGlobalBounds();
     // tolerancia en px de las medidas necesarias para la colision superior
@@ -90,9 +106,22 @@ void Juego::resolverColisionGatoTaza()
 
     if (areaGato.findIntersection(areaTaza))
     {
+        // E lanza la taza hacia el lado en el que se encuentra respecto del gato.
+        if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::E))
+        {
+            float centroGato = areaGato.position.x + areaGato.size.x / 2.f;
+            float centroTaza = areaTaza.position.x + areaTaza.size.x / 2.f;
+            float direccion = centroTaza >= centroGato ? 1.f : -1.f;
+
+            _taza.tirar(direccion);
+            _tocandoTaza = false;
+            _gato.iniciarCaidaSiEstaElevado();
+            return;
+        }
+
         if (!_tocandoTaza)
         {
-            std::cout << "TIRAR TAZA" << std::endl;
+            std::cout << "Presiona E para tirar la taza" << std::endl;
             _tocandoTaza = true;
         }
         // si se cruzan en X y el gato cae sobre la parte superior de la taza -> Apoyado obre taza
