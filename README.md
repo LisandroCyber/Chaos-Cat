@@ -56,7 +56,3 @@ Actualmente, al tocar la taza se muestra el mensaje `TIRAR TAZA` en la consola. 
 - C++ y programación orientada a objetos.
 - SFML 3 para ventana, gráficos y entrada de teclado.
 - Visual Studio para el proyecto actual.
-
-## 👨‍💻 Autor
-
-Lisandro Romero — proyecto de aprendizaje de C++, SFML y desarrollo de videojuegos.
