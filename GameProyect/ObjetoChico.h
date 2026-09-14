@@ -17,12 +17,12 @@ public:
 	
 	ObjetoChico();
 
+	sf::FloatRect getGlobalBounds() const;
 	void update();
+	void draw(sf::RenderTarget& target,
+		sf::RenderStates states) const override;
+
 	void tirar(float direccion);
 	void reiniciar();
 	bool estaTirado() const;
-	sf::FloatRect getGlobalBounds() const;
-
-	void draw(sf::RenderTarget& target,
-		sf::RenderStates states) const override;
 };
