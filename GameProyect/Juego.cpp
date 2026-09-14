@@ -7,7 +7,12 @@
 Juego::Juego()
     : _window(sf::VideoMode({ ANCHO_VENTANA, ALTO_VENTANA }), "Chaos Cat SFML 3"),
       _spriteFondo(_texturaFondo),
-      _taza("images/TazaCafe.png", { 458.f, 478.f }, 0.2f),
+      _taza("images/TazaCafe.png", { 458.f, 490.f }, 0.2f),
+      _heladera("images/heladera.png", { 3.f, 300.f }, { 0.25f, 0.272f },
+          { { 177.f, 40.f }, { 695.f, 1459.f } }),
+      _mesa("images/mesa-larga.png", { 356.06f, 400.f }, { 0.280825f, 0.384588f },
+          { { 47.f, 293.f }, { 1442.f, 561.f } }),
+      _hitboxCocina({ { 1090.f, 470.f }, { 202.f, 265.f } }),
       _tocandoTaza(false),
       _mostrarHitboxes(true)
 {
@@ -46,7 +51,7 @@ void Juego::procesarEventos()
 void Juego::actualizar()
 {
     _gato.update();
-    resolverColisionGatoTaza();
+    resolverColisionesGato();
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::M))
     {
@@ -59,28 +64,33 @@ void Juego::dibujar()
 {
     _window.clear();
     _window.draw(_spriteFondo);
+    _window.draw(_heladera);
+    _window.draw(_mesa);
     _window.draw(_gato);
     _window.draw(_taza);
     dibujarHitboxes();
     _window.display();
 }
 
-void Juego::resolverColisionGatoTaza()
+void Juego::resolverColisionesGato()
+{
+    bool gatoApoyado = false;
+
+    gatoApoyado = gatoPuedeApoyarseEn(_heladera.getGlobalBounds()) || gatoApoyado;
+    gatoApoyado = gatoPuedeApoyarseEn(_hitboxCocina) || gatoApoyado;
+    gatoApoyado = gatoPuedeApoyarseEn(_mesa.getGlobalBounds()) || gatoApoyado;
+    gatoApoyado = resolverColisionGatoTaza() || gatoApoyado;
+
+    if (!gatoApoyado)
+    {
+        _gato.iniciarCaidaSiEstaElevado();
+    }
+}
+
+bool Juego::resolverColisionGatoTaza()
 {
     const sf::FloatRect areaTaza = _taza.getGlobalBounds();
     const sf::FloatRect areaGato = _gato.getGlobalBounds();
-    bool gatoApoyadoSobreTaza = false;
-
-    float gatoIzquierda = areaGato.position.x;
-    float gatoDerecha = areaGato.position.x + areaGato.size.x;
-    float baseGato = _gato.getBaseY();
-
-    float tazaIzquierda = areaTaza.position.x;
-    float tazaDerecha = areaTaza.position.x + areaTaza.size.x;
-    float tazaArriba = areaTaza.position.y;
-
-    bool seCruzanEnX = gatoDerecha > tazaIzquierda && gatoIzquierda < tazaDerecha;
-    bool gatoCercaDeArriba = baseGato >= tazaArriba - 8.f && baseGato <= tazaArriba + 30.f;
 
     if (areaGato.findIntersection(areaTaza))
     {
@@ -89,27 +99,36 @@ void Juego::resolverColisionGatoTaza()
             std::cout << "TIRAR TAZA" << std::endl;
             _tocandoTaza = true;
         }
-
-        if (seCruzanEnX && gatoCercaDeArriba)
-        {
-            _gato.apoyarEn(tazaArriba);
-            gatoApoyadoSobreTaza = true;
-        }
     }
     else
     {
         _tocandoTaza = false;
-
-        if (seCruzanEnX && gatoCercaDeArriba)
-        {
-            gatoApoyadoSobreTaza = true;
-        }
     }
 
-    if (!gatoApoyadoSobreTaza)
+    return gatoPuedeApoyarseEn(areaTaza);
+}
+
+bool Juego::gatoPuedeApoyarseEn(const sf::FloatRect& superficie)
+{
+    const sf::FloatRect areaGato = _gato.getGlobalBounds();
+    const float gatoIzquierda = areaGato.position.x;
+    const float gatoDerecha = areaGato.position.x + areaGato.size.x;
+    const float superficieIzquierda = superficie.position.x;
+    const float superficieDerecha = superficie.position.x + superficie.size.x;
+    const float superficieArriba = superficie.position.y;
+    const float baseGato = _gato.getBaseY();
+
+    const bool seCruzanEnX = gatoDerecha > superficieIzquierda && gatoIzquierda < superficieDerecha;
+    const bool gatoCercaDeArriba = baseGato >= superficieArriba - 8.f
+        && baseGato <= superficieArriba + 30.f;
+
+    if (seCruzanEnX && gatoCercaDeArriba)
     {
-        _gato.iniciarCaidaSiEstaElevado();
+        _gato.apoyarEn(superficieArriba);
+        return true;
     }
+
+    return false;
 }
 
 void Juego::dibujarHitboxes()
@@ -135,4 +154,28 @@ void Juego::dibujarHitboxes()
 
     _window.draw(rectGato);
     _window.draw(rectTaza);
+
+    const sf::FloatRect hitboxHeladera = _heladera.getGlobalBounds();
+    sf::RectangleShape rectHeladera(hitboxHeladera.size);
+    rectHeladera.setPosition(hitboxHeladera.position);
+    rectHeladera.setFillColor(sf::Color::Transparent);
+    rectHeladera.setOutlineColor(sf::Color::Blue);
+    rectHeladera.setOutlineThickness(2.f);
+
+    sf::RectangleShape rectCocina(_hitboxCocina.size);
+    rectCocina.setPosition(_hitboxCocina.position);
+    rectCocina.setFillColor(sf::Color::Transparent);
+    rectCocina.setOutlineColor(sf::Color::Magenta);
+    rectCocina.setOutlineThickness(2.f);
+
+    const sf::FloatRect hitboxMesa = _mesa.getGlobalBounds();
+    sf::RectangleShape rectMesa(hitboxMesa.size);
+    rectMesa.setPosition(hitboxMesa.position);
+    rectMesa.setFillColor(sf::Color::Transparent);
+    rectMesa.setOutlineColor(sf::Color::Yellow);
+    rectMesa.setOutlineThickness(2.f);
+
+    _window.draw(rectHeladera);
+    _window.draw(rectCocina);
+    _window.draw(rectMesa);
 }

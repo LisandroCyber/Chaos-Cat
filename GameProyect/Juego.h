@@ -1,5 +1,6 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+#include "Mueble.h"
 #include "Personaje.h"
 #include "ObjetoChico.h"
 
@@ -12,6 +13,9 @@ private:
 
     Personaje _gato;
     ObjetoChico _taza;
+    Mueble _heladera;
+    Mueble _mesa;
+    sf::FloatRect _hitboxCocina;
 
     bool _tocandoTaza;
     bool _mostrarHitboxes;
@@ -19,7 +23,9 @@ private:
     void procesarEventos();
     void actualizar();
     void dibujar();
-    void resolverColisionGatoTaza();
+    void resolverColisionesGato();
+    bool resolverColisionGatoTaza();
+    bool gatoPuedeApoyarseEn(const sf::FloatRect& superficie);
     void dibujarHitboxes();
 
 public:
