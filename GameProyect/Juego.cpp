@@ -51,7 +51,13 @@ void Juego::procesarEventos()
 void Juego::actualizar()
 {
     _gato.update();
+    _taza.update();
     resolverColisionesGato();
+
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::R))
+    {
+        _taza.reiniciar();
+    }
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::M))
     {
@@ -89,16 +95,25 @@ void Juego::resolverColisionesGato()
 
 bool Juego::resolverColisionGatoTaza()
 {
+    if (_taza.estaTirado())
+    {
+        _tocandoTaza = false;
+        return false;
+    }
+
     const sf::FloatRect areaTaza = _taza.getGlobalBounds();
     const sf::FloatRect areaGolpe = _gato.getHitboxGolpe();
+    const sf::FloatRect areaGato = _gato.getGlobalBounds();
 
     if (_gato.estaGolpeando() && areaGolpe.findIntersection(areaTaza))
     {
-        if (!_tocandoTaza)
-        {
-            std::cout << "TIRAR TAZA" << std::endl;
-            _tocandoTaza = true;
-        }
+        const float centroGato = areaGato.position.x + areaGato.size.x / 2.f;
+        const float centroTaza = areaTaza.position.x + areaTaza.size.x / 2.f;
+        const float direccion = centroTaza >= centroGato ? 1.f : -1.f;
+
+        _taza.tirar(direccion);
+        _tocandoTaza = false;
+        return false;
     }
     else
     {

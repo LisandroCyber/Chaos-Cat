@@ -1,5 +1,6 @@
 #include <SFML/Graphics.hpp>
 #include "ObjetoChico.h"
+#include "Constantes.h"
 #include <cstdlib>
 #include <iostream>
 
@@ -17,7 +18,8 @@ sf::Texture ObjetoChico::cargarTextura(const std::string& rutaTextura)
 }
 
 ObjetoChico::ObjetoChico(const std::string& rutaTextura, const sf::Vector2f& posicion, float escala)
-	: _texture(cargarTextura(rutaTextura)), _sprite(_texture)
+	: _texture(cargarTextura(rutaTextura)), _sprite(_texture), _posicionInicial(posicion),
+	  _velocidad({ 0.f, 0.f }), _tirado(false), _visible(true)
 {
 	_sprite.setPosition(posicion);
 	_sprite.setScale({ escala, escala });
@@ -27,10 +29,53 @@ ObjetoChico::ObjetoChico(const std::string& rutaTextura, const sf::Vector2f& pos
 
 void ObjetoChico::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
-	target.draw(_sprite, states);
+	if (_visible)
+	{
+		target.draw(_sprite, states);
+	}
 }
 
 sf::FloatRect ObjetoChico::getGlobalBounds() const
 {
 	return _sprite.getGlobalBounds();
+}
+
+void ObjetoChico::update()
+{
+	if (!_tirado)
+	{
+		return;
+	}
+
+	_sprite.move(_velocidad);
+	_velocidad.y += 0.45f;
+
+	if (_sprite.getGlobalBounds().position.y > ALTO_VENTANA)
+	{
+		_visible = false;
+	}
+}
+
+void ObjetoChico::tirar(float direccion)
+{
+	if (_tirado)
+	{
+		return;
+	}
+
+	_tirado = true;
+	_velocidad = { 8.f * direccion, -7.f };
+}
+
+void ObjetoChico::reiniciar()
+{
+	_sprite.setPosition(_posicionInicial);
+	_velocidad = { 0.f, 0.f };
+	_tirado = false;
+	_visible = true;
+}
+
+bool ObjetoChico::estaTirado() const
+{
+	return _tirado;
 }
