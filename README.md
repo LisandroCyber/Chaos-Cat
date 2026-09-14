@@ -27,7 +27,7 @@ En la versión disponible en la rama `EnProceso` ya se encuentran implementadas 
 - Posibilidad de saltar y apoyarse sobre objetos.
 - Fondo y sprites cargados desde archivos externos.
 
-Actualmente, al tocar la taza se muestra el mensaje `TIRAR TAZA` en la consola. El movimiento físico y la caída del objeto todavía no están implementados.
+Actualmente, al tocar la taza se muestra una indicación en la consola. Al presionar `E`, la taza sale impulsada hacia el lado opuesto al gato y cae por gravedad. Se puede usar `R` para devolverla a su posición inicial durante las pruebas.
 
 ## Controles
 
@@ -40,6 +40,8 @@ Actualmente, al tocar la taza se muestra el mensaje `TIRAR TAZA` en la consola. 
 | `Shift izquierdo` | Correr |
 | `Ctrl izquierdo` | Agacharse |
 | `Espacio` | Saltar |
+| `E` | Tirar la taza al tocarla |
+| `R` | Reiniciar la posición de la taza |
 | `M` | Mostrar la posición del gato en la consola |
 
 ## Mecánica planeada
