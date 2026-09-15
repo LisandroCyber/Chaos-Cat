@@ -1,13 +1,19 @@
 #include "Juego.h"
 #include "Constantes.h"
+#include "NivelCocina.h"
 #include <iostream>
 
 Juego::Juego()
     : _window(sf::VideoMode({ ANCHO_VENTANA, ALTO_VENTANA }), "Chaos Cat SFML 3"),
       _gato(),
-      _nivel(TipoNivel::Cocina)
+      _nivel(new NivelCocina())
 {
     _window.setFramerateLimit(LIMITE_FPS);
+}
+
+Juego::~Juego()
+{
+    delete _nivel;
 }
 
 void Juego::ejecutar()
@@ -34,11 +40,11 @@ void Juego::procesarEventos()
 void Juego::actualizar()
 {
     _gato.update();
-    _nivel.actualizar(_gato);
+    _nivel->actualizar(_gato);
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::R))
     {
-        _nivel.reiniciarObjetos();
+        _nivel->reiniciarObjetos();
     }
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::M))
@@ -51,6 +57,6 @@ void Juego::actualizar()
 void Juego::dibujar()
 {
     _window.clear();
-    _nivel.dibujar(_window, _gato);
+    _nivel->dibujar(_window, _gato);
     _window.display();
 }

@@ -24,6 +24,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Mueble.cpp" />
     <ClCompile Include="Nivel.cpp" />
+    <ClCompile Include="NivelCocina.cpp" />
     <ClCompile Include="Objeto.cpp" />
     <ClCompile Include="Personaje.cpp" />
   </ItemGroup>
@@ -33,6 +34,7 @@
     <ClInclude Include="Juego.h" />
     <ClInclude Include="Mueble.h" />
     <ClInclude Include="Nivel.h" />
+    <ClInclude Include="NivelCocina.h" />
     <ClInclude Include="Objeto.h" />
     <ClInclude Include="Personaje.h" />
   </ItemGroup>

@@ -10,7 +10,7 @@ private:
     sf::RenderWindow _window;
 
     Personaje _gato;
-    Nivel _nivel;
+    Nivel* _nivel;
 
     void procesarEventos();
     void actualizar();
@@ -18,5 +18,6 @@ private:
 
 public:
     Juego();
+    ~Juego();
     void ejecutar();
 };

@@ -1,7 +1,6 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
-#include <memory>
 #include <string>
 #include <vector>
 
@@ -10,26 +9,19 @@
 #include "Objeto.h"
 #include "Personaje.h"
 
-enum class TipoNivel
-{
-    Cocina
-};
-
 class Nivel
 {
 private:
     sf::Texture _texturaFondo;
     sf::Sprite _spriteFondo;
 
-    std::vector<std::unique_ptr<Humano>> _humanos;
-    std::vector<std::unique_ptr<Mueble>> _muebles;
-    std::vector<std::unique_ptr<Objeto>> _objetos;
+    std::vector<Humano*> _humanos;
+    std::vector<Mueble*> _muebles;
+    std::vector<Objeto*> _objetos;
     std::vector<sf::FloatRect> _superficiesFijas;
 
     bool _mostrarHitboxes;
 
-    void cargarCocina();
-    void cargarFondo(const std::string& rutaTextura);
     void resolverColisiones(Personaje& gato);
     bool resolverColisionGatoObjeto(Personaje& gato, Objeto& objeto);
     bool gatoPuedeApoyarseEn(Personaje& gato,
@@ -40,8 +32,10 @@ private:
         const sf::FloatRect& hitbox,
         const sf::Color& color);
 
-public:
-    explicit Nivel(TipoNivel tipo);
+protected:
+    Nivel();
+
+    void cargarFondo(const std::string& rutaTextura);
 
     void agregarHumano(const std::string& rutaTextura,
         const sf::Vector2f& posicion,
@@ -56,6 +50,9 @@ public:
         const sf::Vector2f& posicion,
         float escala);
     void agregarSuperficie(const sf::FloatRect& superficie);
+
+public:
+    virtual ~Nivel();
 
     void actualizar(Personaje& gato);
     void reiniciarObjetos();

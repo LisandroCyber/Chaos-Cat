@@ -3,40 +3,28 @@
 #include <cstdlib>
 #include <iostream>
 
-Nivel::Nivel(TipoNivel tipo)
+Nivel::Nivel()
     : _spriteFondo(_texturaFondo),
       _mostrarHitboxes(true)
 {
-    switch (tipo)
-    {
-    case TipoNivel::Cocina:
-        cargarCocina();
-        break;
-    }
 }
 
-void Nivel::cargarCocina()
+Nivel::~Nivel()
 {
-    cargarFondo("images/cocina.png");
+    for (Humano* humano : _humanos)
+    {
+        delete humano;
+    }
 
-    agregarHumano("images/frames_humano.png",
-        { 672.f, 664.f },
-        600,
-        724,
-        { 0.7f, 0.82f });
+    for (Mueble* mueble : _muebles)
+    {
+        delete mueble;
+    }
 
-    agregarMueble("images/heladera.png",
-        { 3.f, 300.f },
-        { 0.25f, 0.272f },
-        { { 177.f, 40.f }, { 695.f, 1459.f } });
-
-    agregarMueble("images/mesa-larga.png",
-        { 356.06f, 400.f },
-        { 0.280825f, 0.384588f },
-        { { 47.f, 293.f }, { 1442.f, 561.f } });
-
-    agregarObjeto("images/TazaCafe.png", { 458.f, 490.f }, 0.2f);
-    agregarSuperficie({ { 1090.f, 470.f }, { 202.f, 265.f } });
+    for (Objeto* objeto : _objetos)
+    {
+        delete objeto;
+    }
 }
 
 void Nivel::cargarFondo(const std::string& rutaTextura)
@@ -56,7 +44,7 @@ void Nivel::agregarHumano(const std::string& rutaTextura,
     int frameAlto,
     const sf::Vector2f& escala)
 {
-    _humanos.push_back(std::make_unique<Humano>(
+    _humanos.push_back(new Humano(
         rutaTextura,
         posicion,
         frameAncho,
@@ -70,7 +58,7 @@ void Nivel::agregarMueble(const std::string& rutaTextura,
     const sf::Vector2f& escala,
     const sf::FloatRect& hitboxLocal)
 {
-    _muebles.push_back(std::make_unique<Mueble>(
+    _muebles.push_back(new Mueble(
         rutaTextura,
         posicion,
         escala,
@@ -82,7 +70,7 @@ void Nivel::agregarObjeto(const std::string& rutaTextura,
     const sf::Vector2f& posicion,
     float escala)
 {
-    _objetos.push_back(std::make_unique<Objeto>(
+    _objetos.push_back(new Objeto(
         rutaTextura,
         posicion,
         escala
@@ -96,7 +84,7 @@ void Nivel::agregarSuperficie(const sf::FloatRect& superficie)
 
 void Nivel::actualizar(Personaje& gato)
 {
-    for (const std::unique_ptr<Objeto>& objeto : _objetos)
+    for (Objeto* objeto : _objetos)
     {
         objeto->update();
     }
@@ -106,7 +94,7 @@ void Nivel::actualizar(Personaje& gato)
 
 void Nivel::reiniciarObjetos()
 {
-    for (const std::unique_ptr<Objeto>& objeto : _objetos)
+    for (Objeto* objeto : _objetos)
     {
         objeto->reiniciar();
     }
@@ -116,7 +104,7 @@ void Nivel::resolverColisiones(Personaje& gato)
 {
     bool gatoApoyado = false;
 
-    for (const std::unique_ptr<Mueble>& mueble : _muebles)
+    for (Mueble* mueble : _muebles)
     {
         gatoApoyado = gatoPuedeApoyarseEn(gato, mueble->getGlobalBounds()) || gatoApoyado;
     }
@@ -126,7 +114,7 @@ void Nivel::resolverColisiones(Personaje& gato)
         gatoApoyado = gatoPuedeApoyarseEn(gato, superficie) || gatoApoyado;
     }
 
-    for (const std::unique_ptr<Objeto>& objeto : _objetos)
+    for (Objeto* objeto : _objetos)
     {
         gatoApoyado = resolverColisionGatoObjeto(gato, *objeto) || gatoApoyado;
     }
@@ -190,19 +178,19 @@ void Nivel::dibujar(sf::RenderWindow& ventana,
 {
     ventana.draw(_spriteFondo);
 
-    for (const std::unique_ptr<Humano>& humano : _humanos)
+    for (const Humano* humano : _humanos)
     {
         ventana.draw(*humano);
     }
 
-    for (const std::unique_ptr<Mueble>& mueble : _muebles)
+    for (const Mueble* mueble : _muebles)
     {
         ventana.draw(*mueble);
     }
 
     ventana.draw(gato);
 
-    for (const std::unique_ptr<Objeto>& objeto : _objetos)
+    for (const Objeto* objeto : _objetos)
     {
         ventana.draw(*objeto);
     }
@@ -220,7 +208,7 @@ void Nivel::dibujarHitboxes(sf::RenderWindow& ventana,
 
     dibujarHitbox(ventana, gato.getGlobalBounds(), sf::Color::Green);
 
-    for (const std::unique_ptr<Objeto>& objeto : _objetos)
+    for (const Objeto* objeto : _objetos)
     {
         dibujarHitbox(ventana, objeto->getGlobalBounds(), sf::Color::Red);
     }
@@ -230,7 +218,7 @@ void Nivel::dibujarHitboxes(sf::RenderWindow& ventana,
         dibujarHitbox(ventana, gato.getHitboxGolpe(), sf::Color::Cyan);
     }
 
-    for (const std::unique_ptr<Mueble>& mueble : _muebles)
+    for (const Mueble* mueble : _muebles)
     {
         dibujarHitbox(ventana, mueble->getGlobalBounds(), sf::Color::Blue);
     }
