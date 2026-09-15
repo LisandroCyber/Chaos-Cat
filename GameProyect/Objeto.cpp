@@ -27,11 +27,11 @@ Objeto::Objeto(const std::string& rutaTextura, const sf::Vector2f& posicion, flo
 	
 }
 
-void Objeto::draw(sf::RenderTarget& target, sf::RenderStates states) const
+void Objeto::dibujar(sf::RenderWindow& ventana) const
 {
 	if (_visible)
 	{
-		target.draw(_sprite, states);
+		ventana.draw(_sprite);
 	}
 }
 

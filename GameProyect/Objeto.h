@@ -3,7 +3,6 @@
 #include <string>
 
 class Objeto
-:	public sf::Drawable
 {
 private:
 	sf::Texture _texture;
@@ -25,6 +24,5 @@ public:
 	void reiniciar();
 	bool estaTirado() const;
 
-	void draw(sf::RenderTarget& target,
-		sf::RenderStates states) const override;
+	void dibujar(sf::RenderWindow& ventana) const;
 };

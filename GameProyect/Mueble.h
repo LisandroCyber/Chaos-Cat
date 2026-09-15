@@ -3,7 +3,7 @@
 #include <SFML/Graphics.hpp>
 #include <string>
 
-class Mueble : public sf::Drawable
+class Mueble
 {
 private:
     sf::Texture _textura;
@@ -20,6 +20,5 @@ public:
 
     sf::FloatRect getGlobalBounds() const;
 
-    void draw(sf::RenderTarget& target,
-        sf::RenderStates states) const override;
+    void dibujar(sf::RenderWindow& ventana) const;
 };

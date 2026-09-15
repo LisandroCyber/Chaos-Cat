@@ -85,7 +85,7 @@ Humano::Humano(const std::string& rutaTextura,
     _sprite.setScale(escala);
 }
 
-void Humano::draw(sf::RenderTarget& target, sf::RenderStates states) const
+void Humano::dibujar(sf::RenderWindow& ventana) const
 {
-    target.draw(_sprite, states);
+    ventana.draw(_sprite);
 }

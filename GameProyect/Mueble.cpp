@@ -45,7 +45,7 @@ sf::FloatRect Mueble::getGlobalBounds() const
     };
 }
 
-void Mueble::draw(sf::RenderTarget& target, sf::RenderStates states) const
+void Mueble::dibujar(sf::RenderWindow& ventana) const
 {
-    target.draw(_sprite, states);
+    ventana.draw(_sprite);
 }

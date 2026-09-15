@@ -10,7 +10,7 @@ enum class EstadoGato {
     Golpeando
 };
 
-class Personaje : public sf::Drawable
+class Personaje
 {
 private:
     sf::Texture _texture;
@@ -69,6 +69,5 @@ public:
     void apoyarEn(float superficieY);
     void iniciarCaidaSiEstaElevado();
 
-    void draw(sf::RenderTarget& target,
-        sf::RenderStates states) const override;
+    void dibujar(sf::RenderWindow& ventana) const;
 };

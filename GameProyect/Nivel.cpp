@@ -180,19 +180,19 @@ void Nivel::dibujar(sf::RenderWindow& ventana,
 
     for (const Humano* humano : _humanos)
     {
-        ventana.draw(*humano);
+        humano->dibujar(ventana);
     }
 
     for (const Mueble* mueble : _muebles)
     {
-        ventana.draw(*mueble);
+        mueble->dibujar(ventana);
     }
 
-    ventana.draw(gato);
+    gato.dibujar(ventana);
 
     for (const Objeto* objeto : _objetos)
     {
-        ventana.draw(*objeto);
+        objeto->dibujar(ventana);
     }
 
     dibujarHitboxes(ventana, gato);

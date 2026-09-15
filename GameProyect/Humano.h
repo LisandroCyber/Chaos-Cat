@@ -3,7 +3,7 @@
 #include <SFML/Graphics.hpp>
 #include <string>
 
-class Humano : public sf::Drawable
+class Humano
 {
 private:
     sf::Texture _textura;
@@ -23,6 +23,5 @@ public:
         int frameAlto,
         const sf::Vector2f& escala);
 
-    void draw(sf::RenderTarget& target,
-        sf::RenderStates states) const override;
+    void dibujar(sf::RenderWindow& ventana) const;
 };

@@ -331,12 +331,12 @@ bool Personaje::estaGolpeando() const
     return _estado == EstadoGato::Golpeando;
 }
 
-void Personaje::draw(sf::RenderTarget& target, sf::RenderStates states) const
+void Personaje::dibujar(sf::RenderWindow& ventana) const
 {
     sf::Sprite spriteDibujo = _sprite;
     spriteDibujo.setPosition(obtenerPosicionDibujo());
 
-    target.draw(spriteDibujo, states);
+    ventana.draw(spriteDibujo);
 }
 
 float Personaje::getPosx() {
