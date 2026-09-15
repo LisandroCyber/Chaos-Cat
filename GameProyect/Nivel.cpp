@@ -241,3 +241,34 @@ void Nivel::dibujarHitbox(sf::RenderWindow& ventana,
 
     ventana.draw(rectangulo);
 }
+
+bool Nivel::cargarMusicaFondo(const std::string& rutaMusica, float volumen)
+{
+    if (!_musicaFondo.openFromFile(rutaMusica))
+    {
+        std::cout << "No se pudo cargar la musica: "
+            << rutaMusica << "\n";
+
+        return false;
+    }
+
+    _musicaFondo.setVolume(volumen);
+    _musicaFondo.setLooping(true);
+
+    return true;
+}
+
+void Nivel::configurarLoopMusica(sf::Time inicioLoop,
+    sf::Time duracionLoop)
+{
+    _musicaFondo.setLoopPoints({
+        inicioLoop,
+        duracionLoop
+        });
+}
+
+void Nivel::reproducirMusicaFondo(sf::Time inicioReproduccion)
+{
+    _musicaFondo.setPlayingOffset(inicioReproduccion);
+    _musicaFondo.play();
+}

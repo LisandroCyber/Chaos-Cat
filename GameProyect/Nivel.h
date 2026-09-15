@@ -8,12 +8,14 @@
 #include "Mueble.h"
 #include "Objeto.h"
 #include "Personaje.h"
+#include <SFML/Audio.hpp>
 
 class Nivel
 {
 private:
     sf::Texture _texturaFondo;
     sf::Sprite _spriteFondo;
+    sf::Music _musicaFondo;
 
     std::vector<Humano*> _humanos;
     std::vector<Mueble*> _muebles;
@@ -50,6 +52,10 @@ protected:
         const sf::Vector2f& posicion,
         float escala);
     void agregarSuperficie(const sf::FloatRect& superficie);
+
+    bool cargarMusicaFondo(const std::string& rutaMusica, float volumen);
+    void configurarLoopMusica(sf::Time inicioLoop, sf::Time duracionLoop);
+    void reproducirMusicaFondo(sf::Time inicioReproduccion);
 
 public:
     virtual ~Nivel();

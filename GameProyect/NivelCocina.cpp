@@ -4,6 +4,11 @@ NivelCocina::NivelCocina()
 {
     cargarFondo("images/cocina.png");
 
+    if (cargarMusicaFondo("music/cocina.mp3", 20.f))
+    {
+        reproducirMusicaFondo(sf::seconds(0.f));
+    }
+
     agregarHumano("images/frames_humano.png",
         { 672.f, 664.f },
         600,
