@@ -1,5 +1,7 @@
 #pragma once
+
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 
 enum class EstadoGato {
     Quieto,
@@ -16,6 +18,9 @@ private:
     sf::Texture _texture;
     sf::Sprite _sprite;
     sf::Vector2f _velocity;
+
+    sf::SoundBuffer _bufferSalto;
+    sf::Sound _sonidoSalto;
 
     EstadoGato _estado;
     int _frameAncho;

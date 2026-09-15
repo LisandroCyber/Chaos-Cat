@@ -18,7 +18,7 @@ sf::Texture Personaje::cargarTextura()
 }
 
 Personaje::Personaje()
-    : _texture(cargarTextura()), _sprite(_texture)
+    : _texture(cargarTextura()), _sprite(_texture), _sonidoSalto(_bufferSalto)
 {
     //frame del gato
     _frameAncho = 600;
@@ -28,6 +28,13 @@ Personaje::Personaje()
     //velocidad inicial, junto con otros atributos iniciados
     _sprite.setScale({ _escala, _escala });
     _velocity = { 0.f, 0.f };
+
+    if (!_bufferSalto.loadFromFile("sound effects/salto_gato.mp3"))
+    {
+        std::cout << "No se pudo cargar el sonido del salto\n";
+    }
+
+    _sonidoSalto.setVolume(35.f);
 
     _estado = EstadoGato::Sentado;
     _contandoQuieto = true;
@@ -315,6 +322,8 @@ void Personaje::saltar()
         _enElPiso = false;
         _alturaVertical = 0.f;
         _velocidadVertical = VELOCIDAD_INICIAL_SALTO;
+
+        _sonidoSalto.play();
     }
 }
 
