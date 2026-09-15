@@ -1,34 +1,20 @@
 #pragma once
+
 #include <SFML/Graphics.hpp>
-#include "Humano.h"
-#include "Mueble.h"
+#include "Nivel.h"
 #include "Personaje.h"
-#include "ObjetoChico.h"
 
 class Juego
 {
 private:
     sf::RenderWindow _window;
-    sf::Texture _texturaFondo;
-    sf::Sprite _spriteFondo;
 
     Personaje _gato;
-    Humano _duenio;
-    ObjetoChico _taza;
-    Mueble _heladera;
-    Mueble _mesa;
-    sf::FloatRect _hitboxCocina;
-
-    bool _tocandoTaza;
-    bool _mostrarHitboxes;
+    Nivel _nivel;
 
     void procesarEventos();
     void actualizar();
     void dibujar();
-    void resolverColisionesGato();
-    bool resolverColisionGatoTaza();
-    bool gatoPuedeApoyarseEn(const sf::FloatRect& superficie);
-    void dibujarHitboxes();
 
 public:
     Juego();

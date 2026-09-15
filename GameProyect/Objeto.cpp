@@ -1,10 +1,10 @@
 #include <SFML/Graphics.hpp>
-#include "ObjetoChico.h"
+#include "Objeto.h"
 #include "Constantes.h"
 #include <cstdlib>
 #include <iostream>
 
-sf::Texture ObjetoChico::cargarTextura(const std::string& rutaTextura)
+sf::Texture Objeto::cargarTextura(const std::string& rutaTextura)
 {
 	sf::Texture textura;
 
@@ -17,7 +17,7 @@ sf::Texture ObjetoChico::cargarTextura(const std::string& rutaTextura)
 	return textura;
 }
 
-ObjetoChico::ObjetoChico(const std::string& rutaTextura, const sf::Vector2f& posicion, float escala)
+Objeto::Objeto(const std::string& rutaTextura, const sf::Vector2f& posicion, float escala)
 	: _texture(cargarTextura(rutaTextura)), _sprite(_texture), _posicionInicial(posicion),
 	  _velocidad({ 0.f, 0.f }), _tirado(false), _visible(true)
 {
@@ -27,7 +27,7 @@ ObjetoChico::ObjetoChico(const std::string& rutaTextura, const sf::Vector2f& pos
 	
 }
 
-void ObjetoChico::draw(sf::RenderTarget& target, sf::RenderStates states) const
+void Objeto::draw(sf::RenderTarget& target, sf::RenderStates states) const
 {
 	if (_visible)
 	{
@@ -35,12 +35,12 @@ void ObjetoChico::draw(sf::RenderTarget& target, sf::RenderStates states) const
 	}
 }
 
-sf::FloatRect ObjetoChico::getGlobalBounds() const
+sf::FloatRect Objeto::getGlobalBounds() const
 {
 	return _sprite.getGlobalBounds();
 }
 
-void ObjetoChico::update()
+void Objeto::update()
 {
 	if (!_tirado)
 	{
@@ -56,7 +56,7 @@ void ObjetoChico::update()
 	}
 }
 
-void ObjetoChico::tirar(float direccion)
+void Objeto::tirar(float direccion)
 {
 	if (_tirado)
 	{
@@ -67,7 +67,7 @@ void ObjetoChico::tirar(float direccion)
 	_velocidad = { 8.f * direccion, -7.f };
 }
 
-void ObjetoChico::reiniciar()
+void Objeto::reiniciar()
 {
 	_sprite.setPosition(_posicionInicial);
 	_velocidad = { 0.f, 0.f };
@@ -75,7 +75,7 @@ void ObjetoChico::reiniciar()
 	_visible = true;
 }
 
-bool ObjetoChico::estaTirado() const
+bool Objeto::estaTirado() const
 {
 	return _tirado;
 }

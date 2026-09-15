@@ -2,7 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include <string>
 
-class ObjetoChico
+class Objeto
 :	public sf::Drawable
 {
 private:
@@ -17,7 +17,7 @@ private:
 
 public:
 	
-	ObjetoChico(const std::string& rutaTextura, const sf::Vector2f& posicion, float escala);
+	Objeto(const std::string& rutaTextura, const sf::Vector2f& posicion, float escala);
 
 	sf::FloatRect getGlobalBounds() const;
 	void update();
