@@ -136,6 +136,7 @@ bool Nivel::resolverColisionGatoObjeto(Personaje& gato, Objeto& objeto)
     const sf::FloatRect areaGolpe = gato.getHitboxGolpe();
     const sf::FloatRect areaGato = gato.getGlobalBounds();
 
+    // Golpe frontal (hitbox de golpe)
     if (gato.estaGolpeando() && areaGolpe.findIntersection(areaObjeto))
     {
         const float centroGato = areaGato.position.x + areaGato.size.x / 2.f;
@@ -144,6 +145,30 @@ bool Nivel::resolverColisionGatoObjeto(Personaje& gato, Objeto& objeto)
 
         objeto.tirar(direccion);
         return false;
+    }
+
+    // Golpe cuando el gato está encima del objeto
+    {
+        const float gatoIzquierda = areaGato.position.x;
+        const float gatoDerecha = areaGato.position.x + areaGato.size.x;
+        const float superficieIzquierda = areaObjeto.position.x;
+        const float superficieDerecha = areaObjeto.position.x + areaObjeto.size.x;
+        const float superficieArriba = areaObjeto.position.y;
+        const float baseGato = gato.getBaseY();
+
+        const bool seCruzanEnX = gatoDerecha > superficieIzquierda && gatoIzquierda < superficieDerecha;
+        const bool gatoCercaDeArriba = baseGato >= superficieArriba - 8.f
+            && baseGato <= superficieArriba + 30.f;
+
+        if (gato.estaGolpeando() && seCruzanEnX && gatoCercaDeArriba)
+        {
+            const float centroGato = areaGato.position.x + areaGato.size.x / 2.f;
+            const float centroObjeto = areaObjeto.position.x + areaObjeto.size.x / 2.f;
+            const float direccion = centroObjeto >= centroGato ? 1.f : -1.f;
+
+            objeto.tirar(direccion);
+            return false;
+        }
     }
 
     return gatoPuedeApoyarseEn(gato, areaObjeto);
