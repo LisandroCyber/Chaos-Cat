@@ -137,7 +137,7 @@ bool Nivel::resolverColisionGatoObjeto(Personaje& gato, Objeto& objeto)
     const sf::FloatRect areaGato = gato.getGlobalBounds();
 
     // Golpe frontal (hitbox de golpe)
-    if (gato.estaGolpeando() && areaGolpe.findIntersection(areaObjeto))
+    if (gato.estaGolpeando() && areaGolpe.intersects(areaObjeto))
     {
         const float centroGato = areaGato.left + areaGato.width / 2.f;
         const float centroObjeto = areaObjeto.left + areaObjeto.width / 2.f;
@@ -149,11 +149,11 @@ bool Nivel::resolverColisionGatoObjeto(Personaje& gato, Objeto& objeto)
 
     // Golpe cuando el gato está encima del objeto
     {
-        const float gatoIzquierda = areaGato.position.x;
-        const float gatoDerecha = areaGato.position.x + areaGato.size.x;
-        const float superficieIzquierda = areaObjeto.position.x;
-        const float superficieDerecha = areaObjeto.position.x + areaObjeto.size.x;
-        const float superficieArriba = areaObjeto.position.y;
+        const float gatoIzquierda = areaGato.left;
+        const float gatoDerecha = areaGato.left + areaGato.width;
+        const float superficieIzquierda = areaObjeto.left;
+        const float superficieDerecha = areaObjeto.left + areaObjeto.width;
+        const float superficieArriba = areaObjeto.top;
         const float baseGato = gato.getBaseY();
 
         const bool seCruzanEnX = gatoDerecha > superficieIzquierda && gatoIzquierda < superficieDerecha;
@@ -162,8 +162,8 @@ bool Nivel::resolverColisionGatoObjeto(Personaje& gato, Objeto& objeto)
 
         if (gato.estaGolpeando() && seCruzanEnX && gatoCercaDeArriba)
         {
-            const float centroGato = areaGato.position.x + areaGato.size.x / 2.f;
-            const float centroObjeto = areaObjeto.position.x + areaObjeto.size.x / 2.f;
+            const float centroGato = areaGato.left + areaGato.width / 2.f;
+            const float centroObjeto = areaObjeto.left + areaObjeto.width / 2.f;
             const float direccion = centroObjeto >= centroGato ? 1.f : -1.f;
 
             objeto.tirar(direccion);
