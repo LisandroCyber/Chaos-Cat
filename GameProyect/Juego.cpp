@@ -4,7 +4,7 @@
 #include <iostream>
 
 Juego::Juego()
-    : _window(sf::VideoMode({ ANCHO_VENTANA, ALTO_VENTANA }), "Chaos Cat SFML 3"),
+    : _window(sf::VideoMode(ANCHO_VENTANA, ALTO_VENTANA), "Chaos Cat SFML 2.5"),
       _gato(),
       _nivel(new NivelCocina())
 {
@@ -28,9 +28,11 @@ void Juego::ejecutar()
 
 void Juego::procesarEventos()
 {
-    while (const auto event = _window.pollEvent())
+    sf::Event event;
+
+    while (_window.pollEvent(event))
     {
-        if (event->is<sf::Event::Closed>())
+        if (event.type == sf::Event::Closed)
         {
             _window.close();
         }
@@ -42,12 +44,12 @@ void Juego::actualizar()
     _gato.update();
     _nivel->actualizar(_gato);
 
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::R))
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::R))
     {
         _nivel->reiniciarObjetos();
     }
 
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::M))
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::M))
     {
         std::cout << "Posision en x: " << _gato.getPosx() << std::endl;
         std::cout << "Posision en y: " << _gato.getPosy() << std::endl;

@@ -23,7 +23,7 @@ Objeto::Objeto(const std::string& rutaTextura, const sf::Vector2f& posicion, flo
 {
 	_sprite.setPosition(posicion);
 	_sprite.setScale({ escala, escala });
-	_sprite.setOrigin({ _sprite.getGlobalBounds().size.x / 2, 0 });
+	_sprite.setOrigin(_sprite.getGlobalBounds().width / 2.f, 0.f);
 	
 }
 
@@ -50,7 +50,7 @@ void Objeto::update()
 	_sprite.move(_velocidad);
 	_velocidad.y += 0.45f;
 
-	if (_sprite.getGlobalBounds().position.y > ALTO_VENTANA)
+	if (_sprite.getGlobalBounds().top > ALTO_VENTANA)
 	{
 		_visible = false;
 	}

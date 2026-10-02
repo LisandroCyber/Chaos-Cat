@@ -56,10 +56,7 @@ Personaje::Personaje()
     });
 
     //al ser un sprite con multiples imagenes, este dice donde pararse para la primer imagen
-    _sprite.setTextureRect(sf::IntRect(
-        { 0, 0 },
-        { _frameAncho, _frameAlto }
-    ));
+    _sprite.setTextureRect(sf::IntRect(0, 0, _frameAncho, _frameAlto));
 
     //con esto la posicion inicial siempre va a ser al costado inferior izquierdo de la pantalla
     float margenX = 0.f;
@@ -92,11 +89,11 @@ bool Personaje::procesarEntrada()
 {
     float velocidadActual = VELOCIDAD_CAMINAR;
 
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::LShift))
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
     {
         velocidadActual = VELOCIDAD_CORRER;
     }
-    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::LControl))
+    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::LControl))
     {
         velocidadActual = VELOCIDAD_AGACHADO;
     }
@@ -104,7 +101,7 @@ bool Personaje::procesarEntrada()
     _velocity = { 0.f, 0.f };
     bool seMueve = false;
 
-    const bool ePresionada = sf::Keyboard::isKeyPressed(sf::Keyboard::Key::E);
+    const bool ePresionada = sf::Keyboard::isKeyPressed(sf::Keyboard::E);
 
     if (ePresionada && !_ePresionadaAntes && _enElPiso && _estado != EstadoGato::Golpeando)
     {
@@ -118,33 +115,33 @@ bool Personaje::procesarEntrada()
         return false;
     }
 
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A))
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
     {
         _velocity.x = -velocidadActual;
         _sprite.setScale({ -_escala, _escala });
         seMueve = true;
     }
 
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D))
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
     {
         _velocity.x = velocidadActual;
         _sprite.setScale({ _escala, _escala });
         seMueve = true;
     }
 
-    /*if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W))
+    /*if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
     {
         _velocity.y = -velocidadActual;
         seMueve = true;
     }
 
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S))
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
     {
         _velocity.y = velocidadActual;
         seMueve = true;
     }*/
 
-    bool espacioPresionado = sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Space);
+    bool espacioPresionado = sf::Keyboard::isKeyPressed(sf::Keyboard::Space);
 
     if (espacioPresionado && !_espacioPresionadoAntes)
     {
@@ -168,7 +165,7 @@ void Personaje::actualizarEstado(bool seMueve)
         _contandoQuieto = false;
     }
 
-    if (seMueve || !_enElPiso || sf::Keyboard::isKeyPressed(sf::Keyboard::Key::LControl))
+    if (seMueve || !_enElPiso || sf::Keyboard::isKeyPressed(sf::Keyboard::LControl))
     {
         _contandoQuieto = false;
     }
@@ -177,7 +174,7 @@ void Personaje::actualizarEstado(bool seMueve)
     {
         _estado = EstadoGato::Saltando;
     }
-    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::LControl) && !sf::Keyboard::isKeyPressed(sf::Keyboard::Key::LShift))
+    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::LControl) && !sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
     {
         _estado = EstadoGato::Agachado;
     }
@@ -269,24 +266,24 @@ void Personaje::limitarMovimiento()
     sf::FloatRect hitbox = getGlobalBounds();
     sf::Vector2f ajuste = { 0.f, 0.f };
 
-    if (hitbox.position.x < 0.f)
+    if (hitbox.left < 0.f)
     {
-        ajuste.x = -hitbox.position.x;
+        ajuste.x = -hitbox.left;
     }
 
-    if (hitbox.position.x + hitbox.size.x > ANCHO_VENTANA)
+    if (hitbox.left + hitbox.width > ANCHO_VENTANA)
     {
-        ajuste.x = ANCHO_VENTANA - (hitbox.position.x + hitbox.size.x);
+        ajuste.x = ANCHO_VENTANA - (hitbox.left + hitbox.width);
     }
 
-    if (hitbox.position.y < 0.f)
+    if (hitbox.top < 0.f)
     {
-        ajuste.y = -hitbox.position.y;
+        ajuste.y = -hitbox.top;
     }
 
-    if (hitbox.position.y + hitbox.size.y > ALTO_VENTANA)
+    if (hitbox.top + hitbox.height > ALTO_VENTANA)
     {
-        ajuste.y = ALTO_VENTANA - (hitbox.position.y + hitbox.size.y);
+        ajuste.y = ALTO_VENTANA - (hitbox.top + hitbox.height);
     }
 
     _sprite.move(ajuste);
@@ -310,8 +307,10 @@ void Personaje::actualizarSprite()
         frame = 7 + _frameGolpe;
 
     _sprite.setTextureRect(sf::IntRect(
-        { frame * _frameAncho, 0 },
-        { _frameAncho, _frameAlto }
+        frame * _frameAncho,
+        0,
+        _frameAncho,
+        _frameAlto
     ));
 }
 
@@ -406,7 +405,7 @@ sf::FloatRect Personaje::getGlobalBounds() const
         posicionHitbox.y = posicionDibujo.y - alto / 2.f + offsetY;
     }
 
-    return sf::FloatRect(posicionHitbox, { ancho, alto });
+    return sf::FloatRect(posicionHitbox.x, posicionHitbox.y, ancho, alto);
 }
 
 sf::FloatRect Personaje::getHitboxGolpe() const
@@ -421,7 +420,7 @@ sf::FloatRect Personaje::getHitboxGolpe() const
         ? obtenerPosicionDibujo().x + desplazamientoPata
         : obtenerPosicionDibujo().x - desplazamientoPata - ancho;
 
-    return { { x, getBaseY() - alto }, { ancho, alto } };
+    return sf::FloatRect(x, getBaseY() - alto, ancho, alto);
 }
 
 void Personaje::mover(const sf::Vector2f& desplazamiento)

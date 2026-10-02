@@ -33,16 +33,12 @@ sf::FloatRect Mueble::getGlobalBounds() const
     const sf::Vector2f posicion = _sprite.getPosition();
     const sf::Vector2f escala = _sprite.getScale();
 
-    return {
-        {
-            posicion.x + _hitboxLocal.position.x * escala.x,
-            posicion.y + _hitboxLocal.position.y * escala.y
-        },
-        {
-            _hitboxLocal.size.x * escala.x,
-            _hitboxLocal.size.y * escala.y
-        }
-    };
+    return sf::FloatRect(
+        posicion.x + _hitboxLocal.left * escala.x,
+        posicion.y + _hitboxLocal.top * escala.y,
+        _hitboxLocal.width * escala.x,
+        _hitboxLocal.height * escala.y
+    );
 }
 
 void Mueble::dibujar(sf::RenderWindow& ventana) const

@@ -136,10 +136,10 @@ bool Nivel::resolverColisionGatoObjeto(Personaje& gato, Objeto& objeto)
     const sf::FloatRect areaGolpe = gato.getHitboxGolpe();
     const sf::FloatRect areaGato = gato.getGlobalBounds();
 
-    if (gato.estaGolpeando() && areaGolpe.findIntersection(areaObjeto))
+    if (gato.estaGolpeando() && areaGolpe.intersects(areaObjeto))
     {
-        const float centroGato = areaGato.position.x + areaGato.size.x / 2.f;
-        const float centroObjeto = areaObjeto.position.x + areaObjeto.size.x / 2.f;
+        const float centroGato = areaGato.left + areaGato.width / 2.f;
+        const float centroObjeto = areaObjeto.left + areaObjeto.width / 2.f;
         const float direccion = centroObjeto >= centroGato ? 1.f : -1.f;
 
         objeto.tirar(direccion);
@@ -153,11 +153,11 @@ bool Nivel::gatoPuedeApoyarseEn(Personaje& gato,
     const sf::FloatRect& superficie) const
 {
     const sf::FloatRect areaGato = gato.getGlobalBounds();
-    const float gatoIzquierda = areaGato.position.x;
-    const float gatoDerecha = areaGato.position.x + areaGato.size.x;
-    const float superficieIzquierda = superficie.position.x;
-    const float superficieDerecha = superficie.position.x + superficie.size.x;
-    const float superficieArriba = superficie.position.y;
+    const float gatoIzquierda = areaGato.left;
+    const float gatoDerecha = areaGato.left + areaGato.width;
+    const float superficieIzquierda = superficie.left;
+    const float superficieDerecha = superficie.left + superficie.width;
+    const float superficieArriba = superficie.top;
     const float baseGato = gato.getBaseY();
 
     const bool seCruzanEnX = gatoDerecha > superficieIzquierda && gatoIzquierda < superficieDerecha;
@@ -233,8 +233,8 @@ void Nivel::dibujarHitbox(sf::RenderWindow& ventana,
     const sf::FloatRect& hitbox,
     const sf::Color& color)
 {
-    sf::RectangleShape rectangulo(hitbox.size);
-    rectangulo.setPosition(hitbox.position);
+    sf::RectangleShape rectangulo(sf::Vector2f(hitbox.width, hitbox.height));
+    rectangulo.setPosition(hitbox.left, hitbox.top);
     rectangulo.setFillColor(sf::Color::Transparent);
     rectangulo.setOutlineColor(color);
     rectangulo.setOutlineThickness(2.f);
@@ -253,7 +253,7 @@ bool Nivel::cargarMusicaFondo(const std::string& rutaMusica, float volumen)
     }
 
     _musicaFondo.setVolume(volumen);
-    _musicaFondo.setLooping(true);
+    _musicaFondo.setLoop(true);
 
     return true;
 }

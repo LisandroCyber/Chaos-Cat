@@ -30,7 +30,7 @@ sf::Vector2f Humano::obtenerOrigenVisible(const sf::Texture& textura,
     {
         for (unsigned int x = 0; x < static_cast<unsigned int>(frameAncho); x++)
         {
-            if (imagen.getPixel({ x, y }).a > 0)
+            if (imagen.getPixel(x, y).a > 0)
             {
                 if (x < izquierda)
                 {
@@ -76,10 +76,7 @@ Humano::Humano(const std::string& rutaTextura,
       _frameAncho(frameAncho),
       _frameAlto(frameAlto)
 {
-    _sprite.setTextureRect(sf::IntRect(
-        { 0, 0 },
-        { _frameAncho, _frameAlto }
-    ));
+    _sprite.setTextureRect(sf::IntRect(0, 0, _frameAncho, _frameAlto));
     _sprite.setOrigin(obtenerOrigenVisible(_textura, _frameAncho, _frameAlto));
     _sprite.setPosition(posicion);
     _sprite.setScale(escala);
