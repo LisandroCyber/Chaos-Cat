@@ -36,7 +36,7 @@ Personaje::Personaje()
 
     _sonidoSalto.setVolume(35.f);
 
-    if (!_bufferGolpe.loadFromFile("music/golpeGato.wav"))
+    if (!_bufferGolpe.loadFromFile("sound effects/golpeGato.wav"))
     {
         std::cout << "No se pude cargar el sonido del golpe del gato\n";
     }
