@@ -102,100 +102,196 @@ void Nivel::reiniciarObjetos()
 
 void Nivel::resolverColisiones(Personaje& gato)
 {
-    bool gatoApoyado = false;
+    // Primero resolvemos golpes y bloqueos laterales.
+    for (Objeto* objeto : _objetos)
+    {
+        resolverColisionGatoObjeto(gato, *objeto);
+    }
+
+    // Reunimos las superficies sobre las que puede apoyarse.
+    std::vector<sf::FloatRect> superficies;
 
     for (Mueble* mueble : _muebles)
     {
-        gatoApoyado = gatoPuedeApoyarseEn(gato, mueble->getGlobalBounds()) || gatoApoyado;
+        superficies.push_back(mueble->getGlobalBounds());
     }
 
     for (const sf::FloatRect& superficie : _superficiesFijas)
     {
-        gatoApoyado = gatoPuedeApoyarseEn(gato, superficie) || gatoApoyado;
+        superficies.push_back(superficie);
     }
 
     for (Objeto* objeto : _objetos)
     {
-        gatoApoyado = resolverColisionGatoObjeto(gato, *objeto) || gatoApoyado;
+        if (!objeto->estaTirado())
+        {
+            superficies.push_back(objeto->getGlobalBounds());
+        }
     }
 
-    if (!gatoApoyado)
+    bool gatoApoyado = false;
+    float alturaApoyo = 0.f;
+
+    for (const sf::FloatRect& superficie : superficies)
+    {
+        if (gatoPuedeApoyarseEn(gato, superficie))
+        {
+            // Si cruzó varias superficies al caer, elegimos
+            // la más alta: en pantalla tiene menor coordenada Y.
+            if (!gatoApoyado || superficie.top < alturaApoyo)
+            {
+                alturaApoyo = superficie.top;
+                gatoApoyado = true;
+            }
+        }
+    }
+
+    // Ajustamos la altura una sola vez.
+    if (gatoApoyado)
+    {
+        gato.apoyarEn(alturaApoyo);
+    }
+    else
     {
         gato.iniciarCaidaSiEstaElevado();
     }
 }
 
-bool Nivel::resolverColisionGatoObjeto(Personaje& gato, Objeto& objeto)
+void Nivel::resolverColisionGatoObjeto(Personaje& gato, Objeto& objeto)
 {
     if (objeto.estaTirado())
     {
-        return false;
+        return;
     }
 
     const sf::FloatRect areaObjeto = objeto.getGlobalBounds();
-    const sf::FloatRect areaGolpe = gato.getHitboxGolpe();
     const sf::FloatRect areaGato = gato.getGlobalBounds();
+    const sf::FloatRect areaAnterior = gato.getAreaAnterior();
 
-    // Golpe frontal (hitbox de golpe)
-    if (gato.estaGolpeando() && areaGolpe.intersects(areaObjeto))
+    const bool puedeApoyarse =
+        gatoPuedeApoyarseEn(gato, areaObjeto);
+
+    // Conserve el golpe frontal y el golpe desde arriba.
+    if (gato.estaGolpeando())
     {
-        const float centroGato = areaGato.left + areaGato.width / 2.f;
-        const float centroObjeto = areaObjeto.left + areaObjeto.width / 2.f;
-        const float direccion = centroObjeto >= centroGato ? 1.f : -1.f;
 
-        objeto.tirar(direccion);
-        return false;
-    }
+        const bool golpeFrontal =
+            gato.getHitboxGolpe().intersects(areaObjeto);
 
-    // Golpe cuando el gato está encima del objeto
-    {
-        const float gatoIzquierda = areaGato.left;
-        const float gatoDerecha = areaGato.left + areaGato.width;
-        const float superficieIzquierda = areaObjeto.left;
-        const float superficieDerecha = areaObjeto.left + areaObjeto.width;
-        const float superficieArriba = areaObjeto.top;
-        const float baseGato = gato.getBaseY();
-
-        const bool seCruzanEnX = gatoDerecha > superficieIzquierda && gatoIzquierda < superficieDerecha;
-        const bool gatoCercaDeArriba = baseGato >= superficieArriba - 8.f
-            && baseGato <= superficieArriba + 30.f;
-
-        if (gato.estaGolpeando() && seCruzanEnX && gatoCercaDeArriba)
+        if (golpeFrontal || puedeApoyarse)
         {
-            const float centroGato = areaGato.left + areaGato.width / 2.f;
-            const float centroObjeto = areaObjeto.left + areaObjeto.width / 2.f;
-            const float direccion = centroObjeto >= centroGato ? 1.f : -1.f;
+            const float centroGato =
+                areaGato.left + areaGato.width / 2.f;
+
+            const float centroObjeto =
+                areaObjeto.left + areaObjeto.width / 2.f;
+
+            const float direccion =
+                centroGato <= centroObjeto ? 1.f : -1.f;
 
             objeto.tirar(direccion);
-            return false;
+            return;
         }
     }
 
-    return gatoPuedeApoyarseEn(gato, areaObjeto);
+    // Si viene cayendo desde arriba, la función principal resuelve el apoyo.
+    
+    if (puedeApoyarse)
+    {
+        return;
+    }
+
+    sf::FloatRect interseccion;
+
+    if (!areaGato.intersects(areaObjeto, interseccion))
+    {
+        return;
+    }
+
+    // Resuelve las colisiones laterales, corrigiendo la posision del gato
+    // moviendolo la cantidad de pixeles de la intereccion, hacia
+    // el lado donde sea la colision
+
+    const float derechaAnterior =
+        areaAnterior.left + areaAnterior.width;
+
+    const float derechaObjeto =
+        areaObjeto.left + areaObjeto.width;
+
+    if (derechaAnterior <= areaObjeto.left)
+    {
+        // Entró por el costado izquierdo.
+        const float correccion =
+            areaObjeto.left - (areaGato.left + areaGato.width);
+
+        gato.mover({ correccion, 0.f });
+    }
+    else if (areaAnterior.left >= derechaObjeto)
+    {
+        // Entró por el costado derecho.
+        const float correccion =
+            derechaObjeto - areaGato.left;
+
+        gato.mover({ correccion, 0.f });
+    }
+    else
+    {
+        // Si ya había superposición, por ejemplo porque
+        // cambió el tamaño de la hitbox al cambiar de estado,
+        // corregimos hacia el lado donde estaba el gato.
+        const float centroAnterior =
+            areaAnterior.left + areaAnterior.width / 2.f;
+
+        const float centroObjeto =
+            areaObjeto.left + areaObjeto.width / 2.f;
+
+        if (centroAnterior < centroObjeto)
+        {
+            gato.mover({
+                areaObjeto.left - (areaGato.left + areaGato.width),
+                0.f
+                });
+        }
+        else
+        {
+            gato.mover({
+                derechaObjeto - areaGato.left,
+                0.f
+                });
+        }
+    }
 }
 
 bool Nivel::gatoPuedeApoyarseEn(Personaje& gato,
     const sf::FloatRect& superficie) const
 {
     const sf::FloatRect areaGato = gato.getGlobalBounds();
-    const float gatoIzquierda = areaGato.left;
-    const float gatoDerecha = areaGato.left + areaGato.width;
-    const float superficieIzquierda = superficie.left;
-    const float superficieDerecha = superficie.left + superficie.width;
-    const float superficieArriba = superficie.top;
-    const float baseGato = gato.getBaseY();
 
-    const bool seCruzanEnX = gatoDerecha > superficieIzquierda && gatoIzquierda < superficieDerecha;
-    const bool gatoCercaDeArriba = baseGato >= superficieArriba - 8.f
-        && baseGato <= superficieArriba + 30.f;
+    const float baseAnterior = gato.getBaseAnterior();
+    const float baseActual = gato.getBaseY();
 
-    if (seCruzanEnX && gatoCercaDeArriba)
+    // Si está subiendo, atraviesa la plataforma.
+    if (baseActual < baseAnterior)
     {
-        gato.apoyarEn(superficieArriba);
-        return true;
+        return false;
     }
 
-    return false;
+    const bool seCruzanEnX =
+        areaGato.left < superficie.left + superficie.width &&
+        areaGato.left + areaGato.width > superficie.left;
+
+    // Margen pequeño para errores de precisión decimal.
+    const float tolerancia = 0.5f;
+
+    const bool antesEstabaArriba =
+        baseAnterior <= superficie.top + tolerancia;
+
+    const bool ahoraAlcanzoLaSuperficie =
+        baseActual >= superficie.top - tolerancia;
+
+    return seCruzanEnX &&
+        antesEstabaArriba &&
+        ahoraAlcanzoLaSuperficie;
 }
 
 void Nivel::dibujar(sf::RenderWindow& ventana,
@@ -282,6 +378,7 @@ bool Nivel::cargarMusicaFondo(const std::string& rutaMusica, float volumen)
 
     return true;
 }
+
 
 void Nivel::configurarLoopMusica(sf::Time inicioLoop,
     sf::Time duracionLoop)

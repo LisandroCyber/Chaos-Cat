@@ -57,6 +57,13 @@ private:
     sf::Vector2f obtenerPosicionDibujo() const;
     sf::Vector2f obtenerTamanoHitbox() const;
 
+    sf::FloatRect _areaAnterior;
+    float _baseAnterior = 0.f;
+
+    sf::SoundBuffer _bufferGolpe;
+    sf::Sound _sonidoGolpe;
+
+
 public:
     Personaje();
 
@@ -73,6 +80,9 @@ public:
     void mover(const sf::Vector2f& desplazamiento);
     void apoyarEn(float superficieY);
     void iniciarCaidaSiEstaElevado();
+
+    sf::FloatRect getAreaAnterior() const;
+    float getBaseAnterior() const;
 
     void dibujar(sf::RenderWindow& ventana) const;
 };

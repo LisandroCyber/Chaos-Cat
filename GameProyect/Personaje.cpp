@@ -36,6 +36,17 @@ Personaje::Personaje()
 
     _sonidoSalto.setVolume(35.f);
 
+    if (!_bufferGolpe.loadFromFile("music/golpeGato.wav"))
+    {
+        std::cout << "No se pude cargar el sonido del golpe del gato\n";
+    }
+    else {
+        _sonidoGolpe.setBuffer(_bufferGolpe);
+    }
+
+
+        _sonidoGolpe.setVolume(30.f);
+
     _estado = EstadoGato::Sentado;
     _contandoQuieto = true;
     _frameCaminar = 0;
@@ -70,11 +81,16 @@ Personaje::Personaje()
     });
 
     actualizarSprite();
+    _areaAnterior = getGlobalBounds();
+    _baseAnterior = getBaseY();
 }
 
 //para ver el comportamiento del gato en cada frame, lee el teclado y aplica la "gravedad" para el gato
 void Personaje::update()
 {
+    _areaAnterior = getGlobalBounds();
+    _baseAnterior = getBaseY();
+
     bool seMueve = procesarEntrada();
 
     aplicarGravedad();
@@ -87,6 +103,7 @@ void Personaje::update()
 
 bool Personaje::procesarEntrada()
 {
+
     float velocidadActual = VELOCIDAD_CAMINAR;
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
@@ -105,6 +122,8 @@ bool Personaje::procesarEntrada()
 
     if (ePresionada && !_ePresionadaAntes && _enElPiso && _estado != EstadoGato::Golpeando)
     {
+        _sonidoGolpe.setPlayingOffset(sf::seconds(0.5f));
+        _sonidoGolpe.play();
         golpear();
     }
 
@@ -361,7 +380,6 @@ float Personaje::getBaseY() const
     return obtenerPosicionDibujo().y + (ALTO_BASE_HITBOX * escalaY) / 2.f;
 }
 
-
 sf::Vector2f Personaje::obtenerTamanoHitbox() const
 {
     // Medidas originales, antes de aplicar la escala del sprite.
@@ -386,26 +404,18 @@ sf::Vector2f Personaje::obtenerTamanoHitbox() const
 
 sf::FloatRect Personaje::getGlobalBounds() const
 {
-    float escalaX = _sprite.getScale().x < 0.f ? -_sprite.getScale().x : _sprite.getScale().x;
-    float escalaY = _sprite.getScale().y < 0.f ? -_sprite.getScale().y : _sprite.getScale().y;
-    sf::Vector2f tamano = obtenerTamanoHitbox();
-    float ancho = tamano.x * escalaX;
-    float alto = tamano.y * escalaY;
-    sf::Vector2f posicionDibujo = obtenerPosicionDibujo();
-    sf::Vector2f posicionHitbox = {
-        posicionDibujo.x - ancho / 2.f,
-        getBaseY() - alto
-    };
+    const sf::Vector2f posicion = obtenerPosicionDibujo();
 
-    if (_estado == EstadoGato::Saltando)
-    {
-        float offsetX = 20.f * (_sprite.getScale().x < 0.f ? -escalaX : escalaX);
-        float offsetY = 95.f * escalaY;
-        posicionHitbox.x += offsetX;
-        posicionHitbox.y = posicionDibujo.y - alto / 2.f + offsetY;
-    }
+    // Equivalen a la hitbox del gato sentado con escala 0.5.
+    const float ancho = 74.f;
+    const float alto = 110.f;
 
-    return sf::FloatRect(posicionHitbox.x, posicionHitbox.y, ancho, alto);
+    return sf::FloatRect(
+        posicion.x - ancho / 2.f,
+        getBaseY() - alto,
+        ancho,
+        alto
+    );
 }
 
 sf::FloatRect Personaje::getHitboxGolpe() const
@@ -456,3 +466,14 @@ sf::Vector2f Personaje::obtenerPosicionDibujo() const
         _sprite.getPosition().y + _alturaVertical
     };
 }
+
+sf::FloatRect Personaje::getAreaAnterior() const
+{
+    return _areaAnterior;
+}
+
+float Personaje::getBaseAnterior() const
+{
+    return _baseAnterior;
+}
+

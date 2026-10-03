@@ -24,7 +24,15 @@ Objeto::Objeto(const std::string& rutaTextura, const sf::Vector2f& posicion, flo
 	_sprite.setPosition(posicion);
 	_sprite.setScale({ escala, escala });
 	_sprite.setOrigin(_sprite.getGlobalBounds().width / 2.f, 0.f);
-	
+	if (!_bufferCaida.loadFromFile("music/vidrioRoto.wav"))
+	{
+		std::cout << "ERROR: NO SE PUDO CARGAR EL SONIDO DE CAIDA\n";
+	}
+	else
+	{
+		_sonidoCaida.setBuffer(_bufferCaida);
+		_sonidoCaida.setVolume(60.f);
+	}
 }
 
 void Objeto::dibujar(sf::RenderWindow& ventana) const
@@ -42,7 +50,7 @@ sf::FloatRect Objeto::getGlobalBounds() const
 
 void Objeto::update()
 {
-	if (!_tirado)
+	if (!_tirado || _enElPiso)
 	{
 		return;
 	}
@@ -50,9 +58,33 @@ void Objeto::update()
 	_sprite.move(_velocidad);
 	_velocidad.y += 0.45f;
 
-	if (_sprite.getGlobalBounds().top > ALTO_VENTANA)
+	const sf::FloatRect limites = _sprite.getGlobalBounds();
+	const float ventanaX = static_cast<float>(ANCHO_VENTANA);
+
+	if (limites.left < 0.f)
 	{
-		_visible = false;
+		_sprite.move(-limites.left, 0.f);
+		_velocidad.x = 0.f;
+	}
+	else if (limites.left + limites.width > ventanaX)
+	{
+		_sprite.move(ventanaX - (limites.left + limites.width), 0.f);
+		_velocidad.x = 0.f;
+	}
+
+	const sf::FloatRect area = _sprite.getGlobalBounds();
+	const float baseObjeto = area.top + area.height;
+	const float pisoY = static_cast<float>(ALTO_VENTANA);
+
+	if (_velocidad.y > 0.f && baseObjeto >= pisoY)
+	{
+		// Alinear la base del objeto con el borde inferior.
+		_sprite.move(0.f, pisoY - baseObjeto);
+
+		_velocidad = sf::Vector2f(0.f, 0.f);
+		_enElPiso = true;
+		_sonidoCaida.setPlayingOffset(sf::seconds(0.2f));
+		_sonidoCaida.play();
 	}
 }
 
@@ -64,15 +96,20 @@ void Objeto::tirar(float direccion)
 	}
 
 	_tirado = true;
-	_velocidad = { 8.f * direccion, -7.f };
+	_enElPiso = false;
+	_velocidad = sf::Vector2f(8.f * direccion, -7.f);
 }
 
 void Objeto::reiniciar()
 {
+	_sonidoCaida.stop();
+
 	_sprite.setPosition(_posicionInicial);
-	_velocidad = { 0.f, 0.f };
+	_velocidad = sf::Vector2f(0.f, 0.f);
+
 	_tirado = false;
 	_visible = true;
+	_enElPiso = false;
 }
 
 bool Objeto::estaTirado() const

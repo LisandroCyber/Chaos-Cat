@@ -16,6 +16,7 @@ private:
     sf::Texture _texturaFondo;
     sf::Sprite _spriteFondo;
     sf::Music _musicaFondo;
+    sf::Sound _sonido;
 
     std::vector<Humano*> _humanos;
     std::vector<Mueble*> _muebles;
@@ -25,9 +26,10 @@ private:
     bool _mostrarHitboxes;
 
     void resolverColisiones(Personaje& gato);
-    bool resolverColisionGatoObjeto(Personaje& gato, Objeto& objeto);
+    void resolverColisionGatoObjeto(Personaje& gato, Objeto& objeto);
     bool gatoPuedeApoyarseEn(Personaje& gato,
         const sf::FloatRect& superficie) const;
+
     void dibujarHitboxes(sf::RenderWindow& ventana,
         const Personaje& gato) const;
     static void dibujarHitbox(sf::RenderWindow& ventana,
@@ -54,6 +56,7 @@ protected:
     void agregarSuperficie(const sf::FloatRect& superficie);
 
     bool cargarMusicaFondo(const std::string& rutaMusica, float volumen);
+    bool cargarSonido(const std::string& rutaSonido, float volumen);
     void configurarLoopMusica(sf::Time inicioLoop, sf::Time duracionLoop);
     void reproducirMusicaFondo(sf::Time inicioReproduccion);
 

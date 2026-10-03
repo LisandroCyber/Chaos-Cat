@@ -1,5 +1,6 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 #include <string>
 
 class Objeto
@@ -11,6 +12,10 @@ private:
 	sf::Vector2f _velocidad;
 	bool _tirado;
 	bool _visible;
+	bool _enElPiso = false;
+
+	sf::SoundBuffer _bufferCaida;
+	sf::Sound _sonidoCaida;
 	
 	static sf::Texture cargarTextura(const std::string& rutaTextura);
 
