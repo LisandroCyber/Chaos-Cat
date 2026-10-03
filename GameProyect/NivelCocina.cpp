@@ -23,17 +23,8 @@ NivelCocina::NivelCocina()
     agregarMueble("images/mesa-larga.png",
         { 356.06f, 400.f },
         { 0.280825f, 0.384588f },
-        sf::FloatRect(47.f, 330.f, 1442.f, 561.f));
+        sf::FloatRect(47.f, 293.f, 1442.f, 561.f));
 
-    agregarObjeto("images/TazaCafe.png", { 530.f, 490.f }, 0.2f);
-    agregarObjeto("images/manzana.png", { 580.f, 483.f }, 0.3f);
-    agregarObjeto("images/llaves.png", { 415.f, 480.f }, 0.3f);
-
-    agregarObjeto("images/joystick.png", { 695.f, 485.f }, 0.4f); /// No va en este nivel, solo de prueba
-
-
+    agregarObjeto("images/TazaCafe.png", { 458.f, 490.f }, 0.2f);
     agregarSuperficie(sf::FloatRect(1090.f, 470.f, 202.f, 265.f));
-    agregarSuperficie(sf::FloatRect(180.f, 453.f, 1000.f, 450.f));
-    
-
 }
