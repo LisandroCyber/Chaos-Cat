@@ -127,14 +127,33 @@ void Nivel::resolverColisiones(Personaje& gato)
 
 bool Nivel::resolverColisionGatoObjeto(Personaje& gato, Objeto& objeto)
 {
+    const sf::FloatRect areaObjeto = objeto.getGlobalBounds();
+    const sf::FloatRect areaGolpe = gato.getHitboxGolpe();
+    const sf::FloatRect areaGato = gato.getGlobalBounds();
+    sf::FloatRect interseccion;
+
+    if (areaGato.intersects(areaObjeto, interseccion))
+    {
+        const float centroGato = areaGato.left + areaGato.width / 2.f;
+        const float centroObjeto = areaObjeto.left + areaObjeto.width / 2.f;
+
+        if (centroGato < centroObjeto)
+        {
+            // Si el gato está a la izquierda: lo muevo a la izquierda la cantidad de pixeles que colisione con el objeto.
+            gato.mover({ -interseccion.width, 0.f });
+        }
+        else
+        {
+            // Si el gato está a la derecha: lo muevo a la derecha la cantidad de pixeles que colisione con el objeto.
+            gato.mover({ interseccion.width, 0.f });
+        }
+    }
+
     if (objeto.estaTirado())
     {
         return false;
     }
 
-    const sf::FloatRect areaObjeto = objeto.getGlobalBounds();
-    const sf::FloatRect areaGolpe = gato.getHitboxGolpe();
-    const sf::FloatRect areaGato = gato.getGlobalBounds();
 
     // Golpe frontal (hitbox de golpe)
     if (gato.estaGolpeando() && areaGolpe.intersects(areaObjeto))
@@ -145,30 +164,6 @@ bool Nivel::resolverColisionGatoObjeto(Personaje& gato, Objeto& objeto)
 
         objeto.tirar(direccion);
         return false;
-    }
-
-    // Golpe cuando el gato está encima del objeto
-    {
-        const float gatoIzquierda = areaGato.left;
-        const float gatoDerecha = areaGato.left + areaGato.width;
-        const float superficieIzquierda = areaObjeto.left;
-        const float superficieDerecha = areaObjeto.left + areaObjeto.width;
-        const float superficieArriba = areaObjeto.top;
-        const float baseGato = gato.getBaseY();
-
-        const bool seCruzanEnX = gatoDerecha > superficieIzquierda && gatoIzquierda < superficieDerecha;
-        const bool gatoCercaDeArriba = baseGato >= superficieArriba - 8.f
-            && baseGato <= superficieArriba + 30.f;
-
-        if (gato.estaGolpeando() && seCruzanEnX && gatoCercaDeArriba)
-        {
-            const float centroGato = areaGato.left + areaGato.width / 2.f;
-            const float centroObjeto = areaObjeto.left + areaObjeto.width / 2.f;
-            const float direccion = centroObjeto >= centroGato ? 1.f : -1.f;
-
-            objeto.tirar(direccion);
-            return false;
-        }
     }
 
     return gatoPuedeApoyarseEn(gato, areaObjeto);
