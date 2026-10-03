@@ -135,11 +135,12 @@ bool Personaje::procesarEntrada()
         seMueve = true;
     }
 
+    */
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
     {
-        _velocity.y = velocidadActual;
+        // Hacer que con la S baje de los muebles, sin necesidad de ir hasta el borde.
         seMueve = true;
-    }*/
+    }
 
     bool espacioPresionado = sf::Keyboard::isKeyPressed(sf::Keyboard::Space);
 
