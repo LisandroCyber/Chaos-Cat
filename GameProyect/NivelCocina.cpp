@@ -22,12 +22,12 @@ NivelCocina::NivelCocina()
         sf::FloatRect(185.f, 70.f, 585.f, 100.f));
 
     agregarMueble("images/1-Cocina/mesa-larga.png",
-        { 356.06f, 400.f },
+        { 396.06f, 400.f },
         { 0.280825f, 0.384588f },
         sf::FloatRect(47.f, 320.f, 1442.f, 100.f));
 
-    agregarObjeto("images/1-Cocina/TazaCafe.png", { 465.f, 480.f }, 0.25f);
-    agregarObjeto("images/1-Cocina/frutero.png", { 600.f, 450.f }, 0.15f);
+    agregarObjeto("images/1-Cocina/TazaCafe.png", { 505.f, 480.f }, 0.25f);
+    agregarObjeto("images/1-Cocina/frutero.png", { 640.f, 450.f }, 0.15f);
     agregarObjeto("images/1-Cocina/cacerola.png", { 1139.f, 405.f }, 0.50f);
     agregarObjeto("images/1-Cocina/platos.png", { 75.f, 235.f }, 0.08f);
 
