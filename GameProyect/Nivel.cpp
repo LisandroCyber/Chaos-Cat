@@ -394,3 +394,16 @@ void Nivel::reproducirMusicaFondo(sf::Time inicioReproduccion)
     _musicaFondo.setPlayingOffset(inicioReproduccion);
     _musicaFondo.play();
 }
+
+void Nivel::pausarMusica()
+{
+    _musicaFondo.pause();
+}
+
+void Nivel::continuarMusica()
+{
+    if (_musicaFondo.getStatus() != sf::SoundSource::Playing)
+    {
+        _musicaFondo.play();
+    }
+}

@@ -1,0 +1,61 @@
+#include "Menu.h"
+#include <iostream>
+
+Menu::Menu()
+{
+    if (!_fuente.loadFromFile("fonts/starcatcher.ttf"))
+    {
+        std::cout << "ERROR AL CARGAR LA FUENTE\n";
+    }
+
+    _titulo.setFont(_fuente);
+    _titulo.setCharacterSize(80);
+    _titulo.setPosition(440.f, 180.f);
+
+    for (int i = 0; i < 2; i++)
+    {
+        _opciones[i].setFont(_fuente);
+        _opciones[i].setCharacterSize(36);
+        _opciones[i].setPosition(550.f, 350.f + i * 70.f);
+    }
+
+    _opciones[1].setString("Salir");
+}
+
+int Menu::procesarEvento(const sf::Event& evento)
+{
+    if (evento.type == sf::Event::KeyPressed)
+    {
+        if (evento.key.code == sf::Keyboard::Up ||
+            evento.key.code == sf::Keyboard::Down)
+        {
+            _seleccion = 1 - _seleccion;
+        }
+
+        if (evento.key.code == sf::Keyboard::Enter)
+        {
+            return _seleccion;
+        }
+    }
+
+    return -1;
+}
+
+void Menu::dibujar(sf::RenderWindow& ventana)
+{
+    ventana.draw(_titulo);
+
+    for (int i = 0; i < 2; i++)
+    {
+        _opciones[i].setFillColor(
+            i == _seleccion ? sf::Color::Yellow : sf::Color::White
+        );
+
+        ventana.draw(_opciones[i]);
+    }
+}
+
+void Menu::reiniciarSeleccion()
+{
+    _seleccion = 0;
+}

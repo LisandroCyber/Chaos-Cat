@@ -22,6 +22,9 @@
     <ClCompile Include="Humano.cpp" />
     <ClCompile Include="Juego.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Menu.cpp" />
+    <ClCompile Include="MenuPausa.cpp" />
+    <ClCompile Include="MenuPrincipal.cpp" />
     <ClCompile Include="Mueble.cpp" />
     <ClCompile Include="Nivel.cpp" />
     <ClCompile Include="NivelCocina.cpp" />
@@ -32,6 +35,9 @@
     <ClInclude Include="Constantes.h" />
     <ClInclude Include="Humano.h" />
     <ClInclude Include="Juego.h" />
+    <ClInclude Include="Menu.h" />
+    <ClInclude Include="MenuPausa.h" />
+    <ClInclude Include="MenuPrincipal.h" />
     <ClInclude Include="Mueble.h" />
     <ClInclude Include="Nivel.h" />
     <ClInclude Include="NivelCocina.h" />

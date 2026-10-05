@@ -3,6 +3,8 @@
 #include <SFML/Graphics.hpp>
 #include "Nivel.h"
 #include "Personaje.h"
+#include "MenuPrincipal.h"
+#include "MenuPausa.h"
 
 class Juego
 {
@@ -11,6 +13,11 @@ private:
 
     Personaje _gato;
     Nivel* _nivel;
+    MenuPrincipal _menuPrincipal;
+    MenuPausa _menuPausa;
+
+    bool _enMenu = true;
+    bool _enPausa = false;
 
     void procesarEventos();
     void actualizar();

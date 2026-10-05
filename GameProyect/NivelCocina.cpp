@@ -1,12 +1,13 @@
 #include "NivelCocina.h"
+#include <iostream>
 
 NivelCocina::NivelCocina()
 {
     cargarFondo("images/cocina.png");
 
-    if (cargarMusicaFondo("music/loopPrincipal.wav", 5.f))
+    if (!cargarMusicaFondo("music/loopPrincipal.wav", 5.f))
     {
-        reproducirMusicaFondo(sf::seconds(0.f));
+        std::cout << "ERROR AL CARGAR LA MUSICA\n";
     }
 
     agregarHumano("images/frames_humano.png",

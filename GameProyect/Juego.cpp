@@ -9,6 +9,8 @@ Juego::Juego()
       _nivel(new NivelCocina())
 {
     _window.setFramerateLimit(LIMITE_FPS);
+    _window.setKeyRepeatEnabled(false);
+    _nivel->pausarMusica();
 }
 
 Juego::~Juego()
@@ -28,12 +30,54 @@ void Juego::ejecutar()
 
 void Juego::procesarEventos()
 {
-    sf::Event event;
+    sf::Event evento;
 
-    while (_window.pollEvent(event))
+    while (_window.pollEvent(evento))
     {
-        if (event.type == sf::Event::Closed)
+        if (evento.type == sf::Event::Closed)
         {
+            _window.close();
+        }
+
+        if (!_enMenu &&
+            evento.type == sf::Event::KeyPressed &&
+            evento.key.code == sf::Keyboard::Escape)
+        {
+            _enPausa = !_enPausa;
+            _menuPausa.reiniciarSeleccion();
+
+            if (_enPausa)
+            {
+                _nivel->pausarMusica();
+            }
+            else
+            {
+                _nivel->continuarMusica();
+            }
+
+            continue;
+        }
+
+        int opcion = -1;
+
+        if (_enMenu)
+        {
+            opcion = _menuPrincipal.procesarEvento(evento);
+        }
+        else if (_enPausa)
+        {
+            opcion = _menuPausa.procesarEvento(evento);
+        }
+
+        if (opcion == 0)
+        {
+            _enMenu = false;
+            _enPausa = false;
+            _nivel->continuarMusica();
+        }
+        else if (opcion == 1)
+        {
+            _nivel->pausarMusica();
             _window.close();
         }
     }
@@ -41,6 +85,10 @@ void Juego::procesarEventos()
 
 void Juego::actualizar()
 {
+    if (_enMenu || _enPausa)
+    {
+        return;
+    }
     _gato.update();
     _nivel->actualizar(_gato);
 
@@ -58,7 +106,32 @@ void Juego::actualizar()
 
 void Juego::dibujar()
 {
-    _window.clear();
-    _nivel->dibujar(_window, _gato);
+    _window.clear(sf::Color(30, 30, 40));
+
+    if (_enMenu)
+    {
+        _menuPrincipal.dibujar(_window);
+    }
+    else
+    {
+        // La partida queda visible detrás de la pausa.
+        _nivel->dibujar(_window, _gato);
+
+        if (_enPausa)
+        {
+            sf::RectangleShape fondo(
+                sf::Vector2f(
+                    static_cast<float>(_window.getSize().x),
+                    static_cast<float>(_window.getSize().y)
+                )
+            );
+
+            fondo.setFillColor(sf::Color(0, 0, 0, 180));
+            _window.draw(fondo);
+
+            _menuPausa.dibujar(_window);
+        }
+    }
+
     _window.display();
 }

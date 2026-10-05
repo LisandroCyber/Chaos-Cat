@@ -63,6 +63,8 @@ protected:
 public:
     virtual ~Nivel();
 
+    void pausarMusica();
+    void continuarMusica();
     void actualizar(Personaje& gato);
     void reiniciarObjetos();
     void dibujar(sf::RenderWindow& ventana,
