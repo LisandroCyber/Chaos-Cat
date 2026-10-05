@@ -19,7 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Humano.cpp" />
+    <ClCompile Include="Enemigo.cpp" />
     <ClCompile Include="Juego.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Menu.cpp" />
@@ -33,7 +33,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Constantes.h" />
-    <ClInclude Include="Humano.h" />
+    <ClInclude Include="Enemigo.h" />
     <ClInclude Include="Juego.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="MenuPausa.h" />

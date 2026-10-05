@@ -4,7 +4,7 @@
 #include <string>
 #include <vector>
 
-#include "Humano.h"
+#include "Enemigo.h"
 #include "Mueble.h"
 #include "Objeto.h"
 #include "Personaje.h"
@@ -18,7 +18,7 @@ private:
     sf::Music _musicaFondo;
     sf::Sound _sonido;
 
-    std::vector<Humano*> _humanos;
+    std::vector<Enemigo*> _enemigos;
     std::vector<Mueble*> _muebles;
     std::vector<Objeto*> _objetos;
     std::vector<sf::FloatRect> _superficiesFijas;
@@ -43,7 +43,7 @@ protected:
 
     void cargarFondo(const std::string& rutaTextura);
 
-    void agregarHumano(const std::string& rutaTextura,
+    void agregarEnemigo(const std::string& rutaTextura,
         const sf::Vector2f& posicion,
         int frameAncho,
         int frameAlto,

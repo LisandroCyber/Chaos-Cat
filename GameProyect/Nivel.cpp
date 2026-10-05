@@ -11,9 +11,9 @@ Nivel::Nivel()
 
 Nivel::~Nivel()
 {
-    for (Humano* humano : _humanos)
+    for (Enemigo* enemigo : _enemigos)
     {
-        delete humano;
+        delete enemigo;
     }
 
     for (Mueble* mueble : _muebles)
@@ -38,13 +38,13 @@ void Nivel::cargarFondo(const std::string& rutaTextura)
     _spriteFondo.setTexture(_texturaFondo, true);
 }
 
-void Nivel::agregarHumano(const std::string& rutaTextura,
+void Nivel::agregarEnemigo(const std::string& rutaTextura,
     const sf::Vector2f& posicion,
     int frameAncho,
     int frameAlto,
     const sf::Vector2f& escala)
 {
-    _humanos.push_back(new Humano(
+    _enemigos.push_back(new Enemigo(
         rutaTextura,
         posicion,
         frameAncho,
@@ -89,6 +89,11 @@ void Nivel::agregarZonaEscondite(const sf::FloatRect& zona)
 
 void Nivel::actualizar(Personaje& gato)
 {
+    for (Enemigo* enemigo : _enemigos)
+    {
+        enemigo->actualizar();
+    }
+
     for (Objeto* objeto : _objetos)
     {
         objeto->update();
@@ -339,9 +344,9 @@ void Nivel::dibujar(sf::RenderWindow& ventana,
 {
     ventana.draw(_spriteFondo);
 
-    for (const Humano* humano : _humanos)
+    for (const Enemigo* enemigo : _enemigos)
     {
-        humano->dibujar(ventana);
+        enemigo->dibujar(ventana);
     }
 
     for (const Mueble* mueble : _muebles)

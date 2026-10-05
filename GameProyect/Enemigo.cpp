@@ -1,22 +1,23 @@
-#include "Humano.h"
+#include "Enemigo.h"
+#include "Constantes.h"
 
 #include <cstdlib>
 #include <iostream>
 
-sf::Texture Humano::cargarTextura(const std::string& rutaTextura)
+sf::Texture Enemigo::cargarTextura(const std::string& rutaTextura)
 {
     sf::Texture textura;
 
     if (!textura.loadFromFile(rutaTextura))
     {
-        std::cout << "ERROR: NO SE PUDO CARGAR EL HUMANO " << rutaTextura << '\n';
+        std::cout << "ERROR: NO SE PUDO CARGAR EL ENEMIGO " << rutaTextura << '\n';
         exit(-1);
     }
 
     return textura;
 }
 
-sf::Vector2f Humano::obtenerOrigenVisible(const sf::Texture& textura,
+sf::Vector2f Enemigo::obtenerOrigenVisible(const sf::Texture& textura,
     int frameAncho,
     int frameAlto)
 {
@@ -66,7 +67,7 @@ sf::Vector2f Humano::obtenerOrigenVisible(const sf::Texture& textura,
     };
 }
 
-Humano::Humano(const std::string& rutaTextura,
+Enemigo::Enemigo(const std::string& rutaTextura,
     const sf::Vector2f& posicion,
     int frameAncho,
     int frameAlto,
@@ -82,7 +83,57 @@ Humano::Humano(const std::string& rutaTextura,
     _sprite.setScale(escala);
 }
 
-void Humano::dibujar(sf::RenderWindow& ventana) const
+void Enemigo::actualizar()
+{
+    const float tiempoTranscurrido =
+        _relojEstado.getElapsedTime().asSeconds();
+
+    if (_estado == EstadoEnemigo::DeEspalda &&
+        tiempoTranscurrido >= TIEMPO_ENEMIGO_DE_ESPALDA)
+    {
+        cambiarEstado(EstadoEnemigo::Alerta);
+    }
+    else if (_estado == EstadoEnemigo::Alerta &&
+        tiempoTranscurrido >= TIEMPO_ENEMIGO_ALERTA)
+    {
+        cambiarEstado(EstadoEnemigo::DadoVuelta);
+    }
+    else if (_estado == EstadoEnemigo::DadoVuelta &&
+        tiempoTranscurrido >= TIEMPO_ENEMIGO_DADO_VUELTA)
+    {
+        cambiarEstado(EstadoEnemigo::DeEspalda);
+    }
+}
+
+void Enemigo::cambiarEstado(EstadoEnemigo nuevoEstado)
+{
+    _estado = nuevoEstado;
+    _relojEstado.restart();
+    actualizarSprite();
+}
+
+void Enemigo::actualizarSprite()
+{
+    int frame = 0;
+
+    if (_estado == EstadoEnemigo::Alerta)
+    {
+        frame = 1;
+    }
+    else if (_estado == EstadoEnemigo::DadoVuelta)
+    {
+        frame = 2;
+    }
+
+    _sprite.setTextureRect(sf::IntRect(
+        frame * _frameAncho,
+        0,
+        _frameAncho,
+        _frameAlto
+    ));
+}
+
+void Enemigo::dibujar(sf::RenderWindow& ventana) const
 {
     ventana.draw(_sprite);
 }

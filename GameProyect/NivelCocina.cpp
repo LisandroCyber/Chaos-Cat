@@ -10,7 +10,7 @@ NivelCocina::NivelCocina()
         std::cout << "ERROR AL CARGAR LA MUSICA\n";
     }
 
-    agregarHumano("images/frames_humano.png",
+    agregarEnemigo("images/frames_enemigo.png",
         { 672.f, 664.f },
         600,
         724,
