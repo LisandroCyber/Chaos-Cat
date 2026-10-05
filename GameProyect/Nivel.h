@@ -22,11 +22,13 @@ private:
     std::vector<Mueble*> _muebles;
     std::vector<Objeto*> _objetos;
     std::vector<sf::FloatRect> _superficiesFijas;
+    std::vector<sf::FloatRect> _zonasEscondite;
 
     bool _mostrarHitboxes;
 
     void resolverColisiones(Personaje& gato);
     void resolverColisionGatoObjeto(Personaje& gato, Objeto& objeto);
+    void actualizarEscondite(Personaje& gato);
     bool gatoPuedeApoyarseEn(Personaje& gato,
         const sf::FloatRect& superficie) const;
 
@@ -54,6 +56,7 @@ protected:
         const sf::Vector2f& posicion,
         float escala);
     void agregarSuperficie(const sf::FloatRect& superficie);
+    void agregarZonaEscondite(const sf::FloatRect& zona);
 
     bool cargarMusicaFondo(const std::string& rutaMusica, float volumen);
     bool cargarSonido(const std::string& rutaSonido, float volumen);

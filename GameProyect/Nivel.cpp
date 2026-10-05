@@ -82,6 +82,11 @@ void Nivel::agregarSuperficie(const sf::FloatRect& superficie)
     _superficiesFijas.push_back(superficie);
 }
 
+void Nivel::agregarZonaEscondite(const sf::FloatRect& zona)
+{
+    _zonasEscondite.push_back(zona);
+}
+
 void Nivel::actualizar(Personaje& gato)
 {
     for (Objeto* objeto : _objetos)
@@ -90,6 +95,41 @@ void Nivel::actualizar(Personaje& gato)
     }
 
     resolverColisiones(gato);
+    actualizarEscondite(gato);
+}
+
+void Nivel::actualizarEscondite(Personaje& gato)
+{
+    if (!gato.estaAgachado())
+    {
+        gato.setEscondido(false);
+        return;
+    }
+
+    const sf::FloatRect areaGato = gato.getGlobalBounds();
+    const float derechaGato = areaGato.left + areaGato.width;
+    const float abajoGato = areaGato.top + areaGato.height;
+
+    for (const sf::FloatRect& zona : _zonasEscondite)
+    {
+        const float derechaZona = zona.left + zona.width;
+        const float abajoZona = zona.top + zona.height;
+
+        // Toda la hitbox debe quedar dentro de la zona de escondite.
+        const bool estaDentro =
+            areaGato.left >= zona.left &&
+            derechaGato <= derechaZona &&
+            areaGato.top >= zona.top &&
+            abajoGato <= abajoZona;
+
+        if (estaDentro)
+        {
+            gato.setEscondido(true);
+            return;
+        }
+    }
+
+    gato.setEscondido(false);
 }
 
 void Nivel::reiniciarObjetos()
@@ -347,6 +387,11 @@ void Nivel::dibujarHitboxes(sf::RenderWindow& ventana,
     for (const sf::FloatRect& superficie : _superficiesFijas)
     {
         dibujarHitbox(ventana, superficie, sf::Color::Magenta);
+    }
+
+    for (const sf::FloatRect& zona : _zonasEscondite)
+    {
+        dibujarHitbox(ventana, zona, sf::Color(128, 0, 32));
     }
 }
 

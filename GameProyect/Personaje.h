@@ -28,6 +28,7 @@ private:
     float _escala;
 
     bool _enElPiso;
+    bool _escondido = false;
     bool _espacioPresionadoAntes;
     bool _ePresionadaAntes;
     float _alturaVertical;
@@ -70,6 +71,9 @@ public:
     void update();
     void saltar();
     bool estaGolpeando() const;
+    bool estaAgachado() const;
+    bool estaEscondido() const;
+    void setEscondido(bool escondido);
 
     float getPosx();
     float getPosy();

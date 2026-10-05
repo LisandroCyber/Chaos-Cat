@@ -357,6 +357,35 @@ bool Personaje::estaGolpeando() const
     return _estado == EstadoGato::Golpeando;
 }
 
+bool Personaje::estaAgachado() const
+{
+    return _estado == EstadoGato::Agachado;
+}
+
+bool Personaje::estaEscondido() const
+{
+    return _escondido;
+}
+
+void Personaje::setEscondido(bool escondido)
+{
+    if (_escondido == escondido)
+    {
+        return;
+    }
+
+    _escondido = escondido;
+
+    if (_escondido)
+    {
+        std::cout << "El gato esta escondido\n";
+    }
+    else
+    {
+        std::cout << "El gato ya no esta escondido\n";
+    }
+}
+
 void Personaje::dibujar(sf::RenderWindow& ventana) const
 {
     sf::Sprite spriteDibujo = _sprite;
