@@ -62,62 +62,11 @@ Después del impacto se detienen. Permanecen marcados como tirados y dejan de pa
 
 Todos los objetos usan actualmente el mismo sonido `sound effects/vidrioRoto.wav`; la imagen del objeto permanece intacta después de caer.
 
-## Estructura del código
-
-Los archivos de código y recursos están en `GameProyect/`.
-
-| Archivo o clase | Responsabilidad |
-|---|---|
-| `main.cpp` | Crear y ejecutar el juego |
-| `Juego` | Ventana, eventos, actualización, dibujo, estados de menú y confirmación de salida |
-| `Menu` | Fuente, título, dos opciones y navegación común |
-| `MenuPrincipal` | Menú inicial e imagen de fondo |
-| `MenuPausa` | Título y opciones de pausa |
-| `Personaje` | Gato, entrada, animaciones, salto, gravedad, ataque y sonidos |
-| `Nivel` | Recursos del nivel, entidades, colisiones, hitboxes y música |
-| `NivelCocina` | Composición y recursos del nivel de cocina |
-| `Mueble` | Sprite y hitbox del mueble |
-| `Objeto` | Lanzamiento, caída, impacto, sonido y reinicio |
-| `Humano` | Representación gráfica del dueño |
-| `Constantes.h` | Resolución, límite de FPS, velocidades, gravedad y tiempos |
-
-### Recursos
-
-- `images/`: fondos, personajes, muebles y objetos.
-- `fonts/`: fuente del menú.
-- `music/`: música de fondo.
-- `sound effects/`: efectos de sonido.
-- `SFML/`: cabeceras y bibliotecas incluidas en el proyecto.
-
-## Compilación y ejecución
-
-1. Clonar la rama:
-
-   ```bash
-   git clone --branch CambioMau https://github.com/LisandroCyber/Chaos-Cat.git
-   ```
-
-2. Abrir `GameProyect.slnx` en Visual Studio con las herramientas de desarrollo de escritorio en C++.
-3. Seleccionar **x64**, en Debug o Release. Ambas configuraciones tienen las rutas de SFML configuradas y usan C++17.
-4. El proyecto declara el toolset **v145**. Si no está instalado, instalarlo o adaptar el toolset a uno compatible con las bibliotecas utilizadas.
-5. Ejecutar con `GameProyect/` como directorio de trabajo, porque los recursos se cargan mediante rutas relativas.
-6. Al ejecutar fuera de Visual Studio, colocar las DLL correspondientes a la configuración junto al ejecutable, incluido `openal32.dll`, y conservar las carpetas de recursos en el directorio de trabajo.
-
-La versión de SFML incluida es **2.5.0**. La ventana es de **1280 × 720** y el límite está configurado en **144 FPS**.
-
 ## Estado actual y pendientes
 
 La idea final es causar caos en distintas habitaciones sin que el dueño descubra al gato. En esta rama, el dueño todavía es una representación gráfica: no se da vuelta, no detecta movimiento y no reacciona al ruido.
 
 Quedan pendientes el tiempo límite, el objetivo de objetos por habitación, el puntaje, las condiciones de victoria y derrota, más niveles, posiciones aleatorias, configuración de controles y audio, y los modos adicionales.
-
-Detalles técnicos a revisar:
-
-- La física usa valores por actualización y todavía no se ajusta mediante delta time.
-- Los relojes de animación siguen contando durante la pausa, aunque la partida deja de actualizarse.
-- El sonido de salto intenta cargar un MP3; el código señala que esa carga falla y requiere revisar el formato.
-- El código carga `fonts/starcatcher.ttf`, mientras el archivo guardado es `fonts/Starcatcher.ttf`. La diferencia de mayúsculas puede impedir la carga en sistemas que distinguen ambos nombres.
-- Las hitboxes se muestran por defecto. Para ocultarlas, cambiar `_mostrarHitboxes` en `Nivel`.
 
 ## Integrantes
 
