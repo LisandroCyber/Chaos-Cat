@@ -14,8 +14,9 @@ protected:
 public:
     Menu();
 
-    int procesarEvento(const sf::Event& evento);
+    int procesarEvento(const sf::Event& evento, const sf::RenderWindow& ventana);
     void dibujar(sf::RenderWindow& ventana);
     void reiniciarSeleccion();
     bool cargarMusicaFondo(const std::string& rutaMusica, float volumen);
+    int obtenerOpcionEn(const sf::Vector2f& posicionMouse) const;
 };

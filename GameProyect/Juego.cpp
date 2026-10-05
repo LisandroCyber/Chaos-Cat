@@ -13,6 +13,13 @@ Juego::Juego()
     _window.setKeyRepeatEnabled(false);
     _nivel->pausarMusica();
     _fuenteConfirmacion.loadFromFile("fonts/starcatcher.ttf");
+
+    for (int i = 0; i < 2; i++)
+    {
+        _opcionesSalida[i].setFont(_fuenteConfirmacion);
+        _opcionesSalida[i].setString(i == 0 ? "Si" : "No");
+        _opcionesSalida[i].setCharacterSize(30);
+    }
 }
 
 Juego::~Juego()
@@ -47,6 +54,50 @@ void Juego::procesarEventos()
 
         if (_confirmarSalida)
         {
+            actualizarOpcionesSalida();
+
+            if (evento.type == sf::Event::MouseMoved)
+            {
+                const sf::Vector2f posicionMouse =
+                    _window.mapPixelToCoords(sf::Vector2i(
+                        evento.mouseMove.x,
+                        evento.mouseMove.y
+                    ));
+
+                const int opcion = obtenerOpcionSalidaEn(posicionMouse);
+
+                if (opcion != -1)
+                {
+                    _opcionSalida = opcion;
+                }
+            }
+
+            if (evento.type == sf::Event::MouseButtonPressed &&
+                evento.mouseButton.button == sf::Mouse::Left)
+            {
+                const sf::Vector2f posicionMouse =
+                    _window.mapPixelToCoords(sf::Vector2i(
+                        evento.mouseButton.x,
+                        evento.mouseButton.y
+                    ));
+
+                const int opcion = obtenerOpcionSalidaEn(posicionMouse);
+
+                if (opcion == 0)
+                {
+                    _window.close();
+                }
+                else if (opcion == 1)
+                {
+                    _confirmarSalida = false;
+
+                    if (!_enMenu && !_enPausa)
+                    {
+                        _nivel->continuarMusica();
+                    }
+                }
+            }
+
             if (evento.type == sf::Event::KeyPressed)
             {
                 if (evento.key.code == sf::Keyboard::Left ||
@@ -108,11 +159,11 @@ void Juego::procesarEventos()
 
         if (_enMenu)
         {
-            opcion = _menuPrincipal.procesarEvento(evento);
+            opcion = _menuPrincipal.procesarEvento(evento, _window);
         }
         else if (_enPausa)
         {
-            opcion = _menuPausa.procesarEvento(evento);
+            opcion = _menuPausa.procesarEvento(evento, _window);
         }
 
         if (opcion == 0)
@@ -214,23 +265,50 @@ void Juego::dibujarConfirmacion()
     pregunta.setPosition(ancho / 2.f, alto / 2.f - 65.f);
     _window.draw(pregunta);
 
+    actualizarOpcionesSalida();
+
     for (int i = 0; i < 2; i++)
     {
-        sf::Text opcion;
-        opcion.setFont(_fuenteConfirmacion);
-        opcion.setString(i == 0 ? "Si" : "No");
-        opcion.setCharacterSize(30);
-        opcion.setFillColor(
-            i == _opcionSalida ? sf::Color::Yellow : sf::Color::White
+        _window.draw(_opcionesSalida[i]);
+    }
+}
+
+void Juego::actualizarOpcionesSalida()
+{
+    const float ancho = static_cast<float>(_window.getSize().x);
+    const float alto = static_cast<float>(_window.getSize().y);
+
+    for (int i = 0; i < 2; i++)
+    {
+        sf::FloatRect area = _opcionesSalida[i].getLocalBounds();
+
+        _opcionesSalida[i].setOrigin(
+            area.left + area.width / 2.f,
+            area.top
         );
 
-        area = opcion.getLocalBounds();
-        opcion.setOrigin(area.left + area.width / 2.f, area.top);
-        opcion.setPosition(
+        _opcionesSalida[i].setPosition(
             ancho / 2.f + (i == 0 ? -100.f : 100.f),
             alto / 2.f + 30.f
         );
 
-        _window.draw(opcion);
+        _opcionesSalida[i].setFillColor(
+            i == _opcionSalida ? sf::Color::Yellow : sf::Color::White
+        );
     }
+}
+
+int Juego::obtenerOpcionSalidaEn(
+    const sf::Vector2f& posicionMouse) const
+{
+    for (int i = 0; i < 2; i++)
+    {
+        if (_opcionesSalida[i].getGlobalBounds().contains(
+            posicionMouse.x, posicionMouse.y))
+        {
+            return i;
+        }
+    }
+
+    return -1;
 }

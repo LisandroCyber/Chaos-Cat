@@ -21,12 +21,17 @@ private:
     bool _confirmarSalida = false;
     int _opcionSalida = 1; // Empieza seleccionado "No".
     sf::Font _fuenteConfirmacion;
+    sf::Text _opcionesSalida[2];//guardo los textos como atributos para poder seleccionarlos
 
     void dibujarConfirmacion();
 
     void procesarEventos();
     void actualizar();
     void dibujar();
+
+    void actualizarOpcionesSalida();
+    int obtenerOpcionSalidaEn(
+        const sf::Vector2f& posicionMouse) const;
 
 public:
     Juego();

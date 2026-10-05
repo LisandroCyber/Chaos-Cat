@@ -22,8 +22,37 @@ Menu::Menu()
     _opciones[1].setString("Salir");
 }
 
-int Menu::procesarEvento(const sf::Event& evento)
+int Menu::procesarEvento(const sf::Event& evento, const sf::RenderWindow& ventana)
 {
+    //verifica si el mouse se mueve dentro de la pantalla
+    if (evento.type == sf::Event::MouseMoved)
+    {
+        const sf::Vector2f posicionMouse =
+            ventana.mapPixelToCoords(sf::Vector2i(
+                evento.mouseMove.x,
+                evento.mouseMove.y
+            ));
+
+        const int opcion = obtenerOpcionEn(posicionMouse);
+
+        if (opcion != -1)
+        {
+            _seleccion = opcion;
+        }
+    }
+
+    if (evento.type == sf::Event::MouseButtonPressed &&
+        evento.mouseButton.button == sf::Mouse::Left)
+    {
+        const sf::Vector2f posicionMouse =
+            ventana.mapPixelToCoords(sf::Vector2i(
+                evento.mouseButton.x,
+                evento.mouseButton.y
+            ));
+
+        return obtenerOpcionEn(posicionMouse);
+    }
+
     if (evento.type == sf::Event::KeyPressed)
     {
         if (evento.key.code == sf::Keyboard::Up ||
@@ -72,4 +101,20 @@ bool Menu::cargarMusicaFondo(const std::string& rutaMusica, float volumen)
     _musicaFondo.play();
 
     return true;
+}
+
+//recorre las opciones y verifica si el mouse esta sobre uno de ellos o no
+int Menu::obtenerOpcionEn(
+    const sf::Vector2f& posicionMouse) const
+{
+    for (int i = 0; i < 2; i++)
+    {
+        if (_opciones[i].getGlobalBounds().contains(
+            posicionMouse.x, posicionMouse.y))
+        {
+            return i;
+        }
+    }
+
+    return -1;
 }

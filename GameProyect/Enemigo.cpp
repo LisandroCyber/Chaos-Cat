@@ -17,6 +17,8 @@ sf::Texture Enemigo::cargarTextura(const std::string& rutaTextura)
     return textura;
 }
 
+//sirve para tomar el sprite sheet entero, darle valores a una sola de las imagenes y mantenerlo en el mismo eje que las
+// otras. De esta forma da el efecto correcto que el enemigo se da vuelta sobre su propio eje
 sf::Vector2f Enemigo::obtenerOrigenVisible(const sf::Texture& textura,
     int frameAncho,
     int frameAlto)
@@ -27,10 +29,12 @@ sf::Vector2f Enemigo::obtenerOrigenVisible(const sf::Texture& textura,
     unsigned int abajo = 0;
     bool encontroPixelVisible = false;
 
+    //recorre como una matriz el area para detectar la posicion del sprite (sus medidas)
     for (unsigned int y = 0; y < static_cast<unsigned int>(frameAlto); y++)
     {
         for (unsigned int x = 0; x < static_cast<unsigned int>(frameAncho); x++)
         {
+            //el a es alpha y es el gradiente de color, si es 0 no hay color por ende es transparente
             if (imagen.getPixel(x, y).a > 0)
             {
                 if (x < izquierda)
@@ -53,6 +57,7 @@ sf::Vector2f Enemigo::obtenerOrigenVisible(const sf::Texture& textura,
         }
     }
 
+    //si el frame es completamente transparente devuelve un numero fijo asi no explota todo
     if (!encontroPixelVisible)
     {
         return {
