@@ -18,6 +18,11 @@ private:
 
     bool _enMenu = true;
     bool _enPausa = false;
+    bool _confirmarSalida = false;
+    int _opcionSalida = 1; // Empieza seleccionado "No".
+    sf::Font _fuenteConfirmacion;
+
+    void dibujarConfirmacion();
 
     void procesarEventos();
     void actualizar();
