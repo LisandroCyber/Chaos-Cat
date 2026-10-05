@@ -14,6 +14,11 @@ MenuPrincipal::MenuPrincipal()
     {
         _fondo.setTexture(_texturaFondo);
     }
+
+    if (!cargarMusicaFondo("music/cancion_pantalla_principal.wav", 3.f))
+    {
+        std::cout << "ERROR AL CARGAR LA MUSICA\n";
+    }
 }
 
 void MenuPrincipal::dibujar(sf::RenderWindow& ventana)

@@ -59,3 +59,17 @@ void Menu::reiniciarSeleccion()
 {
     _seleccion = 0;
 }
+
+bool Menu::cargarMusicaFondo(const std::string& rutaMusica, float volumen)
+{
+    if (!_musicaFondo.openFromFile(rutaMusica))
+    {
+        return false;
+    }
+
+    _musicaFondo.setVolume(volumen);
+    _musicaFondo.setLoop(true);
+    _musicaFondo.play();
+
+    return true;
+}

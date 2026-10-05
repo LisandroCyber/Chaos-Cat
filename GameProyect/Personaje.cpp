@@ -29,8 +29,7 @@ Personaje::Personaje()
     _sprite.setScale({ _escala, _escala });
     _velocity = { 0.f, 0.f };
 
-    // no anda, (format not supported) cambiar a .wav o revisar
-    if (!_bufferSalto.loadFromFile("sound effects/salto_gato.mp3"))
+    if (!_bufferSalto.loadFromFile("sound effects/salto_gato.ogg"))
     {
         std::cout << "No se pudo cargar el sonido del salto\n";
     }
@@ -45,7 +44,7 @@ Personaje::Personaje()
         _sonidoGolpe.setBuffer(_bufferGolpe);
     }
 
-        _sonidoGolpe.setVolume(30.f);
+    _sonidoGolpe.setVolume(20.f);
 
     _estado = EstadoGato::Sentado;
     _contandoQuieto = true;
