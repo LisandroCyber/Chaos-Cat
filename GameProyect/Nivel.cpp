@@ -457,3 +457,16 @@ void Nivel::continuarMusica()
         _musicaFondo.play();
     }
 }
+
+bool Nivel::gatoFueDetectado(const Personaje& gato) const
+{
+    for (const Enemigo* enemigo : _enemigos)
+    {
+        if (enemigo->detectaAl(gato))
+        {
+            return true;
+        }
+    }
+
+    return false;
+}

@@ -61,7 +61,7 @@ void Juego::cancelarSalida()
     {
         _menuPausa.continuarMusica();
     }
-    else
+    else if (!_perdio)
     {
         _nivel->continuarMusica();
     }
@@ -118,7 +118,7 @@ void Juego::procesarEventos()
             continue;
         }
 
-        if (evento.type == sf::Event::KeyPressed &&
+        if (!_perdio && evento.type == sf::Event::KeyPressed &&
             evento.key.code == sf::Keyboard::Escape)
         {
             _enPausa = !_enPausa;
@@ -161,13 +161,22 @@ void Juego::procesarEventos()
 
 void Juego::actualizar()
 {
-    if (_enMenu || _enPausa || _confirmarSalida)
+    if (_enMenu || _enPausa || _confirmarSalida || _perdio)
     {
         return;
     }
 
     _gato.update();
     _nivel->actualizar(_gato);
+
+    if (_nivel->gatoFueDetectado(_gato))
+    {
+        _perdio = true;
+        _nivel->pausarMusica();
+
+        std::cout << "PANTALLA DE DERROTA";
+        return;
+    }
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::R))
     {

@@ -19,6 +19,7 @@ private:
     MenuPausa _menuPausa;
     ConfirmacionSalida _menuSalida;
 
+    bool _perdio = false;
     bool _enMenu = true;
     bool _enPausa = false;
     bool _confirmarSalida = false;

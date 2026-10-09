@@ -1,5 +1,6 @@
 #include "Enemigo.h"
 #include "Constantes.h"
+#include "Personaje.h"
 
 #include <cstdlib>
 #include <iostream>
@@ -141,4 +142,19 @@ void Enemigo::actualizarSprite()
 void Enemigo::dibujar(sf::RenderWindow& ventana) const
 {
     ventana.draw(_sprite);
+}
+
+bool Enemigo::detectaAl(const Personaje& gato) const
+{
+    if (_estado != EstadoEnemigo::DadoVuelta)
+    {
+        return false;
+    }
+
+    if (gato.estaEscondido())
+    {
+        return false;
+    }
+
+    return gato.seEstaMoviendo() || gato.estaGolpeando();
 }

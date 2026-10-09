@@ -70,6 +70,7 @@ public:
     void continuarMusica();
     void actualizar(Personaje& gato);
     void reiniciarObjetos();
+    bool gatoFueDetectado(const Personaje& gato) const;
     void dibujar(sf::RenderWindow& ventana,
         const Personaje& gato) const;
 };

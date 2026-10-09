@@ -3,6 +3,7 @@
 #include "Constantes.h"
 #include <cstdlib>
 #include <iostream>
+#include <cmath>
 
 sf::Texture Personaje::cargarTextura()
 {
@@ -505,3 +506,15 @@ float Personaje::getBaseAnterior() const
     return _baseAnterior;
 }
 
+bool Personaje::seEstaMoviendo() const
+{
+    const sf::FloatRect actual = getGlobalBounds();
+
+    const bool movimientoHorizontal =
+        std::abs(actual.left - _areaAnterior.left) > 0.1f;
+
+    const bool movimientoVertical =
+        std::abs(getBaseY() - _baseAnterior) > 0.1f;
+
+    return movimientoHorizontal || movimientoVertical;
+}

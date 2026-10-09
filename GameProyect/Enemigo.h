@@ -3,6 +3,8 @@
 #include <SFML/Graphics.hpp>
 #include <string>
 
+class Personaje;
+
 enum class EstadoEnemigo
 {
     DeEspalda,
@@ -33,6 +35,7 @@ public:
         int frameAncho,
         int frameAlto,
         const sf::Vector2f& escala);
+    bool detectaAl(const Personaje& gato) const;
 
     void actualizar();
     void dibujar(sf::RenderWindow& ventana) const;

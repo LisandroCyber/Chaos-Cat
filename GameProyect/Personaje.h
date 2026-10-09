@@ -84,6 +84,7 @@ public:
     void mover(const sf::Vector2f& desplazamiento);
     void apoyarEn(float superficieY);
     void iniciarCaidaSiEstaElevado();
+    bool seEstaMoviendo() const;
 
     sf::FloatRect getAreaAnterior() const;
     float getBaseAnterior() const;
