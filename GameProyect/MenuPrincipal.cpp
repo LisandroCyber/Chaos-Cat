@@ -15,27 +15,48 @@ MenuPrincipal::MenuPrincipal()
         _fondo.setTexture(_texturaFondo);
     }
 
-    if (!cargarMusicaFondo("music/cancion_pantalla_principal.wav", 3.f))
+    if (!_musicaFondo.openFromFile(
+        "music/MenuPrincipal/LoopMenuPrincipal.wav"))
     {
-        std::cout << "ERROR AL CARGAR LA MUSICA\n";
+        std::cout << "ERROR AL CARGAR LA MUSICA DEL MENU\n";
+    }
+    else
+    {
+        _musicaFondo.setVolume(3.f);
+        _musicaFondo.setLoop(true);
     }
 }
 
-void MenuPrincipal::dibujar(sf::RenderWindow& ventana)
+void MenuPrincipal::pausarMusica()
+{
+    _musicaFondo.pause();
+}
+
+void MenuPrincipal::continuarMusica()
+{
+    if (_musicaFondo.getStatus() != sf::Music::Playing)
+    {
+        _musicaFondo.play();
+    }
+}
+
+void MenuPrincipal::draw(
+    sf::RenderTarget& destino,
+    sf::RenderStates estados) const
 {
     const sf::Vector2u tamanio = _texturaFondo.getSize();
 
     if (tamanio.x > 0 && tamanio.y > 0)
     {
-        // Ajustar la imagen al tamaño de la ventana.
-        _fondo.setScale(
-            static_cast<float>(ventana.getSize().x) / tamanio.x,
-            static_cast<float>(ventana.getSize().y) / tamanio.y
+        sf::Sprite fondo = _fondo;
+
+        fondo.setScale(
+            static_cast<float>(destino.getSize().x) / tamanio.x,
+            static_cast<float>(destino.getSize().y) / tamanio.y
         );
 
-        ventana.draw(_fondo);
+        destino.draw(fondo, estados);
     }
 
-    // Dibujar el título y las opciones sobre la imagen.
-    Menu::dibujar(ventana);
+    Menu::draw(destino, estados);
 }

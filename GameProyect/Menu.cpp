@@ -3,7 +3,7 @@
 
 Menu::Menu()
 {
-    if (!_fuente.loadFromFile("fonts/starcatcher.ttf"))
+    if (!_fuente.loadFromFile("fonts/Starcatcher.ttf"))
     {
         std::cout << "ERROR AL CARGAR LA FUENTE\n";
     }
@@ -22,9 +22,10 @@ Menu::Menu()
     _opciones[1].setString("Salir");
 }
 
-int Menu::procesarEvento(const sf::Event& evento, const sf::RenderWindow& ventana)
+int Menu::procesarEvento(
+    const sf::Event& evento,
+    const sf::RenderWindow& ventana)
 {
-    //verifica si el mouse se mueve dentro de la pantalla
     if (evento.type == sf::Event::MouseMoved)
     {
         const sf::Vector2f posicionMouse =
@@ -60,8 +61,7 @@ int Menu::procesarEvento(const sf::Event& evento, const sf::RenderWindow& ventan
         {
             _seleccion = 1 - _seleccion;
         }
-
-        if (evento.key.code == sf::Keyboard::Enter)
+        else if (evento.key.code == sf::Keyboard::Enter)
         {
             return _seleccion;
         }
@@ -70,40 +70,6 @@ int Menu::procesarEvento(const sf::Event& evento, const sf::RenderWindow& ventan
     return -1;
 }
 
-void Menu::dibujar(sf::RenderWindow& ventana)
-{
-    ventana.draw(_titulo);
-
-    for (int i = 0; i < 2; i++)
-    {
-        _opciones[i].setFillColor(
-            i == _seleccion ? sf::Color::Yellow : sf::Color::White
-        );
-
-        ventana.draw(_opciones[i]);
-    }
-}
-
-void Menu::reiniciarSeleccion()
-{
-    _seleccion = 0;
-}
-
-bool Menu::cargarMusicaFondo(const std::string& rutaMusica, float volumen)
-{
-    if (!_musicaFondo.openFromFile(rutaMusica))
-    {
-        return false;
-    }
-
-    _musicaFondo.setVolume(volumen);
-    _musicaFondo.setLoop(true);
-    _musicaFondo.play();
-
-    return true;
-}
-
-//recorre las opciones y verifica si el mouse esta sobre uno de ellos o no
 int Menu::obtenerOpcionEn(
     const sf::Vector2f& posicionMouse) const
 {
@@ -117,4 +83,28 @@ int Menu::obtenerOpcionEn(
     }
 
     return -1;
+}
+
+void Menu::reiniciarSeleccion()
+{
+    _seleccion = 0;
+}
+
+void Menu::draw(
+    sf::RenderTarget& destino,
+    sf::RenderStates estados) const
+{
+    destino.draw(_titulo, estados);
+
+    for (int i = 0; i < 2; i++)
+    {
+        // Copia local para cambiar el color sin modificar el menu.
+        sf::Text opcion = _opciones[i];
+
+        opcion.setFillColor(
+            i == _seleccion ? sf::Color::Yellow : sf::Color::White
+        );
+
+        destino.draw(opcion, estados);
+    }
 }

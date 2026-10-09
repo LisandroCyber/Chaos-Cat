@@ -24,7 +24,7 @@ Objeto::Objeto(const std::string& rutaTextura, const sf::Vector2f& posicion, flo
 	_sprite.setPosition(posicion);
 	_sprite.setScale({ escala, escala });
 	_sprite.setOrigin(_sprite.getGlobalBounds().width / 2.f, 0.f);
-	if (!_bufferCaida.loadFromFile("sound effects/vidrioRoto.wav"))
+	if (!_bufferCaida.loadFromFile("sound effects/objetos/vidrioRoto.wav"))
 	{
 		std::cout << "ERROR: NO SE PUDO CARGAR EL SONIDO DE CAIDA\n";
 	}

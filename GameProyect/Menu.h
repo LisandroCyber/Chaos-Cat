@@ -1,22 +1,30 @@
 #pragma once
 #include <SFML/Graphics.hpp>
-#include <SFML/Audio.hpp>
 
-class Menu
+class Menu : public sf::Drawable
 {
 protected:
     sf::Font _fuente;
     sf::Text _titulo;
-    sf::Music _musicaFondo;
     sf::Text _opciones[2];
+
     int _seleccion = 0;
+
+    int obtenerOpcionEn(const sf::Vector2f& posicionMouse) const;
+
+    void draw(
+        sf::RenderTarget& destino,
+        sf::RenderStates estados
+    ) const override;
 
 public:
     Menu();
+    virtual ~Menu() = default;
 
-    int procesarEvento(const sf::Event& evento, const sf::RenderWindow& ventana);
-    void dibujar(sf::RenderWindow& ventana);
-    void reiniciarSeleccion();
-    bool cargarMusicaFondo(const std::string& rutaMusica, float volumen);
-    int obtenerOpcionEn(const sf::Vector2f& posicionMouse) const;
+    virtual int procesarEvento(
+        const sf::Event& evento,
+        const sf::RenderWindow& ventana
+    );
+
+    virtual void reiniciarSeleccion();
 };

@@ -5,10 +5,11 @@ NivelCocina::NivelCocina()
 {
     cargarFondo("images/1-Cocina/cocina.png");
 
-    if (!cargarMusicaFondo("music/loopPrincipal.wav", 2.f))
+    if (!cargarMusicaFondo("music/EnPartida/LoopNivelCocina.wav", 2.f))
     {
         std::cout << "ERROR AL CARGAR LA MUSICA\n";
     }
+    reproducirMusicaFondo(sf::Time::Zero);
 
     agregarEnemigo("images/frames_enemigo.png",
         { 672.f, 664.f },
@@ -35,5 +36,5 @@ NivelCocina::NivelCocina()
 
     agregarZonaEscondite(sf::FloatRect(0.f, 520.f, 145.f, 235.f)); // zona escondite heladera
     agregarZonaEscondite(sf::FloatRect(1185.f, 485.f, 95.f, 235.f)); // zona escondite cocina
-    
+
 }

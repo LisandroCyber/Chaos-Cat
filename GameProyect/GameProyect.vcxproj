@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ConfirmacionSalida.cpp" />
     <ClCompile Include="Enemigo.cpp" />
     <ClCompile Include="Juego.cpp" />
     <ClCompile Include="main.cpp" />
@@ -32,6 +33,7 @@
     <ClCompile Include="Personaje.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ConfirmacionSalida.h" />
     <ClInclude Include="Constantes.h" />
     <ClInclude Include="Enemigo.h" />
     <ClInclude Include="Juego.h" />
