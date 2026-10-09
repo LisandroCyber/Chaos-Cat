@@ -22,7 +22,7 @@ MenuPrincipal::MenuPrincipal()
     }
     else
     {
-        _musicaFondo.setVolume(3.f);
+        _musicaFondo.setVolume(25.f);
         _musicaFondo.setLoop(true);
     }
 }

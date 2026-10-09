@@ -5,11 +5,10 @@ NivelCocina::NivelCocina()
 {
     cargarFondo("images/1-Cocina/cocina.png");
 
-    if (!cargarMusicaFondo("music/EnPartida/LoopNivelCocina.wav", 2.f))
+    if (!cargarMusicaFondo("music/EnPartida/LoopNivelCocina.wav", 22.f))
     {
         std::cout << "ERROR AL CARGAR LA MUSICA\n";
     }
-    reproducirMusicaFondo(sf::Time::Zero);
 
     agregarEnemigo("images/frames_enemigo.png",
         { 672.f, 664.f },

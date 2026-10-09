@@ -45,6 +45,7 @@ void Juego::solicitarSalida()
     _menuSalida.reiniciarSeleccion();
 
     _menuPrincipal.pausarMusica();
+    _menuPausa.pausarMusica();
     _nivel->pausarMusica();
 }
 
@@ -52,11 +53,15 @@ void Juego::cancelarSalida()
 {
     _confirmarSalida = false;
 
-    if (!_enMenu)
+    if (_enMenu)
     {
-        _menuPrincipal.pausarMusica();
+        _menuPrincipal.continuarMusica();
     }
-    else if (!_enPausa)
+    else if (_enPausa)
+    {
+        _menuPausa.continuarMusica();
+    }
+    else
     {
         _nivel->continuarMusica();
     }
@@ -121,10 +126,13 @@ void Juego::procesarEventos()
             if (_enPausa)
             {
                 _menuPausa.reiniciarSeleccion();
+
                 _nivel->pausarMusica();
+                _menuPausa.continuarMusica();
             }
             else
             {
+                _menuPausa.pausarMusica();
                 _nivel->continuarMusica();
             }
 
@@ -139,6 +147,8 @@ void Juego::procesarEventos()
             if (opcion == 0)
             {
                 _enPausa = false;
+
+                _menuPausa.pausarMusica();
                 _nivel->continuarMusica();
             }
             else if (opcion == 1)

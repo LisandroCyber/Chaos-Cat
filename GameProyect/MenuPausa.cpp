@@ -13,9 +13,8 @@ MenuPausa::MenuPausa()
     }
     else
     {
-        _musicaFondo.setVolume(3.f);
+        _musicaFondo.setVolume(20.f);
         _musicaFondo.setLoop(true);
-        _musicaFondo.play();
     }
 }
 
