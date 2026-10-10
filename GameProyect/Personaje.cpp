@@ -101,6 +101,32 @@ void Personaje::update()
     limitarMovimiento();
 }
 
+void Personaje::setPausado(bool pausado)
+{
+    _relojQuieto.setPausado(pausado);
+    _relojCaminar.setPausado(pausado);
+    _relojAgachado.setPausado(pausado);
+    _relojGolpe.setPausado(pausado);
+
+    if (pausado)
+    {
+        _sonidoSalto.pause();
+        _sonidoGolpe.pause();
+    }
+    else
+    {
+        if (_sonidoSalto.getStatus() == sf::SoundSource::Paused)
+        {
+            _sonidoSalto.play();
+        }
+
+        if (_sonidoGolpe.getStatus() == sf::SoundSource::Paused)
+        {
+            _sonidoGolpe.play();
+        }
+    }
+}
+
 bool Personaje::procesarEntrada()
 {
 

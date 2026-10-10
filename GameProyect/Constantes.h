@@ -24,6 +24,7 @@ const float DURACION_FRAME_GOLPE = 0.10f;
 const float DURACION_GOLPE = 0.20f;
 
 // Ciclo de vigilancia del enemigo.
-const float TIEMPO_ENEMIGO_DE_ESPALDA = 8.f;
-const float TIEMPO_ENEMIGO_ALERTA = 2.f;
+const int TIEMPO_ENEMIGO_DE_ESPALDA_MIN = 3;
+const int TIEMPO_ENEMIGO_DE_ESPALDA_MAX = 8;
+const float TIEMPO_ENEMIGO_ALERTA = 3.f;
 const float TIEMPO_ENEMIGO_DADO_VUELTA = 3.f;

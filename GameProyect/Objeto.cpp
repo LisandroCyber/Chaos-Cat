@@ -88,6 +88,18 @@ void Objeto::update()
 	}
 }
 
+void Objeto::setPausado(bool pausado)
+{
+	if (pausado && _sonidoCaida.getStatus() == sf::SoundSource::Playing)
+	{
+		_sonidoCaida.pause();
+	}
+	else if (!pausado && _sonidoCaida.getStatus() == sf::SoundSource::Paused)
+	{
+		_sonidoCaida.play();
+	}
+}
+
 void Objeto::tirar(float direccion)
 {
 	if (_tirado)

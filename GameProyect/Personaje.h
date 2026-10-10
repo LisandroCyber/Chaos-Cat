@@ -2,6 +2,7 @@
 
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
+#include "RelojJuego.h"
 
 enum class EstadoGato {
     Quieto,
@@ -35,10 +36,10 @@ private:
     float _velocidadVertical;
     float _posicionPisoY;
 
-    sf::Clock _relojQuieto;
-    sf::Clock _relojCaminar;
-    sf::Clock _relojAgachado;
-    sf::Clock _relojGolpe;
+    RelojJuego _relojQuieto;
+    RelojJuego _relojCaminar;
+    RelojJuego _relojAgachado;
+    RelojJuego _relojGolpe;
 
     bool _contandoQuieto;
     int _frameCaminar;
@@ -69,6 +70,7 @@ public:
     Personaje();
 
     void update();
+    void setPausado(bool pausado);
     void saltar();
     bool estaGolpeando() const;
     bool estaAgachado() const;

@@ -26,9 +26,11 @@ private:
     bool _enMenu = true;
     bool _enPausa = false;
     bool _confirmarSalida = false;
+    bool _partidaPausada = true;
 
     void procesarEventos();
     void actualizar();
+    void actualizarPausaPartida();
     void dibujar();
 
     void solicitarSalida();

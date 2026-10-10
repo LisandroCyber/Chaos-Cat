@@ -32,6 +32,7 @@
     <ClCompile Include="NivelCocina.cpp" />
     <ClCompile Include="Objeto.cpp" />
     <ClCompile Include="Personaje.cpp" />
+    <ClCompile Include="RelojJuego.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ConfirmacionSalida.h" />
@@ -47,6 +48,7 @@
     <ClInclude Include="NivelCocina.h" />
     <ClInclude Include="Objeto.h" />
     <ClInclude Include="Personaje.h" />
+    <ClInclude Include="RelojJuego.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>18.0</VCProjectVersion>

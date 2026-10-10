@@ -1,7 +1,9 @@
 #pragma once
 
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 #include <string>
+#include "RelojJuego.h"
 
 class Personaje;
 
@@ -20,7 +22,11 @@ private:
     int _frameAncho;
     int _frameAlto;
     EstadoEnemigo _estado = EstadoEnemigo::DeEspalda;
-    sf::Clock _relojEstado;
+    RelojJuego _relojEstado;
+    float _tiempoDeEspalda = 0.f;
+
+    sf::SoundBuffer _bufferAlerta;
+    sf::Sound _sonidoAlerta;
 
     static sf::Texture cargarTextura(const std::string& rutaTextura);
     static sf::Vector2f obtenerOrigenVisible(const sf::Texture& textura,
@@ -38,5 +44,6 @@ public:
     bool detectaAl(const Personaje& gato) const;
 
     void actualizar();
+    void setPausado(bool pausado);
     void dibujar(sf::RenderWindow& ventana) const;
 };

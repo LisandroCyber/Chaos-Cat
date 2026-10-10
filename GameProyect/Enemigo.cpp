@@ -87,6 +87,18 @@ Enemigo::Enemigo(const std::string& rutaTextura,
     _sprite.setOrigin(obtenerOrigenVisible(_textura, _frameAncho, _frameAlto));
     _sprite.setPosition(posicion);
     _sprite.setScale(escala);
+
+    if (!_bufferAlerta.loadFromFile("sound effects/enemigos/huu_duenio.wav"))
+    {
+        std::cout << "ERROR: NO SE PUDO CARGAR EL SONIDO DE ALERTA DEL ENEMIGO\n";
+    }
+    else
+    {
+        _sonidoAlerta.setBuffer(_bufferAlerta);
+        _sonidoAlerta.setVolume(5.f);
+    }
+
+    cambiarEstado(EstadoEnemigo::DeEspalda);
 }
 
 void Enemigo::actualizar()
@@ -95,7 +107,7 @@ void Enemigo::actualizar()
         _relojEstado.getElapsedTime().asSeconds();
 
     if (_estado == EstadoEnemigo::DeEspalda &&
-        tiempoTranscurrido >= TIEMPO_ENEMIGO_DE_ESPALDA)
+        tiempoTranscurrido >= _tiempoDeEspalda)
     {
         cambiarEstado(EstadoEnemigo::Alerta);
     }
@@ -111,9 +123,38 @@ void Enemigo::actualizar()
     }
 }
 
+void Enemigo::setPausado(bool pausado)
+{
+    _relojEstado.setPausado(pausado);
+
+    if (pausado && _sonidoAlerta.getStatus() == sf::SoundSource::Playing)
+    {
+        _sonidoAlerta.pause();
+    }
+    else if (!pausado && _sonidoAlerta.getStatus() == sf::SoundSource::Paused)
+    {
+        _sonidoAlerta.play();
+    }
+}
+
 void Enemigo::cambiarEstado(EstadoEnemigo nuevoEstado)
 {
     _estado = nuevoEstado;
+
+    if (_estado == EstadoEnemigo::DeEspalda)
+    {
+        const int cantidadDeTiempos =
+            TIEMPO_ENEMIGO_DE_ESPALDA_MAX - TIEMPO_ENEMIGO_DE_ESPALDA_MIN + 1;
+
+        _tiempoDeEspalda = static_cast<float>(
+            TIEMPO_ENEMIGO_DE_ESPALDA_MIN + std::rand() % cantidadDeTiempos
+        );
+    }
+    else if (_estado == EstadoEnemigo::Alerta)
+    {
+        _sonidoAlerta.play();
+    }
+
     _relojEstado.restart();
     actualizarSprite();
 }
@@ -146,15 +187,6 @@ void Enemigo::dibujar(sf::RenderWindow& ventana) const
 
 bool Enemigo::detectaAl(const Personaje& gato) const
 {
-    if (_estado != EstadoEnemigo::DadoVuelta)
-    {
-        return false;
-    }
-
-    if (gato.estaEscondido())
-    {
-        return false;
-    }
-
-    return gato.seEstaMoviendo() || gato.estaGolpeando();
+    return _estado == EstadoEnemigo::DadoVuelta
+        && !gato.estaEscondido();
 }

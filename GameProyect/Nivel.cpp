@@ -103,6 +103,19 @@ void Nivel::actualizar(Personaje& gato)
     actualizarEscondite(gato);
 }
 
+void Nivel::setPausado(bool pausado)
+{
+    for (Enemigo* enemigo : _enemigos)
+    {
+        enemigo->setPausado(pausado);
+    }
+
+    for (Objeto* objeto : _objetos)
+    {
+        objeto->setPausado(pausado);
+    }
+}
+
 void Nivel::actualizarEscondite(Personaje& gato)
 {
     if (!gato.estaAgachado())

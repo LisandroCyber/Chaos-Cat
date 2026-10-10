@@ -25,6 +25,7 @@ public:
 
 	sf::FloatRect getGlobalBounds() const;
 	void update();
+	void setPausado(bool pausado);
 	void tirar(float direccion);
 	void reiniciar();
 	bool estaTirado() const;

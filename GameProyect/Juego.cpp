@@ -176,9 +176,25 @@ void Juego::procesarEventos()
     }
 }
 
+void Juego::actualizarPausaPartida()
+{
+    const bool pausada = _enMenu || _enPausa || _confirmarSalida || _perdio;
+
+    if (_partidaPausada == pausada)
+    {
+        return;
+    }
+
+    _gato.setPausado(pausada);
+    _nivel->setPausado(pausada);
+    _partidaPausada = pausada;
+}
+
 void Juego::actualizar()
 {
-    if (_enMenu || _enPausa || _confirmarSalida || _perdio)
+    actualizarPausaPartida();
+
+    if (_partidaPausada)
     {
         return;
     }
@@ -189,6 +205,7 @@ void Juego::actualizar()
     if (_nivel->gatoFueDetectado(_gato))
     {
         _perdio = true;
+        actualizarPausaPartida();
 
         _menuDerrota.reiniciarSeleccion();
         _nivel->pausarMusica();

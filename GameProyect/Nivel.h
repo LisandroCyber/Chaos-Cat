@@ -69,6 +69,7 @@ public:
     void pausarMusica();
     void continuarMusica();
     void actualizar(Personaje& gato);
+    void setPausado(bool pausado);
     void reiniciarObjetos();
     bool gatoFueDetectado(const Personaje& gato) const;
     void dibujar(sf::RenderWindow& ventana,
