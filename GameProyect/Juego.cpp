@@ -14,6 +14,22 @@ Juego::Juego()
     _window.setFramerateLimit(LIMITE_FPS);
     _window.setKeyRepeatEnabled(false);
 
+    if (_texturaOjoEscondido.loadFromFile("images/ojo_escondido.png"))
+    {
+        _spriteOjoEscondido.setTexture(_texturaOjoEscondido);
+
+        const sf::Vector2u tamano = _texturaOjoEscondido.getSize();
+        const float escala = 96.f / tamano.y;
+
+        _spriteOjoEscondido.setOrigin(tamano.x / 2.f, tamano.y / 2.f);
+        _spriteOjoEscondido.setScale(escala, escala);
+        _spriteOjoEscondido.setPosition(ANCHO_VENTANA / 2.f, 96.f);
+    }
+    else
+    {
+        std::cout << "No se pudo cargar el indicador de escondido\n";
+    }
+
     _nivel->pausarMusica();
     _menuPrincipal.continuarMusica();
 }
@@ -240,6 +256,11 @@ void Juego::dibujar()
     {
         // La partida permanece visible detras de la pausa.
         _nivel->dibujar(_window, _gato);
+
+        if (_gato.estaEscondido())
+        {
+            _window.draw(_spriteOjoEscondido);
+        }
 
         if (_enPausa)
         {

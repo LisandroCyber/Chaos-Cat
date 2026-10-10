@@ -16,6 +16,9 @@ private:
     Personaje _gato;
     Nivel* _nivel;
 
+    sf::Texture _texturaOjoEscondido;
+    sf::Sprite _spriteOjoEscondido;
+
     MenuPrincipal _menuPrincipal;
     MenuPausa _menuPausa;
     ConfirmacionSalida _menuSalida;
