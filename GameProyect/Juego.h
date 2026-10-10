@@ -6,6 +6,7 @@
 #include "MenuPrincipal.h"
 #include "MenuPausa.h"
 #include "ConfirmacionSalida.h"
+#include "MenuDerrota.h"
 
 class Juego
 {
@@ -18,6 +19,8 @@ private:
     MenuPrincipal _menuPrincipal;
     MenuPausa _menuPausa;
     ConfirmacionSalida _menuSalida;
+    MenuDerrota _menuDerrota;
+
 
     bool _perdio = false;
     bool _enMenu = true;
@@ -30,6 +33,7 @@ private:
 
     void solicitarSalida();
     void cancelarSalida();
+    void reiniciarPartida();
 
 public:
     Juego();

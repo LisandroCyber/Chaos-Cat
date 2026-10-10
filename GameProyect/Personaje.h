@@ -74,6 +74,7 @@ public:
     bool estaAgachado() const;
     bool estaEscondido() const;
     void setEscondido(bool escondido);
+    void reiniciar();
 
     float getPosx();
     float getPosy();

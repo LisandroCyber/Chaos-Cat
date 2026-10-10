@@ -518,3 +518,45 @@ bool Personaje::seEstaMoviendo() const
 
     return movimientoHorizontal || movimientoVertical;
 }
+
+void Personaje::reiniciar()
+{
+    _sonidoSalto.stop();
+    _sonidoGolpe.stop();
+
+    _velocity = sf::Vector2f(0.f, 0.f);
+    _alturaVertical = 0.f;
+    _velocidadVertical = 0.f;
+
+    _enElPiso = true;
+    _escondido = false;
+
+    // Evita que una tecla mantenida se tome como una pulsación nueva.
+    _espacioPresionadoAntes =
+        sf::Keyboard::isKeyPressed(sf::Keyboard::Space);
+
+    _ePresionadaAntes =
+        sf::Keyboard::isKeyPressed(sf::Keyboard::E);
+
+    _estado = EstadoGato::Quieto;
+
+    _contandoQuieto = false;
+    _frameCaminar = 0;
+    _frameAgachado = 0;
+    _frameGolpe = 0;
+
+    _relojQuieto.restart();
+    _relojCaminar.restart();
+    _relojAgachado.restart();
+    _relojGolpe.restart();
+
+    _sprite.setScale(_escala, _escala);
+
+    // Usá acá la misma posición inicial que tenés en el constructor.
+    _sprite.setPosition(200.f, _posicionPisoY);
+
+    actualizarSprite();
+
+    _areaAnterior = getGlobalBounds();
+    _baseAnterior = getBaseY();
+}

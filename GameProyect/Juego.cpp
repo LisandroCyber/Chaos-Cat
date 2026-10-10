@@ -98,6 +98,23 @@ void Juego::procesarEventos()
             continue;
         }
 
+        if (_perdio)
+        {
+            const int opcion =
+                _menuDerrota.procesarEvento(evento, _window);
+
+            if (opcion == 0)
+            {
+                reiniciarPartida();
+            }
+            else if (opcion == 1)
+            {
+                solicitarSalida();
+            }
+
+            continue;
+        }
+
         if (_enMenu)
         {
             const int opcion =
@@ -172,9 +189,10 @@ void Juego::actualizar()
     if (_nivel->gatoFueDetectado(_gato))
     {
         _perdio = true;
+
+        _menuDerrota.reiniciarSeleccion();
         _nivel->pausarMusica();
 
-        std::cout << "PANTALLA DE DERROTA";
         return;
     }
 
@@ -212,10 +230,36 @@ void Juego::dibujar()
         }
     }
 
+    if (_perdio)
+    {
+        _window.draw(_menuDerrota);
+    }
+
     if (_confirmarSalida)
     {
         _window.draw(_menuSalida);
     }
 
     _window.display();
+}
+
+void Juego::reiniciarPartida()
+{
+    _menuPrincipal.pausarMusica();
+    _menuPausa.pausarMusica();
+
+    // Crear la partida nueva antes de eliminar la anterior.
+    Nivel* nuevoNivel = new NivelCocina();
+
+    delete _nivel;
+    _nivel = nuevoNivel;
+
+    _gato.reiniciar();
+
+    _perdio = false;
+    _enMenu = false;
+    _enPausa = false;
+    _confirmarSalida = false;
+
+    _nivel->continuarMusica();
 }
