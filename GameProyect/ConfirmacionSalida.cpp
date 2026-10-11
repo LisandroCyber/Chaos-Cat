@@ -26,8 +26,7 @@ void ConfirmacionSalida::acomodarTextos(
     sf::Text* opciones,
     const sf::RenderTarget& destino) const
 {
-    const float ancho = static_cast<float>(destino.getSize().x);
-    const float alto = static_cast<float>(destino.getSize().y);
+    const sf::Vector2f centro = destino.getView().getCenter();
 
     sf::FloatRect area = titulo.getLocalBounds();
 
@@ -36,7 +35,7 @@ void ConfirmacionSalida::acomodarTextos(
         area.top
     );
 
-    titulo.setPosition(ancho / 2.f, alto / 2.f - 65.f);
+    titulo.setPosition(centro.x, centro.y - 65.f);
 
     for (int i = 0; i < 2; i++)
     {
@@ -48,8 +47,8 @@ void ConfirmacionSalida::acomodarTextos(
         );
 
         opciones[i].setPosition(
-            ancho / 2.f + (i == 0 ? -100.f : 100.f),
-            alto / 2.f + 30.f
+            centro.x + (i == 0 ? -100.f : 100.f),
+            centro.y + 30.f
         );
     }
 }
@@ -82,15 +81,18 @@ void ConfirmacionSalida::draw(
     sf::RenderTarget& destino,
     sf::RenderStates estados) const
 {
-    const float ancho = static_cast<float>(destino.getSize().x);
-    const float alto = static_cast<float>(destino.getSize().y);
+    // El dibujo y el mouse usan las coordenadas de la vista, no los pixeles.
+    const sf::View& vista = destino.getView();
+    const sf::Vector2f centro = vista.getCenter();
+    const sf::Vector2f tamano = vista.getSize();
 
-    sf::RectangleShape fondo(sf::Vector2f(ancho, alto));
+    sf::RectangleShape fondo(tamano);
+    fondo.setPosition(centro.x - tamano.x / 2.f, centro.y - tamano.y / 2.f);
     fondo.setFillColor(sf::Color(0, 0, 0, 180));
     destino.draw(fondo, estados);
 
     sf::RectangleShape cuadro(sf::Vector2f(500.f, 220.f));
-    cuadro.setPosition(ancho / 2.f - 250.f, alto / 2.f - 110.f);
+    cuadro.setPosition(centro.x - 250.f, centro.y - 110.f);
     cuadro.setFillColor(sf::Color(40, 40, 55));
     cuadro.setOutlineThickness(2.f);
     cuadro.setOutlineColor(sf::Color::White);
