@@ -270,6 +270,7 @@ void Juego::dibujar()
 
     if (_perdio)
     {
+        _menuDerrota.prepararFondo(_window);
         _window.draw(_menuDerrota);
     }
 
