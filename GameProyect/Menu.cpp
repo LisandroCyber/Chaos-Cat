@@ -1,7 +1,8 @@
 #include "Menu.h"
 #include <iostream>
 
-Menu::Menu()
+Menu::Menu(int cantidad)
+    : _cantidadOpciones(cantidad)
 {
     if (!_fuente.loadFromFile("fonts/Starcatcher.ttf"))
     {
@@ -12,7 +13,7 @@ Menu::Menu()
     _titulo.setCharacterSize(80);
     _titulo.setPosition(440.f, 180.f);
 
-    for (int i = 0; i < 2; i++)
+    for (int i = 0; i < _cantidadOpciones; i++)
     {
         _opciones[i].setFont(_fuente);
         _opciones[i].setCharacterSize(36);
@@ -56,10 +57,14 @@ int Menu::procesarEvento(
 
     if (evento.type == sf::Event::KeyPressed)
     {
-        if (evento.key.code == sf::Keyboard::Up ||
-            evento.key.code == sf::Keyboard::Down)
+        if (evento.key.code == sf::Keyboard::Up)
         {
-            _seleccion = 1 - _seleccion;
+            _seleccion =
+                (_seleccion + _cantidadOpciones - 1) % _cantidadOpciones;
+        }
+        else if (evento.key.code == sf::Keyboard::Down)
+        {
+            _seleccion = (_seleccion + 1) % _cantidadOpciones;
         }
         else if (evento.key.code == sf::Keyboard::Enter)
         {
@@ -73,7 +78,7 @@ int Menu::procesarEvento(
 int Menu::obtenerOpcionEn(
     const sf::Vector2f& posicionMouse) const
 {
-    for (int i = 0; i < 2; i++)
+    for (int i = 0; i < _cantidadOpciones; i++)
     {
         if (_opciones[i].getGlobalBounds().contains(
             posicionMouse.x, posicionMouse.y))
@@ -96,7 +101,7 @@ void Menu::draw(
 {
     destino.draw(_titulo, estados);
 
-    for (int i = 0; i < 2; i++)
+    for (int i = 0; i < _cantidadOpciones; i++)
     {
         // Copia local para cambiar el color sin modificar el menu.
         sf::Text opcion = _opciones[i];

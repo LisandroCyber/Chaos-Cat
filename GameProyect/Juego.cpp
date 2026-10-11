@@ -9,7 +9,8 @@ Juego::Juego()
         "Chaos Cat SFML 2.5"
     ),
     _gato(),
-    _nivel(new NivelCocina())
+    _nivel(new NivelCocina()),
+    _menuConfiguracion(_configuracion)
 {
     _window.setFramerateLimit(LIMITE_FPS);
     _window.setKeyRepeatEnabled(false);
@@ -29,6 +30,17 @@ Juego::Juego()
     {
         std::cout << "No se pudo cargar el indicador de escondido\n";
     }
+
+    if (!_configuracion.cargar())
+    {
+        // Primer inicio o archivo invalido: usa los valores iniciales.
+        if (!_configuracion.guardar())
+        {
+            std::cout << "ERROR AL CARGAR LA CONFIGURACION (cfg.dat)";
+        }
+    }
+
+    aplicarConfiguracion();
 
     _nivel->pausarMusica();
     _menuPrincipal.continuarMusica();
@@ -114,6 +126,21 @@ void Juego::procesarEventos()
             continue;
         }
 
+        if (_enConfiguracion)
+        {
+            const bool volver =
+                _menuConfiguracion.procesarEvento(evento, _window);
+
+            aplicarConfiguracion();
+
+            if (volver)
+            {
+                _enConfiguracion = false;
+            }
+
+            continue;
+        }
+
         if (_perdio)
         {
             const int opcion =
@@ -139,11 +166,17 @@ void Juego::procesarEventos()
             if (opcion == 0)
             {
                 _enMenu = false;
+                _enConfiguracion = false;
 
                 _menuPrincipal.pausarMusica();
                 _nivel->continuarMusica();
             }
             else if (opcion == 1)
+            {
+                _enConfiguracion = true;
+                _menuConfiguracion.abrir();
+            }
+            else if (opcion == 2)
             {
                 solicitarSalida();
             }
@@ -189,12 +222,39 @@ void Juego::procesarEventos()
                 solicitarSalida();
             }
         }
+
+        if (!_enMenu &&
+            !_enConfiguracion &&
+            !_enPausa &&
+            !_perdio &&
+            _configuracion.debugActivado() &&
+            evento.type == sf::Event::KeyPressed)
+        {
+            if (evento.key.code == sf::Keyboard::H)
+            {
+                _nivel->alternarHitboxes();
+            }
+            else if (evento.key.code == sf::Keyboard::R)
+            {
+                _nivel->reiniciarObjetos();
+            }
+            else if (evento.key.code == sf::Keyboard::M)
+            {
+                std::cout << "Posicion en x: "
+                    << _gato.getPosx() << '\n';
+
+                    std::cout << "Posicion en y: "
+                    << _gato.getPosy() << '\n';
+            }
+        }
     }
 }
 
 void Juego::actualizarPausaPartida()
 {
-    const bool pausada = _enMenu || _enPausa || _confirmarSalida || _perdio;
+    const bool pausada =
+        _enMenu || _enConfiguracion || _enPausa ||
+        _confirmarSalida || _perdio;
 
     if (_partidaPausada == pausada)
     {
@@ -229,19 +289,6 @@ void Juego::actualizar()
         return;
     }
 
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::R))
-    {
-        _nivel->reiniciarObjetos();
-    }
-
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::M))
-    {
-        std::cout << "Posicion en x: "
-            << _gato.getPosx() << std::endl;
-
-        std::cout << "Posicion en y: "
-            << _gato.getPosy() << std::endl;
-    }
 }
 
 void Juego::dibujar()
@@ -250,7 +297,14 @@ void Juego::dibujar()
 
     if (_enMenu)
     {
-        _window.draw(_menuPrincipal);
+        if (_enConfiguracion)
+        {
+            _window.draw(_menuConfiguracion);
+        }
+        else
+        {
+            _window.draw(_menuPrincipal);
+        }
     }
     else
     {
@@ -294,6 +348,7 @@ void Juego::reiniciarPartida()
     _nivel = nuevoNivel;
 
     _gato.reiniciar();
+    aplicarConfiguracion();
 
     _perdio = false;
     _enMenu = false;
@@ -301,4 +356,25 @@ void Juego::reiniciarPartida()
     _confirmarSalida = false;
 
     _nivel->continuarMusica();
+}
+
+void Juego::aplicarConfiguracion()
+{
+    sf::Listener::setGlobalVolume(
+        static_cast<float>(_configuracion.getVolumenGeneral())
+    );
+
+    const float musica =
+        static_cast<float>(_configuracion.getVolumenMusica());
+
+    _menuPrincipal.setVolumenMusica(musica);
+    _menuPausa.setVolumenMusica(musica);
+    _nivel->setVolumenMusica(musica);
+
+    _gato.setUsarFlechas(_configuracion.usaFlechas());
+
+    if (!_configuracion.debugActivado())
+    {
+        _nivel->ocultarHitboxes();
+    }
 }

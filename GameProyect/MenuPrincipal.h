@@ -20,4 +20,5 @@ public:
 
     void pausarMusica();
     void continuarMusica();
+    void setVolumenMusica(float volumen);
 };

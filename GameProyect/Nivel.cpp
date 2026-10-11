@@ -5,7 +5,7 @@
 
 Nivel::Nivel()
     : _spriteFondo(_texturaFondo),
-      _mostrarHitboxes(true)
+      _mostrarHitboxes(false)
 {
 }
 
@@ -186,7 +186,7 @@ void Nivel::resolverColisiones(Personaje& gato)
     // Reunimos las superficies sobre las que puede apoyarse.
     std::vector<sf::FloatRect> superficies;
     
-    if(!sf::Keyboard::isKeyPressed(sf::Keyboard::S))
+    if(!gato.quiereBajarDeSuperficie())
     {
         for (Mueble* mueble : _muebles)
         {
@@ -506,4 +506,19 @@ bool Nivel::gatoFueDetectado(const Personaje& gato) const
     }
 
     return false;
+}
+
+void Nivel::setVolumenMusica(float volumen)
+{
+    _musicaFondo.setVolume(volumen);
+}
+
+void Nivel::ocultarHitboxes()
+{
+    _mostrarHitboxes = false;
+}
+
+void Nivel::alternarHitboxes()
+{
+    _mostrarHitboxes = !_mostrarHitboxes;
 }

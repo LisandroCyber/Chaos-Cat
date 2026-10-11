@@ -6,8 +6,8 @@ class Menu : public sf::Drawable
 protected:
     sf::Font _fuente;
     sf::Text _titulo;
-    sf::Text _opciones[2];
-
+    sf::Text _opciones[3];
+    int _cantidadOpciones;
     int _seleccion = 0;
 
     int obtenerOpcionEn(const sf::Vector2f& posicionMouse) const;
@@ -18,7 +18,7 @@ protected:
     ) const override;
 
 public:
-    Menu();
+    Menu(int cantidad = 2);
     virtual ~Menu() = default;
 
     virtual int procesarEvento(

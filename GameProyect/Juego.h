@@ -7,6 +7,8 @@
 #include "MenuPausa.h"
 #include "ConfirmacionSalida.h"
 #include "MenuDerrota.h"
+#include "Configuracion.h"
+#include "MenuConfig.h"
 
 class Juego
 {
@@ -21,16 +23,19 @@ private:
 
     MenuPrincipal _menuPrincipal;
     MenuPausa _menuPausa;
-    ConfirmacionSalida _menuSalida;
+    MenuConfiguracion _menuConfiguracion;
     MenuDerrota _menuDerrota;
+    ConfirmacionSalida _menuSalida;
+    Configuracion _configuracion;
 
-
+    bool _enConfiguracion = false;
     bool _perdio = false;
     bool _enMenu = true;
     bool _enPausa = false;
     bool _confirmarSalida = false;
     bool _partidaPausada = true;
 
+    void aplicarConfiguracion();
     void procesarEventos();
     void actualizar();
     void actualizarPausaPartida();

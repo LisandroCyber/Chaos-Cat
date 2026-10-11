@@ -2,9 +2,13 @@
 #include <iostream>
 
 MenuPrincipal::MenuPrincipal()
+    : Menu(3)
 {
     _titulo.setString("CHAOS CAT");
     _opciones[0].setString("Jugar");
+    _opciones[1].setString("Configuracion");
+    _opciones[2].setString("Salir");
+
 
     if (!_texturaFondo.loadFromFile("images/MenuPrincipal.png"))
     {
@@ -59,4 +63,9 @@ void MenuPrincipal::draw(
     }
 
     Menu::draw(destino, estados);
+}
+
+void MenuPrincipal::setVolumenMusica(float volumen)
+{
+    _musicaFondo.setVolume(volumen);
 }

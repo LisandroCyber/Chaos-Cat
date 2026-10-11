@@ -78,4 +78,7 @@ public:
     bool gatoFueDetectado(const Personaje& gato) const;
     void dibujar(sf::RenderWindow& ventana,
         const Personaje& gato) const;
+    void setVolumenMusica(float volumen);
+    void ocultarHitboxes();
+    void alternarHitboxes();
 };

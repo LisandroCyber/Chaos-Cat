@@ -28,6 +28,7 @@ private:
     int _frameAlto;
     float _escala;
 
+    bool _usarFlechas = false;
     bool _enElPiso;
     bool _escondido = false;
     bool _espacioPresionadoAntes;
@@ -93,6 +94,9 @@ public:
 
     sf::FloatRect getAreaAnterior() const;
     float getBaseAnterior() const;
+
+    void setUsarFlechas(bool usarFlechas);
+    bool quiereBajarDeSuperficie() const;
 
     void dibujar(sf::RenderWindow& ventana) const;
 };

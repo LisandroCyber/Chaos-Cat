@@ -160,29 +160,23 @@ bool Personaje::procesarEntrada()
         return false;
     }
 
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+    const sf::Keyboard::Key izquierda =
+        _usarFlechas ? sf::Keyboard::Left : sf::Keyboard::A;
+
+    const sf::Keyboard::Key derecha =
+        _usarFlechas ? sf::Keyboard::Right : sf::Keyboard::D;
+
+    if (sf::Keyboard::isKeyPressed((izquierda)))
     {
         _velocity.x = -velocidadActual;
         _sprite.setScale({ -_escala, _escala });
         seMueve = true;
     }
 
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+    if (sf::Keyboard::isKeyPressed(derecha))
     {
         _velocity.x = velocidadActual;
         _sprite.setScale({ _escala, _escala });
-        seMueve = true;
-    }
-
-    /*if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
-    {
-        _velocity.y = -velocidadActual;
-        seMueve = true;
-    }*/
-
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
-    {
-        _velocity.y = velocidadActual;
         seMueve = true;
     }
 
@@ -591,4 +585,17 @@ void Personaje::reiniciar()
 int Personaje::getNumeroGolpe() const
 {
     return _numeroGolpe;
+}
+
+void Personaje::setUsarFlechas(bool usarFlechas)
+{
+    _usarFlechas = usarFlechas;
+}
+
+bool Personaje::quiereBajarDeSuperficie() const
+{
+    const sf::Keyboard::Key tecla =
+        _usarFlechas ? sf::Keyboard::Down : sf::Keyboard::S;
+
+    return sf::Keyboard::isKeyPressed(tecla);
 }

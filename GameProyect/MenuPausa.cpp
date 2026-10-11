@@ -45,3 +45,8 @@ void MenuPausa::pausarMusica()
 {
     _musicaFondo.pause();
 }
+
+void MenuPausa::setVolumenMusica(float volumen)
+{
+    _musicaFondo.setVolume(volumen);
+}
