@@ -178,13 +178,13 @@ bool Personaje::procesarEntrada()
     {
         _velocity.y = -velocidadActual;
         seMueve = true;
-    }
+    }*/
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::S))
     {
         _velocity.y = velocidadActual;
         seMueve = true;
-    }*/
+    }
 
     bool espacioPresionado = sf::Keyboard::isKeyPressed(sf::Keyboard::Space);
 
@@ -511,7 +511,7 @@ void Personaje::iniciarCaidaSiEstaElevado()
     {
         _enElPiso = false;
         _alturaVertical = 0.f;
-        _velocidadVertical = 0.f;
+        _velocidadVertical = 2.f;
     }
 }
 

@@ -185,15 +185,18 @@ void Nivel::resolverColisiones(Personaje& gato)
 
     // Reunimos las superficies sobre las que puede apoyarse.
     std::vector<sf::FloatRect> superficies;
-
-    for (Mueble* mueble : _muebles)
+    
+    if(!sf::Keyboard::isKeyPressed(sf::Keyboard::S))
     {
-        superficies.push_back(mueble->getGlobalBounds());
-    }
+        for (Mueble* mueble : _muebles)
+        {
+            superficies.push_back(mueble->getGlobalBounds());
+        }
 
-    for (const sf::FloatRect& superficie : _superficiesFijas)
-    {
-        superficies.push_back(superficie);
+        for (const sf::FloatRect& superficie : _superficiesFijas)
+        {
+            superficies.push_back(superficie);
+        }
     }
 
     for (Objeto* objeto : _objetos)
