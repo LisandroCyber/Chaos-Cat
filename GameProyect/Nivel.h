@@ -56,7 +56,9 @@ protected:
         const sf::Vector2f& posicion,
         float escala,
         int golpesNecesarios,
-        const std::string& rutaTexturaCaida);
+        const std::string& rutaTexturaCaida,
+        const std::string& rutaSonidoCaida);
+
     void agregarSuperficie(const sf::FloatRect& superficie);
     void agregarZonaEscondite(const sf::FloatRect& zona);
 

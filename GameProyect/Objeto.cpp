@@ -18,7 +18,7 @@ sf::Texture Objeto::cargarTextura(const std::string& rutaTextura)
 }
 
 Objeto::Objeto(const std::string& rutaTextura, const sf::Vector2f& posicion, float escala,
-	int golpesNecesarios, const std::string& rutaTexturaCaida)
+	int golpesNecesarios, const std::string& rutaTexturaCaida, const std::string& rutaSonidoCaida)
 	: _texture(cargarTextura(rutaTextura)),
 	_texturaCaida(cargarTextura(rutaTexturaCaida)),
 	_sprite(_texture),
@@ -32,9 +32,9 @@ Objeto::Objeto(const std::string& rutaTextura, const sf::Vector2f& posicion, flo
 	_sprite.setScale({ escala, escala });
 	_sprite.setOrigin(_sprite.getGlobalBounds().width / 2.f, 0.f);
 
-	if (!_bufferCaida.loadFromFile("sound effects/objetos/vidrioRoto.wav"))
+	if (!_bufferCaida.loadFromFile(rutaSonidoCaida))
 	{
-		std::cout << "ERROR: NO SE PUDO CARGAR EL SONIDO DE CAIDA\n";
+		std::cout << "ERROR: NO SE PUDO CARGAR EL SONIDO DE CAIDA: " << rutaSonidoCaida << "\n";
 	}
 	else
 	{

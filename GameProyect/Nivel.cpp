@@ -70,14 +70,16 @@ void Nivel::agregarObjeto(const std::string& rutaTextura,
     const sf::Vector2f& posicion,
     float escala,
     int golpesNecesarios,
-    const std::string& rutaTexturaCaida)
+    const std::string& rutaTexturaCaida,
+    const std::string& rutaSonidoCaida)
 {
     _objetos.push_back(new Objeto(
         rutaTextura,
         posicion,
         escala,
         golpesNecesarios,
-        rutaTexturaCaida
+        rutaTexturaCaida,
+        rutaSonidoCaida
     ));
 }
 

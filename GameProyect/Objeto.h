@@ -26,7 +26,7 @@ private:
 public:
 	
 	Objeto(const std::string& rutaTextura, const sf::Vector2f& posicion, float escala,
-		int golpesNecesarios, const std::string& rutaTexturaCaida);
+		int golpesNecesarios, const std::string& rutaTexturaCaida, const std::string& rutaSonidoCaida);
 
 	sf::FloatRect getGlobalBounds() const;
 	void update();

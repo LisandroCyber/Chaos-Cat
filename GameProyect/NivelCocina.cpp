@@ -26,10 +26,10 @@ NivelCocina::NivelCocina()
         { 0.280825f, 0.384588f },
         sf::FloatRect(47.f, 320.f, 1442.f, 100.f));
 
-    agregarObjeto("images/1-Cocina/TazaCafe.png", { 505.f, 480.f }, 0.25f, 1, "images/1-Cocina/TazaCafe_rota.png");
-    agregarObjeto("images/1-Cocina/frutero.png", { 640.f, 450.f }, 0.15f, 3, "images/1-Cocina/frutero_caido.png");
-    agregarObjeto("images/1-Cocina/cacerola.png", { 1139.f, 405.f }, 0.50f, 3, "images/1-Cocina/cacerola_caida.png");
-    agregarObjeto("images/1-Cocina/platos.png", { 75.f, 235.f }, 0.08f, 2, "images/1-Cocina/platos_rotos.png");
+    agregarObjeto("images/1-Cocina/TazaCafe.png", { 505.f, 480.f }, 0.25f, 1, "images/1-Cocina/TazaCafe_rota.png", "sound effects/objetos/vidrioRoto.wav");
+    agregarObjeto("images/1-Cocina/frutero.png", { 640.f, 450.f }, 0.15f, 3, "images/1-Cocina/frutero_caido.png", "sound effects/objetos/golpeFruta.wav");
+    agregarObjeto("images/1-Cocina/cacerola.png", { 1139.f, 405.f }, 0.50f, 3, "images/1-Cocina/cacerola_caida.png", "sound effects/objetos/golpeMetal.wav");
+    agregarObjeto("images/1-Cocina/platos.png", { 75.f, 235.f }, 0.08f, 2, "images/1-Cocina/platos_rotos.png", "sound effects/objetos/vidrioRoto.wav");
 
     agregarSuperficie(sf::FloatRect(1090.f, 490.f, 250.f, 50.f)); // superficie Horno
 
