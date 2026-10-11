@@ -45,7 +45,8 @@ MenuDerrota::MenuDerrota()
         _opciones[i].setPosition(ANCHO_VENTANA / 2.f, 590.f + i * 60.f);
     }
 
-    // El mismo filtro se aplica primero en horizontal y luego en vertical.
+    //El mismo filtro se aplica primero en horizontal y luego en vertical.
+    //Esto esta armado en el lenguaje de los shaders, es mas que nada para aplicar los filtros
     const char* filtroDesenfoque = R"(
         uniform sampler2D textura;
         uniform vec2 direccion;

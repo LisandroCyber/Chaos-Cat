@@ -13,6 +13,9 @@ private:
 	bool _tirado;
 	bool _visible;
 	bool _enElPiso = false;
+	int _golpesNecesarios;
+	int _golpesRecibidos = 0;
+	int _ultimoGolpeRecibido = -1;
 
 	sf::SoundBuffer _bufferCaida;
 	sf::Sound _sonidoCaida;
@@ -21,7 +24,7 @@ private:
 
 public:
 	
-	Objeto(const std::string& rutaTextura, const sf::Vector2f& posicion, float escala);
+	Objeto(const std::string& rutaTextura, const sf::Vector2f& posicion, float escala, int golpesNecesarios);
 
 	sf::FloatRect getGlobalBounds() const;
 	void update();
@@ -29,6 +32,7 @@ public:
 	void tirar(float direccion);
 	void reiniciar();
 	bool estaTirado() const;
+	void recibirGolpe(float direccion, int numeroGolpe);
 
 	void dibujar(sf::RenderWindow& ventana) const;
 };

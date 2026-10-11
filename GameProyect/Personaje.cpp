@@ -373,6 +373,7 @@ void Personaje::saltar()
 
 void Personaje::golpear()
 {
+    _numeroGolpe++;
     _estado = EstadoGato::Golpeando;
     _frameGolpe = 0;
     _relojGolpe.restart();
@@ -585,4 +586,9 @@ void Personaje::reiniciar()
 
     _areaAnterior = getGlobalBounds();
     _baseAnterior = getBaseY();
+}
+
+int Personaje::getNumeroGolpe() const
+{
+    return _numeroGolpe;
 }

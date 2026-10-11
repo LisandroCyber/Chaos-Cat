@@ -54,7 +54,8 @@ protected:
         const sf::FloatRect& hitboxLocal);
     void agregarObjeto(const std::string& rutaTextura,
         const sf::Vector2f& posicion,
-        float escala);
+        float escala,
+        int golpesNecesarios);
     void agregarSuperficie(const sf::FloatRect& superficie);
     void agregarZonaEscondite(const sf::FloatRect& zona);
 

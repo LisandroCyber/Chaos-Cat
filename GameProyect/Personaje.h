@@ -45,6 +45,7 @@ private:
     int _frameCaminar;
     int _frameAgachado;
     int _frameGolpe;
+    int _numeroGolpe = 0;
 
     static sf::Texture cargarTextura();
 
@@ -73,6 +74,7 @@ public:
     void setPausado(bool pausado);
     void saltar();
     bool estaGolpeando() const;
+    int getNumeroGolpe() const;
     bool estaAgachado() const;
     bool estaEscondido() const;
     void setEscondido(bool escondido);

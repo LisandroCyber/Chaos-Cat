@@ -68,12 +68,14 @@ void Nivel::agregarMueble(const std::string& rutaTextura,
 
 void Nivel::agregarObjeto(const std::string& rutaTextura,
     const sf::Vector2f& posicion,
-    float escala)
+    float escala,
+    int golpesNecesarios)
 {
     _objetos.push_back(new Objeto(
         rutaTextura,
         posicion,
-        escala
+        escala,
+        golpesNecesarios
     ));
 }
 
@@ -247,8 +249,12 @@ void Nivel::resolverColisionGatoObjeto(Personaje& gato, Objeto& objeto)
             const float direccion =
                 centroGato <= centroObjeto ? 1.f : -1.f;
 
-            objeto.tirar(direccion);
-            return;
+            objeto.recibirGolpe(direccion, gato.getNumeroGolpe());
+
+            if (objeto.estaTirado())
+            {
+                return;
+            }
         }
     }
 

@@ -17,13 +17,15 @@ sf::Texture Objeto::cargarTextura(const std::string& rutaTextura)
 	return textura;
 }
 
-Objeto::Objeto(const std::string& rutaTextura, const sf::Vector2f& posicion, float escala)
+Objeto::Objeto(const std::string& rutaTextura, const sf::Vector2f& posicion, float escala, int golpesNecesarios)
 	: _texture(cargarTextura(rutaTextura)), _sprite(_texture), _posicionInicial(posicion),
-	  _velocidad({ 0.f, 0.f }), _tirado(false), _visible(true)
+	  _velocidad({ 0.f, 0.f }), _tirado(false), _visible(true),
+	_golpesNecesarios(golpesNecesarios > 0 ? golpesNecesarios : 1)
 {
 	_sprite.setPosition(posicion);
 	_sprite.setScale({ escala, escala });
 	_sprite.setOrigin(_sprite.getGlobalBounds().width / 2.f, 0.f);
+
 	if (!_bufferCaida.loadFromFile("sound effects/objetos/vidrioRoto.wav"))
 	{
 		std::cout << "ERROR: NO SE PUDO CARGAR EL SONIDO DE CAIDA\n";
@@ -122,9 +124,28 @@ void Objeto::reiniciar()
 	_tirado = false;
 	_visible = true;
 	_enElPiso = false;
+	_golpesRecibidos = 0;
+	_ultimoGolpeRecibido = -1;
 }
 
 bool Objeto::estaTirado() const
 {
 	return _tirado;
 }
+
+void Objeto::recibirGolpe(float direccion, int numeroGolpe)
+{
+	if (_tirado || _ultimoGolpeRecibido == numeroGolpe)
+	{
+		return;
+	}
+
+	_ultimoGolpeRecibido = numeroGolpe;
+	_golpesRecibidos++;
+
+	if (_golpesRecibidos >= _golpesNecesarios)
+	{
+		tirar(direccion);
+	}
+}
+
