@@ -55,7 +55,8 @@ protected:
     void agregarObjeto(const std::string& rutaTextura,
         const sf::Vector2f& posicion,
         float escala,
-        int golpesNecesarios);
+        int golpesNecesarios,
+        const std::string& rutaTexturaCaida);
     void agregarSuperficie(const sf::FloatRect& superficie);
     void agregarZonaEscondite(const sf::FloatRect& zona);
 

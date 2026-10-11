@@ -17,9 +17,15 @@ sf::Texture Objeto::cargarTextura(const std::string& rutaTextura)
 	return textura;
 }
 
-Objeto::Objeto(const std::string& rutaTextura, const sf::Vector2f& posicion, float escala, int golpesNecesarios)
-	: _texture(cargarTextura(rutaTextura)), _sprite(_texture), _posicionInicial(posicion),
-	  _velocidad({ 0.f, 0.f }), _tirado(false), _visible(true),
+Objeto::Objeto(const std::string& rutaTextura, const sf::Vector2f& posicion, float escala,
+	int golpesNecesarios, const std::string& rutaTexturaCaida)
+	: _texture(cargarTextura(rutaTextura)),
+	_texturaCaida(cargarTextura(rutaTexturaCaida)),
+	_sprite(_texture),
+	_posicionInicial(posicion),
+	_velocidad({ 0.f, 0.f }),
+	_tirado(false),
+	_visible(true),
 	_golpesNecesarios(golpesNecesarios > 0 ? golpesNecesarios : 1)
 {
 	_sprite.setPosition(posicion);
@@ -81,6 +87,7 @@ void Objeto::update()
 	if (_velocidad.y > 0.f && baseObjeto >= pisoY)
 	{
 		// Alinear la base del objeto con el borde inferior.
+		_sprite.setTexture(_texturaCaida, true);
 		_sprite.move(0.f, pisoY - baseObjeto);
 
 		_velocidad = sf::Vector2f(0.f, 0.f);
@@ -118,6 +125,7 @@ void Objeto::reiniciar()
 {
 	_sonidoCaida.stop();
 
+	_sprite.setTexture(_texture, true);
 	_sprite.setPosition(_posicionInicial);
 	_velocidad = sf::Vector2f(0.f, 0.f);
 

@@ -7,6 +7,7 @@ class Objeto
 {
 private:
 	sf::Texture _texture;
+	sf::Texture _texturaCaida;
 	sf::Sprite _sprite;
 	sf::Vector2f _posicionInicial;
 	sf::Vector2f _velocidad;
@@ -24,7 +25,8 @@ private:
 
 public:
 	
-	Objeto(const std::string& rutaTextura, const sf::Vector2f& posicion, float escala, int golpesNecesarios);
+	Objeto(const std::string& rutaTextura, const sf::Vector2f& posicion, float escala,
+		int golpesNecesarios, const std::string& rutaTexturaCaida);
 
 	sf::FloatRect getGlobalBounds() const;
 	void update();
