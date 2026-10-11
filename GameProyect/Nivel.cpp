@@ -102,7 +102,18 @@ void Nivel::actualizar(Personaje& gato)
 
     for (Objeto* objeto : _objetos)
     {
+        //la flecha llama al atributo o metodo si el objetoes un puntero
+        const bool estabaEnElPiso = objeto->estaEnElPiso();
         objeto->update();
+
+        //avisa solo en el momento del impacto, no en cada actualizacion.
+        if (!estabaEnElPiso && objeto->estaEnElPiso())
+        {
+            for (Enemigo* enemigo : _enemigos)
+            {
+                enemigo->reaccionarACaida();
+            }
+        }
     }
 
     resolverColisiones(gato);

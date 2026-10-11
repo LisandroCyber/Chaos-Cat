@@ -11,7 +11,9 @@ enum class EstadoEnemigo
 {
     DeEspalda,
     Alerta,
-    DadoVuelta
+    DadoVuelta,
+    DeEspaldaEnojado,
+    DadoVueltaEnojado
 };
 
 class Enemigo
@@ -44,6 +46,7 @@ public:
     bool detectaAl(const Personaje& gato) const;
 
     void actualizar();
+    void reaccionarACaida();
     void setPausado(bool pausado);
     void dibujar(sf::RenderWindow& ventana) const;
 };

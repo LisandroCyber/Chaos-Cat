@@ -116,10 +116,35 @@ void Enemigo::actualizar()
     {
         cambiarEstado(EstadoEnemigo::DadoVuelta);
     }
-    else if (_estado == EstadoEnemigo::DadoVuelta &&
+    else if (_estado == EstadoEnemigo::DeEspaldaEnojado &&
+        tiempoTranscurrido >= TIEMPO_ENEMIGO_REACCION_CAIDA)
+    {
+        cambiarEstado(EstadoEnemigo::DadoVueltaEnojado);
+    }
+    else if ((_estado == EstadoEnemigo::DadoVuelta ||
+        _estado == EstadoEnemigo::DadoVueltaEnojado) &&
         tiempoTranscurrido >= TIEMPO_ENEMIGO_DADO_VUELTA)
     {
         cambiarEstado(EstadoEnemigo::DeEspalda);
+    }
+}
+
+void Enemigo::reaccionarACaida()
+{
+    // Otra caida no reinicia una reaccion que ya esta en curso.
+    if (_estado == EstadoEnemigo::DeEspaldaEnojado ||
+        _estado == EstadoEnemigo::DadoVueltaEnojado)
+    {
+        return;
+    }
+
+    if (_estado == EstadoEnemigo::DadoVuelta)
+    {
+        cambiarEstado(EstadoEnemigo::DadoVueltaEnojado);
+    }
+    else
+    {
+        cambiarEstado(EstadoEnemigo::DeEspaldaEnojado);
     }
 }
 
@@ -154,6 +179,11 @@ void Enemigo::cambiarEstado(EstadoEnemigo nuevoEstado)
     {
         _sonidoAlerta.play();
     }
+    else if (_estado == EstadoEnemigo::DeEspaldaEnojado ||
+        _estado == EstadoEnemigo::DadoVueltaEnojado)
+    {
+        _sonidoAlerta.stop();
+    }
 
     _relojEstado.restart();
     actualizarSprite();
@@ -171,6 +201,14 @@ void Enemigo::actualizarSprite()
     {
         frame = 2;
     }
+    else if (_estado == EstadoEnemigo::DeEspaldaEnojado)
+    {
+        frame = 3;
+    }
+    else if (_estado == EstadoEnemigo::DadoVueltaEnojado)
+    {
+        frame = 4;
+    }
 
     _sprite.setTextureRect(sf::IntRect(
         frame * _frameAncho,
@@ -187,6 +225,8 @@ void Enemigo::dibujar(sf::RenderWindow& ventana) const
 
 bool Enemigo::detectaAl(const Personaje& gato) const
 {
-    return _estado == EstadoEnemigo::DadoVuelta
-        && !gato.estaEscondido();
+    const bool estaMirando = _estado == EstadoEnemigo::DadoVuelta ||
+        _estado == EstadoEnemigo::DadoVueltaEnojado;
+
+    return estaMirando && !gato.estaEscondido();
 }

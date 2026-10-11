@@ -141,6 +141,11 @@ bool Objeto::estaTirado() const
 	return _tirado;
 }
 
+bool Objeto::estaEnElPiso() const
+{
+	return _enElPiso;
+}
+
 void Objeto::recibirGolpe(float direccion, int numeroGolpe)
 {
 	if (_tirado || _ultimoGolpeRecibido == numeroGolpe)

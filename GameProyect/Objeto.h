@@ -34,6 +34,7 @@ public:
 	void tirar(float direccion);
 	void reiniciar();
 	bool estaTirado() const;
+	bool estaEnElPiso() const;
 	void recibirGolpe(float direccion, int numeroGolpe);
 
 	void dibujar(sf::RenderWindow& ventana) const;
