@@ -6,7 +6,7 @@
 MenuDerrota::MenuDerrota()
     : Menu(3)
 {
-    _titulo.setString("TE DESCUBRIERON!");
+    _titulo.setString("TE DESCUBRIERON !");
     _titulo.setCharacterSize(55);
 
     const sf::FloatRect limitesTitulo = _titulo.getLocalBounds();

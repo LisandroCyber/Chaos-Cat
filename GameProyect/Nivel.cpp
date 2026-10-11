@@ -522,3 +522,21 @@ void Nivel::alternarHitboxes()
 {
     _mostrarHitboxes = !_mostrarHitboxes;
 }
+
+bool Nivel::todosLosObjetosEnElPiso() const
+{
+    if (_objetos.empty())
+    {
+        return false;
+    }
+
+    for (const Objeto* objeto : _objetos)
+    {
+        if (!objeto->estaEnElPiso())
+        {
+            return false;
+        }
+    }
+
+    return true;
+}

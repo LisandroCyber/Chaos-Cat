@@ -89,7 +89,7 @@ void Juego::cancelarSalida()
     {
         _menuPausa.continuarMusica();
     }
-    else if (!_perdio)
+    else if (!_perdio && !_gano)
     {
         _nivel->continuarMusica();
     }
@@ -121,6 +121,28 @@ void Juego::procesarEventos()
             else if (opcion == 1)
             {
                 cancelarSalida();
+            }
+
+            continue;
+        }
+
+        if (_gano)
+        {
+            const int opcion =
+                _menuVictoria.procesarEvento(evento, _window);
+
+            if (opcion == 0)
+            {
+                // Continuar: por ahora vuelve al menu. Deberia continuar al siguiente nivel
+                volverAlMenuPrincipal();
+            }
+            else if (opcion == 1)
+            {
+                volverAlMenuPrincipal();
+            }
+            else if (opcion == 2)
+            {
+                solicitarSalida();
             }
 
             continue;
@@ -258,7 +280,7 @@ void Juego::actualizarPausaPartida()
 {
     const bool pausada =
         _enMenu || _enConfiguracion || _enPausa ||
-        _confirmarSalida || _perdio;
+        _confirmarSalida || _perdio || _gano;
 
     if (_partidaPausada == pausada)
     {
@@ -288,6 +310,20 @@ void Juego::actualizar()
         actualizarPausaPartida();
 
         _menuDerrota.reiniciarSeleccion();
+        _nivel->pausarMusica();
+
+        return;
+    }
+
+    if (!_victoriaMostrada &&
+        _nivel->todosLosObjetosEnElPiso())
+    {
+        _gano = true;
+        _victoriaMostrada = true;
+
+        _menuVictoria.reiniciarSeleccion();
+
+        actualizarPausaPartida();
         _nivel->pausarMusica();
 
         return;
@@ -332,6 +368,12 @@ void Juego::dibujar()
         _window.draw(_menuDerrota);
     }
 
+    if (_gano)
+    {
+        _menuVictoria.prepararFondo(_window);
+        _window.draw(_menuVictoria);
+    }
+
     if (_confirmarSalida)
     {
         _window.draw(_menuSalida);
@@ -358,7 +400,10 @@ void Juego::reiniciarPartida()
     _enMenu = false;
     _enPausa = false;
     _confirmarSalida = false;
+    _gano = false;
+    _victoriaMostrada = false;
 
+    _menuVictoria.reiniciarSeleccion();
     _nivel->continuarMusica();
 }
 
@@ -402,7 +447,10 @@ void Juego::volverAlMenuPrincipal()
     _enPausa = false;
     _enConfiguracion = false;
     _confirmarSalida = false;
+    _gano = false;
+    _victoriaMostrada = false;
 
+    _menuVictoria.reiniciarSeleccion();
     // El nivel nuevo y el gato quedan pausados en el menu.
     _nivel->pausarMusica();
     _nivel->setPausado(true);

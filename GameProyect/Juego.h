@@ -9,6 +9,7 @@
 #include "MenuDerrota.h"
 #include "Configuracion.h"
 #include "MenuConfig.h"
+#include "MenuVictoria.h"
 
 class Juego
 {
@@ -27,7 +28,10 @@ private:
     MenuConfiguracion _menuConfiguracion;
     MenuDerrota _menuDerrota;
     ConfirmacionSalida _menuSalida;
+    MenuVictoria _menuVictoria;
 
+    bool _gano = false;
+    bool _victoriaMostrada = false;
     bool _enConfiguracion = false;
     bool _perdio = false;
     bool _enMenu = true;

@@ -29,6 +29,7 @@
     <ClCompile Include="MenuDerrota.cpp" />
     <ClCompile Include="MenuPausa.cpp" />
     <ClCompile Include="MenuPrincipal.cpp" />
+    <ClCompile Include="MenuVictoria.cpp" />
     <ClCompile Include="Mueble.cpp" />
     <ClCompile Include="Nivel.cpp" />
     <ClCompile Include="NivelCocina.cpp" />
@@ -47,6 +48,7 @@
     <ClInclude Include="MenuDerrota.h" />
     <ClInclude Include="MenuPausa.h" />
     <ClInclude Include="MenuPrincipal.h" />
+    <ClInclude Include="MenuVictoria.h" />
     <ClInclude Include="Mueble.h" />
     <ClInclude Include="Nivel.h" />
     <ClInclude Include="NivelCocina.h" />
@@ -175,14 +177,14 @@ sfml-network-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalIncludeDirectories>$(ProjectDir)SFML\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <SubSystem>Console</SubSystem>
+      <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(ProjectDir)SFML\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>sfml-graphics.lib;
 sfml-window.lib;
 sfml-system.lib;
 sfml-audio.lib;
-sfml-network.lib;%(AdditionalDependencies)</AdditionalDependencies>
+sfml-network.lib;sfml-main.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Manifest>
       <EnableSegmentHeap>true</EnableSegmentHeap>

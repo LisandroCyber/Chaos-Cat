@@ -81,4 +81,5 @@ public:
     void setVolumenMusica(float volumen);
     void ocultarHitboxes();
     void alternarHitboxes();
+    bool todosLosObjetosEnElPiso() const;
 };
