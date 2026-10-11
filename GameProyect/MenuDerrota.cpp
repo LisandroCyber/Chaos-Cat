@@ -4,6 +4,7 @@
 #include <iostream>
 
 MenuDerrota::MenuDerrota()
+    : Menu(3)
 {
     _titulo.setString("TE DESCUBRIERON!");
     _titulo.setCharacterSize(55);
@@ -32,17 +33,25 @@ MenuDerrota::MenuDerrota()
         std::cout << "No se pudo cargar la imagen de derrota\n";
     }
 
-    _opciones[0].setString("Reintentar");
-    _opciones[1].setString("Salir");
+    _opciones[0].setString("Reiniciar");
+    _opciones[1].setString("Volver al menu principal");
+    _opciones[2].setString("Salir");
 
-    for (int i = 0; i < 2; i++)
+    for (int i = 0; i < _cantidadOpciones; i++)
     {
+        _opciones[i].setCharacterSize(30);
+
         const sf::FloatRect limites = _opciones[i].getLocalBounds();
+
         _opciones[i].setOrigin(
             limites.left + limites.width / 2.f,
             limites.top + limites.height / 2.f
         );
-        _opciones[i].setPosition(ANCHO_VENTANA / 2.f, 590.f + i * 60.f);
+
+        _opciones[i].setPosition(
+            ANCHO_VENTANA / 2.f,
+            560.f + i * 60.f
+        );
     }
 
     //El mismo filtro se aplica primero en horizontal y luego en vertical.

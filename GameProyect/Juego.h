@@ -23,10 +23,10 @@ private:
 
     MenuPrincipal _menuPrincipal;
     MenuPausa _menuPausa;
+    Configuracion _configuracion;
     MenuConfiguracion _menuConfiguracion;
     MenuDerrota _menuDerrota;
     ConfirmacionSalida _menuSalida;
-    Configuracion _configuracion;
 
     bool _enConfiguracion = false;
     bool _perdio = false;
@@ -40,6 +40,7 @@ private:
     void actualizar();
     void actualizarPausaPartida();
     void dibujar();
+    void volverAlMenuPrincipal();
 
     void solicitarSalida();
     void cancelarSalida();

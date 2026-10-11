@@ -152,6 +152,10 @@ void Juego::procesarEventos()
             }
             else if (opcion == 1)
             {
+                volverAlMenuPrincipal();
+            }
+            else if (opcion == 2)
+            {
                 solicitarSalida();
             }
 
@@ -377,4 +381,36 @@ void Juego::aplicarConfiguracion()
     {
         _nivel->ocultarHitboxes();
     }
+}
+
+void Juego::volverAlMenuPrincipal()
+{
+    _nivel->pausarMusica();
+    _menuPausa.pausarMusica();
+
+    // Prepara un nivel nuevo para la proxima partida.
+    Nivel* nuevoNivel = new NivelCocina();
+
+    delete _nivel;
+    _nivel = nuevoNivel;
+
+    _gato.reiniciar();
+    aplicarConfiguracion();
+
+    _perdio = false;
+    _enMenu = true;
+    _enPausa = false;
+    _enConfiguracion = false;
+    _confirmarSalida = false;
+
+    // El nivel nuevo y el gato quedan pausados en el menu.
+    _nivel->pausarMusica();
+    _nivel->setPausado(true);
+    _gato.setPausado(true);
+    _partidaPausada = true;
+
+    _menuPrincipal.reiniciarSeleccion();
+    _menuDerrota.reiniciarSeleccion();
+
+    _menuPrincipal.continuarMusica();
 }
