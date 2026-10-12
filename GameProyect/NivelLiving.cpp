@@ -70,7 +70,7 @@ NivelLiving::NivelLiving()
         "images/2-Living/obj/PilaDeLibros.png",
         { 1350.f, 433.f },
         0.15f,
-        1,
+        2,
         "images/2-Living/obj/pilaDeLibrosTirados.png",
         "sound effects/objetos/golpeFruta.wav"
     );
