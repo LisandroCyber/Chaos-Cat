@@ -75,14 +75,4 @@ NivelLiving::NivelLiving()
         "sound effects/objetos/golpeFruta.wav"
     );
 
-
-    /// base para darle profundidad al psio
-    agregarSuperficie(
-        sf::FloatRect(
-            0.f,
-            ALTO_VENTANA - 40.f,
-            getAnchoNivel(),
-            40.f
-        )
-    );
 }

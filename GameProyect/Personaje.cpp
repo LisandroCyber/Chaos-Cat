@@ -58,7 +58,7 @@ Personaje::Personaje()
     _ePresionadaAntes = false;
     _alturaVertical = 0.f;
     _velocidadVertical = 0.f;
-    _posicionPisoY = ALTO_VENTANA - 40.f - (ALTO_BASE_HITBOX * _escala) / 2.f;
+    _posicionPisoY = ALTO_VENTANA - (ALTO_BASE_HITBOX * _escala) / 2.f;
 
     //punto de origen del sprite en el frame (aca estaria en el centro)
     _sprite.setOrigin({
