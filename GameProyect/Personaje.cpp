@@ -58,7 +58,7 @@ Personaje::Personaje()
     _ePresionadaAntes = false;
     _alturaVertical = 0.f;
     _velocidadVertical = 0.f;
-    _posicionPisoY = ALTO_VENTANA - (ALTO_BASE_HITBOX * _escala) / 2.f;
+    _posicionPisoY = ALTO_VENTANA - 40.f - (ALTO_BASE_HITBOX * _escala) / 2.f;
 
     //punto de origen del sprite en el frame (aca estaria en el centro)
     _sprite.setOrigin({
@@ -302,30 +302,19 @@ void Personaje::aplicarMovimiento()
 
 void Personaje::limitarMovimiento()
 {
-    sf::FloatRect hitbox = getGlobalBounds();
-    sf::Vector2f ajuste = { 0.f, 0.f };
-
-    if (hitbox.left < 0.f)
-    {
-        ajuste.x = -hitbox.left;
-    }
-
-    if (hitbox.left + hitbox.width > ANCHO_VENTANA)
-    {
-        ajuste.x = ANCHO_VENTANA - (hitbox.left + hitbox.width);
-    }
+    const sf::FloatRect hitbox = getGlobalBounds();
+    float ajusteY = 0.f;
 
     if (hitbox.top < 0.f)
     {
-        ajuste.y = -hitbox.top;
+        ajusteY = -hitbox.top;
     }
-
-    if (hitbox.top + hitbox.height > ALTO_VENTANA)
+    else if (hitbox.top + hitbox.height > ALTO_VENTANA)
     {
-        ajuste.y = ALTO_VENTANA - (hitbox.top + hitbox.height);
+        ajusteY = ALTO_VENTANA - (hitbox.top + hitbox.height);
     }
 
-    _sprite.move(ajuste);
+    _sprite.move(0.f, ajusteY);
 }
 
 void Personaje::actualizarSprite()

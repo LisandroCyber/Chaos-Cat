@@ -1,7 +1,9 @@
 #include "Juego.h"
 #include "Constantes.h"
 #include "NivelCocina.h"
+#include "NivelLiving.h"
 #include <iostream>
+#include <algorithm>
 
 Juego::Juego()
     : _window(
@@ -9,11 +11,21 @@ Juego::Juego()
         "Chaos Cat SFML 2.5"
     ),
     _gato(),
-    _nivel(new NivelCocina()),
+    _nivel(new NivelLiving()),
     _menuConfiguracion(_configuracion)
 {
     _window.setFramerateLimit(LIMITE_FPS);
     _window.setKeyRepeatEnabled(false);
+
+    _camara.setSize(
+        static_cast<float>(ANCHO_VENTANA),
+        static_cast<float>(ALTO_VENTANA)
+    );
+
+    _camara.setCenter(
+        ANCHO_VENTANA / 2.f,
+        ALTO_VENTANA / 2.f
+    );
 
     if (_texturaOjoEscondido.loadFromFile("images/ojo_escondido.png"))
     {
@@ -333,6 +345,7 @@ void Juego::actualizar()
 
 void Juego::dibujar()
 {
+    _window.setView(_window.getDefaultView());
     _window.clear(sf::Color(30, 30, 40));
 
     if (_enMenu)
@@ -349,7 +362,13 @@ void Juego::dibujar()
     else
     {
         // La partida permanece visible detras de la pausa.
+        actualizarCamara();
+
+        _window.setView(_camara);
         _nivel->dibujar(_window, _gato);
+
+        // Los indicadores y menus permanecen fijos.
+        _window.setView(_window.getDefaultView());
 
         if (_gato.estaEscondido())
         {
@@ -461,4 +480,24 @@ void Juego::volverAlMenuPrincipal()
     _menuDerrota.reiniciarSeleccion();
 
     _menuPrincipal.continuarMusica();
+}
+
+void Juego::actualizarCamara()
+{
+    const float mitadPantalla = ANCHO_VENTANA / 2.f;
+
+    const sf::FloatRect area = _gato.getGlobalBounds();
+    const float centroGato = area.left + area.width / 2.f;
+
+    const float limiteDerecho = std::max(
+        mitadPantalla,
+        _nivel->getAnchoNivel() - mitadPantalla
+    );
+
+    const float centroX = std::max(
+        mitadPantalla,
+        std::min(centroGato, limiteDerecho)
+    );
+
+    _camara.setCenter(centroX, ALTO_VENTANA / 2.f);
 }

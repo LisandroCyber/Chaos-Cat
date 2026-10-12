@@ -36,6 +36,10 @@ void Nivel::cargarFondo(const std::string& rutaTextura)
     }
 
     _spriteFondo.setTexture(_texturaFondo, true);
+    _anchoNivel = std::max(
+        static_cast<float>(ANCHO_VENTANA),
+        _spriteFondo.getGlobalBounds().width
+    );
 }
 
 void Nivel::agregarEnemigo(const std::string& rutaTextura,
@@ -104,7 +108,7 @@ void Nivel::actualizar(Personaje& gato)
     {
         //la flecha llama al atributo o metodo si el objetoes un puntero
         const bool estabaEnElPiso = objeto->estaEnElPiso();
-        objeto->update();
+        objeto->update(_anchoNivel);
 
         //avisa solo en el momento del impacto, no en cada actualizacion.
         if (!estabaEnElPiso && objeto->estaEnElPiso())
@@ -177,6 +181,7 @@ void Nivel::reiniciarObjetos()
 
 void Nivel::resolverColisiones(Personaje& gato)
 {
+    limitarMovimientoGato(gato);
     // Primero resolvemos golpes y bloqueos laterales.
     for (Objeto* objeto : _objetos)
     {
@@ -233,6 +238,10 @@ void Nivel::resolverColisiones(Personaje& gato)
     {
         gato.iniciarCaidaSiEstaElevado();
     }
+
+    resolverBarrerasLaterales(gato);
+
+    limitarMovimientoGato(gato);
 }
 
 void Nivel::resolverColisionGatoObjeto(Personaje& gato, Objeto& objeto)
@@ -435,6 +444,11 @@ void Nivel::dibujarHitboxes(sf::RenderWindow& ventana,
     {
         dibujarHitbox(ventana, zona, sf::Color(128, 0, 32));
     }
+
+    for (const sf::FloatRect& barrera : _barrerasLaterales)
+    {
+        dibujarHitbox(ventana, barrera, sf::Color::Yellow);
+    }
 }
 
 void Nivel::dibujarHitbox(sf::RenderWindow& ventana,
@@ -539,4 +553,67 @@ bool Nivel::todosLosObjetosEnElPiso() const
     }
 
     return true;
+}
+
+float Nivel::getAnchoNivel() const
+{
+    return _anchoNivel;
+}
+
+void Nivel::limitarMovimientoGato(Personaje& gato)
+{
+    const sf::FloatRect area = gato.getGlobalBounds();
+
+    if (area.left < 0.f)
+    {
+        gato.mover({ -area.left, 0.f });
+    }
+    else if (area.left + area.width > _anchoNivel)
+    {
+        gato.mover({
+            _anchoNivel - (area.left + area.width),
+            0.f
+            });
+    }
+}
+
+void Nivel::agregarBarreraLateral(const sf::FloatRect& barrera)
+{
+    _barrerasLaterales.push_back(barrera);
+}
+
+void Nivel::resolverBarrerasLaterales(Personaje& gato)
+{
+    for (const sf::FloatRect& barrera : _barrerasLaterales)
+    {
+        const sf::FloatRect area = gato.getGlobalBounds();
+
+        if (!area.intersects(barrera))
+        {
+            continue;
+        }
+
+        const sf::FloatRect anterior = gato.getAreaAnterior();
+
+        const float centroAnterior =
+            anterior.left + anterior.width / 2.f;
+
+        const float centroBarrera =
+            barrera.left + barrera.width / 2.f;
+
+        if (centroAnterior < centroBarrera)
+        {
+            gato.mover({
+                barrera.left - (area.left + area.width),
+                0.f
+                });
+        }
+        else
+        {
+            gato.mover({
+                barrera.left + barrera.width - area.left,
+                0.f
+                });
+        }
+    }
 }

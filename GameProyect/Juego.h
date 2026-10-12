@@ -18,6 +18,8 @@ private:
 
     Personaje _gato;
     Nivel* _nivel;
+    sf::View _camara;
+
 
     sf::Texture _texturaOjoEscondido;
     sf::Sprite _spriteOjoEscondido;
@@ -39,6 +41,7 @@ private:
     bool _confirmarSalida = false;
     bool _partidaPausada = true;
 
+    void actualizarCamara();
     void aplicarConfiguracion();
     void procesarEventos();
     void actualizar();

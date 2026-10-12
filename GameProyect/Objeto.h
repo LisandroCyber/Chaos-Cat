@@ -29,7 +29,7 @@ public:
 		int golpesNecesarios, const std::string& rutaTexturaCaida, const std::string& rutaSonidoCaida);
 
 	sf::FloatRect getGlobalBounds() const;
-	void update();
+	void update(float anchoNivel);
 	void setPausado(bool pausado);
 	void tirar(float direccion);
 	void reiniciar();

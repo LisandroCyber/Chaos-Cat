@@ -56,7 +56,7 @@ sf::FloatRect Objeto::getGlobalBounds() const
 	return _sprite.getGlobalBounds();
 }
 
-void Objeto::update()
+void Objeto::update(float anchoNivel)
 {
 	if (!_tirado || _enElPiso)
 	{
@@ -67,7 +67,7 @@ void Objeto::update()
 	_velocidad.y += 0.45f;
 
 	const sf::FloatRect limites = _sprite.getGlobalBounds();
-	const float ventanaX = static_cast<float>(ANCHO_VENTANA);
+	const float ventanaX = anchoNivel;
 
 	if (limites.left < 0.f)
 	{

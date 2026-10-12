@@ -8,7 +8,9 @@
 #include "Mueble.h"
 #include "Objeto.h"
 #include "Personaje.h"
+#include "Constantes.h"
 #include <SFML/Audio.hpp>
+#include <algorithm>
 
 class Nivel
 {
@@ -23,6 +25,12 @@ private:
     std::vector<Objeto*> _objetos;
     std::vector<sf::FloatRect> _superficiesFijas;
     std::vector<sf::FloatRect> _zonasEscondite;
+    std::vector<sf::FloatRect> _barrerasLaterales;
+
+    void resolverBarrerasLaterales(Personaje& gato);
+    float _anchoNivel = ANCHO_VENTANA;
+
+    void limitarMovimientoGato(Personaje& gato);
 
     bool _mostrarHitboxes;
 
@@ -66,6 +74,7 @@ protected:
     bool cargarSonido(const std::string& rutaSonido, float volumen);
     void configurarLoopMusica(sf::Time inicioLoop, sf::Time duracionLoop);
     void reproducirMusicaFondo(sf::Time inicioReproduccion);
+    void agregarBarreraLateral(const sf::FloatRect& barrera);
 
 public:
     virtual ~Nivel();
@@ -82,4 +91,5 @@ public:
     void ocultarHitboxes();
     void alternarHitboxes();
     bool todosLosObjetosEnElPiso() const;
+    float getAnchoNivel() const;
 };
