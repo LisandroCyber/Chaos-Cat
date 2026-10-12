@@ -49,29 +49,29 @@ NivelLiving::NivelLiving()
     );
     
     agregarObjeto(
-        "images/2-Living/obj/Florero.png",
+        "images/2-Living/Florero.png",
         { 550.f, 390.f },
         0.17f,
         2,
-        "images/2-Living/obj/FloreroRoto.png",
+        "images/2-Living/FloreroRoto.png",
         "sound effects/objetos/vidrioRoto.wav"
     );
 
     agregarObjeto(
-        "images/2-Living/obj/TazaCafe.png",
+        "images/2-Living/TazaCafe.png",
         { 855.f, 484.f },
         0.25f,
         1,
-        "images/2-Living/obj/TazaCafe_rota.png",
+        "images/2-Living/TazaCafe_rota.png",
         "sound effects/objetos/vidrioRoto.wav"
     );
 
     agregarObjeto(
-        "images/2-Living/obj/PilaDeLibros.png",
+        "images/2-Living/PilaDeLibros.png",
         { 1350.f, 433.f },
         0.15f,
         2,
-        "images/2-Living/obj/pilaDeLibrosTirados.png",
+        "images/2-Living/pilaDeLibrosTirados.png",
         "sound effects/objetos/golpeFruta.wav"
     );
 
