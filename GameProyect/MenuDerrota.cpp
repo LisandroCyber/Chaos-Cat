@@ -16,7 +16,7 @@ MenuDerrota::MenuDerrota()
     );
     _titulo.setPosition(ANCHO_VENTANA / 2.f, 75.f);
 
-    if (_texturaGato.loadFromFile("images/gato_desafiante_con_sombra.png"))
+    if (_texturaGato.loadFromFile("images/Gato/gato_desafiante_con_sombra.png"))
     {
         _texturaGato.setSmooth(true);
         _spriteGato.setTexture(_texturaGato);

@@ -27,7 +27,7 @@ Juego::Juego()
         ALTO_VENTANA / 2.f
     );
 
-    if (_texturaOjoEscondido.loadFromFile("images/ojo_escondido.png"))
+    if (_texturaOjoEscondido.loadFromFile("images/Gato/ojo_escondido.png"))
     {
         _spriteOjoEscondido.setTexture(_texturaOjoEscondido);
 

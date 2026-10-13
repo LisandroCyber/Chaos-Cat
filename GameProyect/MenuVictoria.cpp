@@ -16,7 +16,7 @@ MenuVictoria::MenuVictoria()
     );
     _titulo.setPosition(ANCHO_VENTANA / 2.f, 75.f);
 
-    if (_texturaGato.loadFromFile("images/gato_ganador.png"))
+    if (_texturaGato.loadFromFile("images/Gato/gato_ganador.png"))
     {
         _texturaGato.setSmooth(true);
         _spriteGato.setTexture(_texturaGato);
