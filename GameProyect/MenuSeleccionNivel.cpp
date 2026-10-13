@@ -12,7 +12,7 @@ MenuSeleccionNivel::MenuSeleccionNivel()
     }
 
     if (!_texturaMapa.loadFromFile(
-        "images/UI/seleccion_niveles/mapa_casa_sin_muebles.png"))
+        "images/UI/seleccion_niveles/mapa_casa.png"))
     {
         std::cout << "No se pudo cargar el mapa del selector\n";
     }

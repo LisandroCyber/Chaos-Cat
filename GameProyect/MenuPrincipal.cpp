@@ -10,7 +10,7 @@ MenuPrincipal::MenuPrincipal()
     _opciones[2].setString("Salir");
 
 
-    if (!_texturaFondo.loadFromFile("images/MenuPrincipal.png"))
+    if (!_texturaFondo.loadFromFile("images/UI/MenuPrincipal.png"))
     {
         std::cout << "ERROR AL CARGAR EL FONDO DEL MENU\n";
     }
