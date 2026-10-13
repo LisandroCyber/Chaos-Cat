@@ -42,6 +42,11 @@ void Nivel::cargarFondo(const std::string& rutaTextura)
     );
 }
 
+void Nivel::setAnchoNivel(float ancho)
+{
+    _anchoNivel = std::max(static_cast<float>(ANCHO_VENTANA), ancho);
+}
+
 void Nivel::agregarEnemigo(const std::string& rutaTextura,
     const sf::Vector2f& posicion,
     int frameAncho,

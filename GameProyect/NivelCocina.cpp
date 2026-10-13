@@ -4,6 +4,7 @@
 NivelCocina::NivelCocina()
 {
     cargarFondo("images/1-Cocina/cocina.png");
+    setAnchoNivel(static_cast<float>(ANCHO_VENTANA));
 
     if (!cargarMusicaFondo("music/EnPartida/LoopNivelCocina.wav", 22.f))
     {

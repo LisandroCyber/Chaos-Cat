@@ -50,6 +50,7 @@ protected:
     Nivel();
 
     void cargarFondo(const std::string& rutaTextura);
+    void setAnchoNivel(float ancho);
 
     void agregarEnemigo(const std::string& rutaTextura,
         const sf::Vector2f& posicion,
