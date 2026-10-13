@@ -1,31 +1,34 @@
 #pragma once
 
-// Ventana.
+//Ventana.
 const unsigned int ANCHO_VENTANA = 1280;
 const unsigned int ALTO_VENTANA = 720;
 const unsigned int LIMITE_FPS = 144;
 
-// Medidas originales del hitbox base, antes de aplicar la escala.
+//Medidas originales del hitbox base, antes de aplicar la escala.
 const float ANCHO_BASE_HITBOX = 360.f;
 const float ALTO_BASE_HITBOX = 360.f;
 
-// Movimiento y gravedad: valores por actualizacion.
+//Movimiento y gravedad: valores por actualizacion.
 const float VELOCIDAD_CAMINAR = 2.2f;
 const float VELOCIDAD_CORRER = 5.f;
 const float VELOCIDAD_AGACHADO = 0.75f;
 const float GRAVEDAD = 0.55f;
 const float VELOCIDAD_INICIAL_SALTO = -17.f;
 
-// Tiempos en segundos.
+//Tiempos en segundos.
 const float TIEMPO_PARA_SENTARSE = 0.5f;
 const float DURACION_FRAME_CAMINAR = 0.18f;
 const float DURACION_FRAME_AGACHADO = 0.22f;
 const float DURACION_FRAME_GOLPE = 0.10f;
 const float DURACION_GOLPE = 0.20f;
 
-// Ciclo de vigilancia del enemigo.
+//Ciclo de vigilancia del enemigo.
 const int TIEMPO_ENEMIGO_DE_ESPALDA_MIN = 3;
 const int TIEMPO_ENEMIGO_DE_ESPALDA_MAX = 8;
 const float TIEMPO_ENEMIGO_ALERTA = 2.f;
 const float TIEMPO_ENEMIGO_REACCION_CAIDA = 1.f;
 const float TIEMPO_ENEMIGO_DADO_VUELTA = 3.f;
+
+//Seleccion de niveles
+const int CANTIDAD_NIVELES = 6;

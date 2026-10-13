@@ -10,6 +10,8 @@
 #include "Configuracion.h"
 #include "MenuConfig.h"
 #include "MenuVictoria.h"
+#include "MenuSeleccionNivel.h"
+#include "Progreso.h"
 
 class Juego
 {
@@ -31,7 +33,11 @@ private:
     MenuDerrota _menuDerrota;
     ConfirmacionSalida _menuSalida;
     MenuVictoria _menuVictoria;
+    MenuSeleccionNivel _menuSeleccionNivel;
+    Progreso _progreso;
 
+    int _nivelActual = 1;
+    bool _enSeleccionNivel = false;
     bool _gano = false;
     bool _victoriaMostrada = false;
     bool _enConfiguracion = false;
@@ -52,6 +58,10 @@ private:
     void solicitarSalida();
     void cancelarSalida();
     void reiniciarPartida();
+
+    Nivel* crearNivel(int numero);
+    bool iniciarNivel(int numero);
+    void abrirSeleccionNivel();
 
 public:
     Juego();
