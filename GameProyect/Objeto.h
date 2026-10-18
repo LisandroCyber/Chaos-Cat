@@ -6,8 +6,11 @@
 class Objeto
 {
 private:
+	static constexpr int RADIO_CONTORNO = 4;
+
 	sf::Texture _texture;
 	sf::Texture _texturaCaida;
+	sf::Texture _texturaContorno;
 	sf::Sprite _sprite;
 	sf::Vector2f _posicionInicial;
 	sf::Vector2f _velocidad;
@@ -22,6 +25,7 @@ private:
 	sf::Sound _sonidoCaida;
 	
 	static sf::Texture cargarTextura(const std::string& rutaTextura);
+	void crearContorno();
 
 public:
 	

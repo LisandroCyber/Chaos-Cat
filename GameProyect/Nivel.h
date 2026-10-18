@@ -15,6 +15,8 @@
 class Nivel
 {
 private:
+    static constexpr int RADIO_HALO_ESCONDITE = 12;
+
     sf::Texture _texturaFondo;
     sf::Sprite _spriteFondo;
     sf::Music _musicaFondo;
@@ -25,6 +27,7 @@ private:
     std::vector<Objeto*> _objetos;
     std::vector<sf::FloatRect> _superficiesFijas;
     std::vector<sf::FloatRect> _zonasEscondite;
+    std::vector<sf::Texture> _halosEscondite;
     std::vector<sf::FloatRect> _barrerasLaterales;
 
     void resolverBarrerasLaterales(Personaje& gato);
@@ -40,6 +43,7 @@ private:
     bool gatoPuedeApoyarseEn(Personaje& gato,
         const sf::FloatRect& superficie) const;
 
+    void dibujarZonasEscondite(sf::RenderWindow& ventana) const;
     void dibujarHitboxes(sf::RenderWindow& ventana,
         const Personaje& gato) const;
     static void dibujarHitbox(sf::RenderWindow& ventana,

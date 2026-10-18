@@ -1,8 +1,11 @@
 #include <SFML/Graphics.hpp>
 #include "Objeto.h"
 #include "Constantes.h"
+#include <algorithm>
+#include <cmath>
 #include <cstdlib>
 #include <iostream>
+#include <vector>
 
 sf::Texture Objeto::cargarTextura(const std::string& rutaTextura)
 {
@@ -31,6 +34,7 @@ Objeto::Objeto(const std::string& rutaTextura, const sf::Vector2f& posicion, flo
 	_sprite.setPosition(posicion);
 	_sprite.setScale({ escala, escala });
 	_sprite.setOrigin(_sprite.getGlobalBounds().width / 2.f, 0.f);
+	crearContorno();
 
 	if (!_bufferCaida.loadFromFile(rutaSonidoCaida))
 	{
@@ -43,10 +47,97 @@ Objeto::Objeto(const std::string& rutaTextura, const sf::Vector2f& posicion, flo
 	}
 }
 
+void Objeto::crearContorno()
+{
+	const float escala = std::abs(_sprite.getScale().x);
+	if (escala == 0.f)
+	{
+		return;
+	}
+
+	const sf::Image imagen = _texture.copyToImage();
+	const sf::Vector2u tamano = imagen.getSize();
+	// El margen permite que el halo se desvanezca fuera de la silueta.
+	const int ancho = static_cast<int>(std::ceil(tamano.x * escala)) + RADIO_CONTORNO * 2;
+	const int alto = static_cast<int>(std::ceil(tamano.y * escala)) + RADIO_CONTORNO * 2;
+	std::vector<sf::Uint8> mascara(ancho * alto, 0);
+
+	//uso radio contorno para crear un "halo" y no una linea,asi queda mas bonito
+	for (int y = RADIO_CONTORNO; y < alto - RADIO_CONTORNO; y++)
+	{
+		for (int x = RADIO_CONTORNO; x < ancho - RADIO_CONTORNO; x++)
+		{
+			const unsigned int origenX = std::min(tamano.x - 1,
+				static_cast<unsigned int>((x - RADIO_CONTORNO + 0.5f) / escala));
+			const unsigned int origenY = std::min(tamano.y - 1,
+				static_cast<unsigned int>((y - RADIO_CONTORNO + 0.5f) / escala));
+			mascara[y * ancho + x] = imagen.getPixel(origenX, origenY).a >= 128;
+		}
+	}
+
+	sf::Image contorno;
+	contorno.create(ancho, alto, sf::Color::Transparent);
+	const float opacidadMaxima = 265.f;
+	const float suavidad = 1.6f;
+
+	for (int y = 0; y < alto; y++)
+	{
+		for (int x = 0; x < ancho; x++)
+		{
+			if (mascara[y * ancho + x])
+			{
+				continue;
+			}
+
+			int distanciaCuadrada = RADIO_CONTORNO * RADIO_CONTORNO + 1;
+			for (int dy = -RADIO_CONTORNO; dy <= RADIO_CONTORNO; dy++)
+			{
+				for (int dx = -RADIO_CONTORNO; dx <= RADIO_CONTORNO; dx++)
+				{
+					const int vecinoX = x + dx;
+					const int vecinoY = y + dy;
+					if (vecinoX >= 0 && vecinoX < ancho &&
+						vecinoY >= 0 && vecinoY < alto &&
+						mascara[vecinoY * ancho + vecinoX])
+					{
+						distanciaCuadrada = std::min(distanciaCuadrada, dx * dx + dy * dy);
+					}
+				}
+			}
+
+			if (distanciaCuadrada <= RADIO_CONTORNO * RADIO_CONTORNO)
+			{
+				const float intensidad = std::exp(-distanciaCuadrada / (2.f * suavidad * suavidad));
+				const sf::Uint8 opacidad = static_cast<sf::Uint8>(opacidadMaxima * intensidad);
+				contorno.setPixel(x, y, sf::Color(240, 80, 65, opacidad));
+			}
+		}
+	}
+
+	if (!_texturaContorno.loadFromImage(contorno))
+	{
+		std::cout << "ERROR: NO SE PUDO CREAR EL CONTORNO DEL OBJETO\n";
+	}
+	else
+	{
+		_texturaContorno.setSmooth(true);
+	}
+}
+
 void Objeto::dibujar(sf::RenderWindow& ventana) const
 {
 	if (_visible)
 	{
+		if (!_tirado && _texturaContorno.getSize().x > 0)
+		{
+			sf::Sprite contorno(_texturaContorno);
+			contorno.setOrigin(
+				_sprite.getOrigin().x * _sprite.getScale().x + RADIO_CONTORNO,
+				_sprite.getOrigin().y * _sprite.getScale().y + RADIO_CONTORNO);
+			contorno.setPosition(_sprite.getPosition());
+			ventana.draw(contorno);
+		}
+
 		ventana.draw(_sprite);
 	}
 }

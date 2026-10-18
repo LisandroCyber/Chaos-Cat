@@ -1,5 +1,6 @@
 #include "Nivel.h"
 
+#include <cmath>
 #include <cstdlib>
 #include <iostream>
 
@@ -99,7 +100,52 @@ void Nivel::agregarSuperficie(const sf::FloatRect& superficie)
 
 void Nivel::agregarZonaEscondite(const sf::FloatRect& zona)
 {
+    if (zona.width <= 0.f || zona.height <= 0.f)
+    {
+        return;
+    }
+
     _zonasEscondite.push_back(zona);
+    _halosEscondite.emplace_back();
+
+    const int ancho = static_cast<int>(std::ceil(zona.width)) + RADIO_HALO_ESCONDITE * 2;
+    const int alto = static_cast<int>(std::ceil(zona.height)) + RADIO_HALO_ESCONDITE * 2;
+    const float mitadAncho = zona.width / 2.f;
+    const float mitadAlto = zona.height / 2.f;
+    const float radioEsquina = std::min(12.f, std::min(mitadAncho, mitadAlto));
+    const float suavidad = 4.5f;
+    const float opacidadMaxima = 85.f;
+    sf::Image halo;
+    halo.create(ancho, alto, sf::Color::Transparent);
+
+    // La distancia al borde redondeado permite difuminar sin rellenar la zona.
+    for (int y = 0; y < alto; y++)
+    {
+        for (int x = 0; x < ancho; x++)
+        {
+            const float dx = std::abs(x - RADIO_HALO_ESCONDITE + 0.5f - mitadAncho) -
+                (mitadAncho - radioEsquina);
+            const float dy = std::abs(y - RADIO_HALO_ESCONDITE + 0.5f - mitadAlto) -
+                (mitadAlto - radioEsquina);
+            const float exteriorX = std::max(dx, 0.f);
+            const float exteriorY = std::max(dy, 0.f);
+            const float distancia = std::sqrt(exteriorX * exteriorX + exteriorY * exteriorY) +
+                std::min(std::max(dx, dy), 0.f) - radioEsquina;
+            const float intensidad = std::exp(-distancia * distancia / (2.f * suavidad * suavidad));
+            const sf::Uint8 opacidad = static_cast<sf::Uint8>(opacidadMaxima * intensidad);
+            halo.setPixel(x, y, sf::Color(255, 255, 255, opacidad));
+        }
+    }
+
+    sf::Texture& textura = _halosEscondite.back();
+    if (!textura.loadFromImage(halo))
+    {
+        std::cout << "ERROR: NO SE PUDO CREAR EL HALO DEL ESCONDITE\n";
+    }
+    else
+    {
+        textura.setSmooth(true);
+    }
 }
 
 void Nivel::actualizar(Personaje& gato)
@@ -405,6 +451,7 @@ void Nivel::dibujar(sf::RenderWindow& ventana,
         mueble->dibujar(ventana);
     }
 
+    dibujarZonasEscondite(ventana);
     gato.dibujar(ventana);
 
     for (const Objeto* objeto : _objetos)
@@ -413,6 +460,23 @@ void Nivel::dibujar(sf::RenderWindow& ventana,
     }
 
     dibujarHitboxes(ventana, gato);
+}
+
+void Nivel::dibujarZonasEscondite(sf::RenderWindow& ventana) const
+{
+    for (std::size_t i = 0; i < _zonasEscondite.size(); i++)
+    {
+        if (_halosEscondite[i].getSize().x == 0)
+        {
+            continue;
+        }
+
+        sf::Sprite halo(_halosEscondite[i]);
+        halo.setPosition(
+            _zonasEscondite[i].left - RADIO_HALO_ESCONDITE,
+            _zonasEscondite[i].top - RADIO_HALO_ESCONDITE);
+        ventana.draw(halo);
+    }
 }
 
 void Nivel::dibujarHitboxes(sf::RenderWindow& ventana,
