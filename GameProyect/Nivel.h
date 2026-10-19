@@ -3,7 +3,6 @@
 #include <SFML/Graphics.hpp>
 #include <string>
 #include <vector>
-
 #include "Enemigo.h"
 #include "Mueble.h"
 #include "Objeto.h"
@@ -14,6 +13,60 @@
 
 class Nivel
 {
+public:
+    virtual ~Nivel();
+    void pausarMusica();
+    void continuarMusica();
+    void actualizar(Personaje& gato);
+    void setPausado(bool pausado);
+    void reiniciarObjetos();
+    void dibujar(sf::RenderWindow& ventana,
+        const Personaje& gato) const;
+    void setVolumenMusica(float volumen);
+    void ocultarHitboxes();
+    void alternarHitboxes();
+
+    bool gatoFueDetectado(
+        const Personaje& gato,
+        const sf::View& camara
+    ) const;
+    bool todosLosObjetosEnElPiso() const;
+
+    float getAnchoNivel() const;
+
+protected:
+    Nivel();
+
+    void cargarFondo(const std::string& rutaTextura);
+    void setAnchoNivel(float ancho);
+
+    void agregarEnemigo(
+        const std::string& rutaTextura,
+        const sf::Vector2f& posicion,
+        int frameAncho,
+        int frameAlto,
+        const sf::Vector2f& escala,
+        bool entraPorRuido = false);
+    void agregarMueble(const std::string& rutaTextura,
+        const sf::Vector2f& posicion,
+        const sf::Vector2f& escala,
+        const sf::FloatRect& hitboxLocal);
+    void agregarObjeto(const std::string& rutaTextura,
+        const sf::Vector2f& posicion,
+        float escala,
+        int golpesNecesarios,
+        const std::string& rutaTexturaCaida,
+        const std::string& rutaSonidoCaida);
+
+    void agregarSuperficie(const sf::FloatRect& superficie);
+    void agregarZonaEscondite(const sf::FloatRect& zona);
+
+    bool cargarMusicaFondo(const std::string& rutaMusica, float volumen);
+    bool cargarSonido(const std::string& rutaSonido, float volumen);
+    void configurarLoopMusica(sf::Time inicioLoop, sf::Time duracionLoop);
+    void reproducirMusicaFondo(sf::Time inicioReproduccion);
+    void agregarBarreraLateral(const sf::FloatRect& barrera);
+
 private:
     static constexpr int RADIO_HALO_ESCONDITE = 12;
 
@@ -49,52 +102,4 @@ private:
     static void dibujarHitbox(sf::RenderWindow& ventana,
         const sf::FloatRect& hitbox,
         const sf::Color& color);
-
-protected:
-    Nivel();
-
-    void cargarFondo(const std::string& rutaTextura);
-    void setAnchoNivel(float ancho);
-
-    void agregarEnemigo(const std::string& rutaTextura,
-        const sf::Vector2f& posicion,
-        int frameAncho,
-        int frameAlto,
-        const sf::Vector2f& escala);
-    void agregarMueble(const std::string& rutaTextura,
-        const sf::Vector2f& posicion,
-        const sf::Vector2f& escala,
-        const sf::FloatRect& hitboxLocal);
-    void agregarObjeto(const std::string& rutaTextura,
-        const sf::Vector2f& posicion,
-        float escala,
-        int golpesNecesarios,
-        const std::string& rutaTexturaCaida,
-        const std::string& rutaSonidoCaida);
-
-    void agregarSuperficie(const sf::FloatRect& superficie);
-    void agregarZonaEscondite(const sf::FloatRect& zona);
-
-    bool cargarMusicaFondo(const std::string& rutaMusica, float volumen);
-    bool cargarSonido(const std::string& rutaSonido, float volumen);
-    void configurarLoopMusica(sf::Time inicioLoop, sf::Time duracionLoop);
-    void reproducirMusicaFondo(sf::Time inicioReproduccion);
-    void agregarBarreraLateral(const sf::FloatRect& barrera);
-
-public:
-    virtual ~Nivel();
-
-    void pausarMusica();
-    void continuarMusica();
-    void actualizar(Personaje& gato);
-    void setPausado(bool pausado);
-    void reiniciarObjetos();
-    bool gatoFueDetectado(const Personaje& gato) const;
-    void dibujar(sf::RenderWindow& ventana,
-        const Personaje& gato) const;
-    void setVolumenMusica(float volumen);
-    void ocultarHitboxes();
-    void alternarHitboxes();
-    bool todosLosObjetosEnElPiso() const;
-    float getAnchoNivel() const;
 };

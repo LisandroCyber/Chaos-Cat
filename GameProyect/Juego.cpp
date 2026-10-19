@@ -2,6 +2,7 @@
 #include "Constantes.h"
 #include "NivelCocina.h"
 #include "NivelLiving.h"
+#include "NivelHabitacion.h"
 #include <iostream>
 #include <algorithm>
 
@@ -61,6 +62,11 @@ Juego::Juego()
     {
         std::cout << "Sin progreso valido guardado: comienza en Cocina\n";
     }
+
+    _progreso.desbloquearSiguiente(1);
+    _progreso.desbloquearSiguiente(2);
+    _progreso.desbloquearSiguiente(3);
+
     _nivel->setPausado(true);
     _gato.setPausado(true);
     _partidaPausada = true;
@@ -346,8 +352,9 @@ void Juego::actualizar()
 
     _gato.update();
     _nivel->actualizar(_gato);
+    actualizarCamara();
 
-    if (_nivel->gatoFueDetectado(_gato))
+    if (_nivel->gatoFueDetectado(_gato, _camara))
     {
         _perdio = true;
         actualizarPausaPartida();
@@ -518,6 +525,8 @@ Nivel* Juego::crearNivel(int numero)
         return new NivelCocina();
     case 2:
         return new NivelLiving();
+    case 4:
+        return new NivelHabitacion();
     default:
         return nullptr;
     }

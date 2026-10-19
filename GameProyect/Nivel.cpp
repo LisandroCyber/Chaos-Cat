@@ -48,19 +48,28 @@ void Nivel::setAnchoNivel(float ancho)
     _anchoNivel = std::max(static_cast<float>(ANCHO_VENTANA), ancho);
 }
 
-void Nivel::agregarEnemigo(const std::string& rutaTextura,
+void Nivel::agregarEnemigo(
+    const std::string& rutaTextura,
     const sf::Vector2f& posicion,
     int frameAncho,
     int frameAlto,
-    const sf::Vector2f& escala)
+    const sf::Vector2f& escala,
+    bool entraPorRuido)
 {
-    _enemigos.push_back(new Enemigo(
+    Enemigo* enemigo = new Enemigo(
         rutaTextura,
         posicion,
         frameAncho,
         frameAlto,
         escala
-    ));
+    );
+
+    if (entraPorRuido)
+    {
+        enemigo->configurarEntrada(220.f);
+    }
+
+    _enemigos.push_back(enemigo);
 }
 
 void Nivel::agregarMueble(const std::string& rutaTextura,
@@ -578,11 +587,23 @@ void Nivel::continuarMusica()
     }
 }
 
-bool Nivel::gatoFueDetectado(const Personaje& gato) const
+bool Nivel::gatoFueDetectado(
+    const Personaje& gato,
+    const sf::View& camara) const
 {
+    const sf::Vector2f centro = camara.getCenter();
+    const sf::Vector2f tamanio = camara.getSize();
+
+    const sf::FloatRect areaVisible(
+        centro.x - tamanio.x / 2.f,
+        centro.y - tamanio.y / 2.f,
+        tamanio.x,
+        tamanio.y
+    );
+
     for (const Enemigo* enemigo : _enemigos)
     {
-        if (enemigo->detectaAl(gato))
+        if (enemigo->detectaAl(gato, areaVisible))
         {
             return true;
         }

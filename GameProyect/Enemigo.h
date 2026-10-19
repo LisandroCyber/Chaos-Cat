@@ -16,8 +16,36 @@ enum class EstadoEnemigo
     DadoVueltaEnojado
 };
 
+enum class EstadoEntrada
+{
+    Fuera,
+    Esperando,
+    Entrando,
+    Mirando,
+    Girando,
+    Saliendo
+};
+
 class Enemigo
 {
+public:
+    Enemigo(const std::string& rutaTextura,
+        const sf::Vector2f& posicion,
+        int frameAncho,
+        int frameAlto,
+        const sf::Vector2f& escala);
+
+    bool detectaAl(
+        const Personaje& gato,
+        const sf::FloatRect& areaVisible
+    ) const;
+
+    void actualizar();
+    void reaccionarACaida();
+    void setPausado(bool pausado);
+    void dibujar(sf::RenderWindow& ventana) const;
+    void configurarEntrada(float recorrido);
+
 private:
     sf::Texture _textura;
     sf::Sprite _sprite;
@@ -36,17 +64,12 @@ private:
         int frameAlto);
     void cambiarEstado(EstadoEnemigo nuevoEstado);
     void actualizarSprite();
+    bool _entraPorRuido = false;
+    EstadoEntrada _estadoEntrada = EstadoEntrada::Fuera;
 
-public:
-    Enemigo(const std::string& rutaTextura,
-        const sf::Vector2f& posicion,
-        int frameAncho,
-        int frameAlto,
-        const sf::Vector2f& escala);
-    bool detectaAl(const Personaje& gato) const;
+    sf::Vector2f _posicionPuerta;
+    float _recorridoEntrada = 220.f;
 
-    void actualizar();
-    void reaccionarACaida();
-    void setPausado(bool pausado);
-    void dibujar(sf::RenderWindow& ventana) const;
+    void actualizarEntrada();
+    void mostrarFrameEntrada(int frame);
 };

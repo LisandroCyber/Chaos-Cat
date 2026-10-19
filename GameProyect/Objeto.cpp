@@ -153,7 +153,7 @@ void Objeto::update(float anchoNivel)
 	{
 		return;
 	}
-
+	
 	_sprite.move(_velocidad);
 	_velocidad.y += 0.45f;
 
@@ -183,7 +183,7 @@ void Objeto::update(float anchoNivel)
 
 		_velocidad = sf::Vector2f(0.f, 0.f);
 		_enElPiso = true;
-		_sonidoCaida.setPlayingOffset(sf::seconds(0.2f));
+		_sonidoCaida.setPlayingOffset(sf::seconds(0.1f));
 		_sonidoCaida.play();
 	}
 }
@@ -209,7 +209,7 @@ void Objeto::tirar(float direccion)
 
 	_tirado = true;
 	_enElPiso = false;
-	_velocidad = sf::Vector2f(8.f * direccion, -7.f);
+	_velocidad = sf::Vector2f(2.f * direccion, -7.f);
 }
 
 void Objeto::reiniciar()
