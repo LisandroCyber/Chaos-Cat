@@ -103,13 +103,14 @@ Enemigo::Enemigo(const std::string& rutaTextura,
 
 void Enemigo::actualizar()
 {
-    const float tiempoTranscurrido =
-        _relojEstado.getElapsedTime().asSeconds();
-    if (_entraPorRuido)
+    if (_seAsomaPorPuerta)
     {
-        actualizarEntrada();
+        actualizarAsomada();
         return;
     }
+
+    const float tiempoTranscurrido =
+        _relojEstado.getElapsedTime().asSeconds();
 
     if (_estado == EstadoEnemigo::DeEspalda &&
         tiempoTranscurrido >= _tiempoDeEspalda)
@@ -136,12 +137,19 @@ void Enemigo::actualizar()
 
 void Enemigo::reaccionarACaida()
 {
-    if (_entraPorRuido)
+    if (_seAsomaPorPuerta)
     {
-        if (_estadoEntrada == EstadoEntrada::Fuera)
+        _asomadaEnojada = true;
+
+        if (_estadoAsomada == EstadoEnemigoHabitacion::Fuera ||
+            _estadoAsomada == EstadoEnemigoHabitacion::Retirandose)
         {
-            _estadoEntrada = EstadoEntrada::Esperando;
-            _relojEstado.restart();
+            cambiarEstadoAsomada(EstadoEnemigoHabitacion::Asomando);
+        }
+        else
+        {
+            // Cambia el gesto sin dar tiempo extra si ya estaba mirando.
+            actualizarSpriteAsomada();
         }
 
         return;
@@ -235,9 +243,7 @@ void Enemigo::actualizarSprite()
 
 void Enemigo::dibujar(sf::RenderWindow& ventana) const
 {
-    if (_entraPorRuido &&
-        (_estadoEntrada == EstadoEntrada::Fuera ||
-            _estadoEntrada == EstadoEntrada::Esperando))
+    if (_seAsomaPorPuerta && _estadoAsomada == EstadoEnemigoHabitacion::Fuera)
     {
         return;
     }
@@ -249,9 +255,9 @@ bool Enemigo::detectaAl(
     const Personaje& gato,
     const sf::FloatRect& areaVisible) const
 {
-    if (_entraPorRuido)
+    if (_seAsomaPorPuerta)
     {
-        return _estadoEntrada == EstadoEntrada::Mirando &&
+        return _estadoAsomada == EstadoEnemigoHabitacion::Mirando &&
             !gato.estaEscondido();
     }
     // Si el sprite queda completamente fuera de pantalla,
@@ -268,137 +274,78 @@ bool Enemigo::detectaAl(
     return estaMirando && !gato.estaEscondido();
 }
 
-void Enemigo::configurarEntrada(float recorrido)
+void Enemigo::configurarAsomada()
 {
-    _entraPorRuido = true;
-    _estadoEntrada = EstadoEntrada::Fuera;
+    _seAsomaPorPuerta = true;
 
-    _posicionPuerta = _sprite.getPosition();
-    _recorridoEntrada = recorrido;
-
-    // Mismo origen para todos los cuadros.
-    _sprite.setOrigin(
-        _frameAncho / 2.f,
-        static_cast<float>(_frameAlto)
-    );
-
-    _relojEstado.restart();
+    // La mano y la cabeza mantienen la alineacion original de la hoja.
+    _sprite.setOrigin(0.f, 0.f);
+    _sonidoAlerta.stop();
+    cambiarEstadoAsomada(EstadoEnemigoHabitacion::Fuera);
 }
 
-void Enemigo::actualizarEntrada()
+void Enemigo::actualizarAsomada()
 {
     const float tiempo =
         _relojEstado.getElapsedTime().asSeconds();
 
-    const float duracionCaminata = 1.f;
-
-    switch (_estadoEntrada)
+    switch (_estadoAsomada)
     {
-    case EstadoEntrada::Fuera:
-        break;
-
-    case EstadoEntrada::Esperando:
-        if (tiempo >= 2.f)
+    case EstadoEnemigoHabitacion::Fuera:
+        if (tiempo >= TIEMPO_PUERTA_OCULTO)
         {
-            _sprite.setPosition(_posicionPuerta);
-            _estadoEntrada = EstadoEntrada::Entrando;
-            _relojEstado.restart();
-
-            mostrarFrameEntrada(0);
+            cambiarEstadoAsomada(EstadoEnemigoHabitacion::Asomando);
         }
         break;
 
-    case EstadoEntrada::Entrando:
-    {
-        float avance = tiempo / duracionCaminata;
-
-        if (avance > 0.5f)
+    case EstadoEnemigoHabitacion::Asomando:
+        if (tiempo >= TIEMPO_PUERTA_ALERTA)
         {
-            avance = 0.5;
-        }
-
-        _sprite.setPosition(
-            _posicionPuerta.x + _recorridoEntrada * avance,
-            _posicionPuerta.y
-        );
-
-        // Alterna los cuadros 0 y 1.
-        const int frame =
-            static_cast<int>(tiempo / 0.18f) % 2;
-        _sonidoAlerta.play();
-
-        mostrarFrameEntrada(frame);
-
-        if (tiempo >= duracionCaminata)
-        {
-            _estadoEntrada = EstadoEntrada::Mirando;
-            _relojEstado.restart();
-
-            mostrarFrameEntrada(2);
-        }
-        break;
-    }
-
-    case EstadoEntrada::Mirando:
-        if (tiempo >= 3.f)
-        {
-            _estadoEntrada = EstadoEntrada::Girando;
-            _relojEstado.restart();
-
-            mostrarFrameEntrada(3);
+            cambiarEstadoAsomada(EstadoEnemigoHabitacion::Mirando);
         }
         break;
 
-    case EstadoEntrada::Girando:
-        if (tiempo >= 0.3f)
+    case EstadoEnemigoHabitacion::Mirando:
+        if (tiempo >= TIEMPO_PUERTA_VIGILANCIA)
         {
-            _estadoEntrada = EstadoEntrada::Saliendo;
-            _relojEstado.restart();
-
-            mostrarFrameEntrada(4);
+            cambiarEstadoAsomada(EstadoEnemigoHabitacion::Retirandose);
         }
         break;
 
-    case EstadoEntrada::Saliendo:
-    {
-        float avance = tiempo / duracionCaminata;
-
-        if (avance > 0.5f)
+    case EstadoEnemigoHabitacion::Retirandose:
+        if (tiempo >= TIEMPO_PUERTA_RETIRADA)
         {
-            avance = 0.5f;
-        }
-
-        _sprite.setPosition(
-            _posicionPuerta.x +
-            _recorridoEntrada * (0.5f - avance),
-            _posicionPuerta.y
-        );
-
-        // Alterna los cuadros 4 y 5.
-        const int frame =
-            4 + static_cast<int>(tiempo / 0.18f) % 2;
-
-        mostrarFrameEntrada(frame);
-
-        if (tiempo >= duracionCaminata)
-        {
-            _sprite.setPosition(_posicionPuerta);
-            _estadoEntrada = EstadoEntrada::Fuera;
-            _relojEstado.restart();
+            cambiarEstadoAsomada(EstadoEnemigoHabitacion::Fuera);
         }
         break;
-    }
     }
 }
 
-void Enemigo::mostrarFrameEntrada(int frame)
+void Enemigo::cambiarEstadoAsomada(EstadoEnemigoHabitacion nuevoEstado)
 {
-    const int columna = frame % 3;
-    const int fila = frame / 3;
+    _estadoAsomada = nuevoEstado;
+
+    if (_estadoAsomada == EstadoEnemigoHabitacion::Fuera)
+    {
+        _asomadaEnojada = false;
+    }
+
+    _relojEstado.restart();
+    actualizarSpriteAsomada();
+}
+
+void Enemigo::actualizarSpriteAsomada()
+{
+    int frame = 0;
+
+    if (_estadoAsomada == EstadoEnemigoHabitacion::Mirando)
+    {
+        frame = _asomadaEnojada ? 2 : 1;
+    }
 
     _sprite.setTextureRect(sf::IntRect(
-        columna * _frameAncho,
-        fila * _frameAlto,
+        frame * _frameAncho,
+        0,
         _frameAncho,
         _frameAlto
     ));

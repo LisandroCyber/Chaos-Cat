@@ -30,5 +30,11 @@ const float TIEMPO_ENEMIGO_ALERTA = 2.f;
 const float TIEMPO_ENEMIGO_REACCION_CAIDA = 1.3f;
 const float TIEMPO_ENEMIGO_DADO_VUELTA = 3.f;
 
+//Enemigo que se asoma por la puerta.
+const float TIEMPO_PUERTA_OCULTO = 8.f;
+const float TIEMPO_PUERTA_ALERTA = 2.f;
+const float TIEMPO_PUERTA_VIGILANCIA = 3.f;
+const float TIEMPO_PUERTA_RETIRADA = 1.f;
+
 //Seleccion de niveles
 const int CANTIDAD_NIVELES = 6;

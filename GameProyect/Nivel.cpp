@@ -54,7 +54,7 @@ void Nivel::agregarEnemigo(
     int frameAncho,
     int frameAlto,
     const sf::Vector2f& escala,
-    bool entraPorRuido)
+    bool seAsomaPorPuerta)
 {
     Enemigo* enemigo = new Enemigo(
         rutaTextura,
@@ -64,9 +64,9 @@ void Nivel::agregarEnemigo(
         escala
     );
 
-    if (entraPorRuido)
+    if (seAsomaPorPuerta)
     {
-        enemigo->configurarEntrada(220.f);
+        enemigo->configurarAsomada();
     }
 
     _enemigos.push_back(enemigo);

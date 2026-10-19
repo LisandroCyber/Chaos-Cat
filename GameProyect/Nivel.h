@@ -46,7 +46,7 @@ protected:
         int frameAncho,
         int frameAlto,
         const sf::Vector2f& escala,
-        bool entraPorRuido = false);
+        bool seAsomaPorPuerta = false);
     void agregarMueble(const std::string& rutaTextura,
         const sf::Vector2f& posicion,
         const sf::Vector2f& escala,

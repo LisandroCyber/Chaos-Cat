@@ -16,13 +16,13 @@ NivelHabitacion::NivelHabitacion()
     agregarSuperficie(sf::FloatRect(1200.f, 138.f, 80.f, 8.f));
     agregarZonaEscondite(sf::FloatRect(1180.f, 18.f, 100.f, 128.f));
 
-    /// Enemigo entra a la habitacion si esucha ruido
+    /// La enemiga se asoma por la puerta y reacciona a los objetos que caen.
     agregarEnemigo(
-        "images/Enemigos/duenio_entrando.png",
-        { 60.f, 615.f },   // Puerta: centro del cuadro y altura de sus pies.
-        525,
-        525,
-        { 0.5f, 0.6f },
+        "images/Enemigos/duenia_puerta_estados_nocturna.png",
+        { -25.f, 285.f },
+        724,
+        724,
+        { 0.22f, 0.22f },
         true
     );
 

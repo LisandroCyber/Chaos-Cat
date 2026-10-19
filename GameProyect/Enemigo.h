@@ -16,14 +16,12 @@ enum class EstadoEnemigo
     DadoVueltaEnojado
 };
 
-enum class EstadoEntrada
+enum class EstadoEnemigoHabitacion
 {
     Fuera,
-    Esperando,
-    Entrando,
+    Asomando,
     Mirando,
-    Girando,
-    Saliendo
+    Retirandose
 };
 
 class Enemigo
@@ -44,7 +42,7 @@ public:
     void reaccionarACaida();
     void setPausado(bool pausado);
     void dibujar(sf::RenderWindow& ventana) const;
-    void configurarEntrada(float recorrido);
+    void configurarAsomada();
 
 private:
     sf::Texture _textura;
@@ -64,12 +62,11 @@ private:
         int frameAlto);
     void cambiarEstado(EstadoEnemigo nuevoEstado);
     void actualizarSprite();
-    bool _entraPorRuido = false;
-    EstadoEntrada _estadoEntrada = EstadoEntrada::Fuera;
+    bool _seAsomaPorPuerta = false;
+    bool _asomadaEnojada = false;
+    EstadoEnemigoHabitacion _estadoAsomada = EstadoEnemigoHabitacion::Fuera;
 
-    sf::Vector2f _posicionPuerta;
-    float _recorridoEntrada = 220.f;
-
-    void actualizarEntrada();
-    void mostrarFrameEntrada(int frame);
+    void actualizarAsomada();
+    void cambiarEstadoAsomada(EstadoEnemigoHabitacion nuevoEstado);
+    void actualizarSpriteAsomada();
 };
