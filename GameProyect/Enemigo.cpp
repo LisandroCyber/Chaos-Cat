@@ -363,14 +363,14 @@ void Enemigo::actualizarEntrada()
     {
         float avance = tiempo / duracionCaminata;
 
-        if (avance > 1.f)
+        if (avance > 0.5f)
         {
-            avance = 1.f;
+            avance = 0.5f;
         }
 
         _sprite.setPosition(
             _posicionPuerta.x +
-            _recorridoEntrada * (1.f - avance),
+            _recorridoEntrada * (0.5f - avance),
             _posicionPuerta.y
         );
 

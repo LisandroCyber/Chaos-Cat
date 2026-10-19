@@ -123,15 +123,7 @@ NivelHabitacion::NivelHabitacion()
         "images/4-Habitacion/objetos/rotos/lampara_izquierda_rota.png",
         "sound effects/objetos/GolpeMetal.wav"
     );
-    agregarObjeto(
-        "images/4-Habitacion/objetos/lampara_izquierda_apagada.png",
-        { 432.f , 361.f },
-        0.12f,
-        2,
-        "images/4-Habitacion/objetos/rotos/lampara_izquierda_rota.png",
-        "sound effects/objetos/GolpeMetal.wav"
-    );
-    
+
     /// Estante derecho
     agregarMueble(
         "images/4-Habitacion/muebles/soporte_planta.png",
