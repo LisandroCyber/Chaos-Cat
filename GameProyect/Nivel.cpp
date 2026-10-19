@@ -264,6 +264,12 @@ void Nivel::resolverColisiones(Personaje& gato)
         }
     }
 
+    // Las tapas de los bloqueos solidos no se atraviesan al pulsar bajar.
+    for (const sf::FloatRect& superficie : _superficiesSolidas)
+    {
+        superficies.push_back(superficie);
+    }
+
     for (Objeto* objeto : _objetos)
     {
         if (!objeto->estaTirado())
@@ -667,9 +673,15 @@ void Nivel::limitarMovimientoGato(Personaje& gato)
     }
 }
 
-void Nivel::agregarBarreraLateral(const sf::FloatRect& barrera)
+void Nivel::agregarBarreraLateral(const sf::FloatRect& barrera,
+    bool bloqueaDescenso)
 {
     _barrerasLaterales.push_back(barrera);
+
+    if (bloqueaDescenso)
+    {
+        _superficiesSolidas.push_back(barrera);
+    }
 }
 
 void Nivel::resolverBarrerasLaterales(Personaje& gato)

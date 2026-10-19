@@ -65,7 +65,8 @@ protected:
     bool cargarSonido(const std::string& rutaSonido, float volumen);
     void configurarLoopMusica(sf::Time inicioLoop, sf::Time duracionLoop);
     void reproducirMusicaFondo(sf::Time inicioReproduccion);
-    void agregarBarreraLateral(const sf::FloatRect& barrera);
+    void agregarBarreraLateral(const sf::FloatRect& barrera,
+        bool bloqueaDescenso = false);
 
 private:
     static constexpr int RADIO_HALO_ESCONDITE = 12;
@@ -79,6 +80,7 @@ private:
     std::vector<Mueble*> _muebles;
     std::vector<Objeto*> _objetos;
     std::vector<sf::FloatRect> _superficiesFijas;
+    std::vector<sf::FloatRect> _superficiesSolidas;
     std::vector<sf::FloatRect> _zonasEscondite;
     std::vector<sf::Texture> _halosEscondite;
     std::vector<sf::FloatRect> _barrerasLaterales;
