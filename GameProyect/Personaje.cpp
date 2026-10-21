@@ -24,7 +24,7 @@ Personaje::Personaje()
     //frame del gato
     _frameAncho = 600;
     _frameAlto = 724;
-    _escala = 0.5f;
+    _escala = ESCALA_GATO;
 
     //velocidad inicial, junto con otros atributos iniciados
     _sprite.setScale({ _escala, _escala });
@@ -445,9 +445,8 @@ sf::FloatRect Personaje::getGlobalBounds() const
 {
     const sf::Vector2f posicion = obtenerPosicionDibujo();
 
-    // Equivalen a la hitbox del gato sentado con escala 0.5.
-    const float ancho = 74.f;
-    const float alto = 110.f;
+    const float ancho = ANCHO_HITBOX_GATO * std::abs(_sprite.getScale().x);
+    const float alto = ALTO_HITBOX_GATO * std::abs(_sprite.getScale().y);
 
     return sf::FloatRect(
         posicion.x - ancho / 2.f,

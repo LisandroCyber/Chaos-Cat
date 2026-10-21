@@ -12,7 +12,7 @@ NivelLiving::NivelLiving()
         "sound effects/enemigos/mmh_duenia.wav",
         VOLUMEN_ALERTA_DUENIA_LIVING);
 
-    agregarEnemigo("images/Enemigos/frames_enemigo.png", //dueño
+    agregarEnemigo("images/Enemigos/frames_enemigo_limpiando.png", //dueño
         { 310.f, 500.f },
         600,
         724,
