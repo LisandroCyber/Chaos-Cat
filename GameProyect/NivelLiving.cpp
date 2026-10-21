@@ -4,17 +4,21 @@ NivelLiving::NivelLiving()
 {
     cargarFondo("images/2-Living/living.png");
     
-    agregarEnemigo("images/Enemigos/frames_enemiga.png", /// DUEÑA
+    agregarEnemigo("images/Enemigos/frames_enemiga.png", //dueña
         { 1600.f, 500.f },
         600,
         724,
-        { 0.52f, 0.53f });
+        { 0.52f, 0.53f },
+        "sound effects/enemigos/mmh_duenia.wav",
+        VOLUMEN_ALERTA_DUENIA_LIVING);
 
-    agregarEnemigo("images/Enemigos/frames_enemigo.png", /// DUEÑO
+    agregarEnemigo("images/Enemigos/frames_enemigo.png", //dueño
         { 310.f, 500.f },
         600,
         724,
-        { 0.52f, 0.53f });
+        { 0.52f, 0.53f },
+        "sound effects/enemigos/huu_duenio.wav",
+        VOLUMEN_ALERTA_DUENIO);
 
     agregarMueble("images/2-living/Muebles/mesa_ratona.png", 
         { 430.f, 500.f },

@@ -36,6 +36,7 @@
     <ClCompile Include="NivelCocina.cpp" />
     <ClCompile Include="Nivelhabitacion.cpp" />
     <ClCompile Include="NivelLiving.cpp" />
+    <ClCompile Include="NivelPatio.cpp" />
     <ClCompile Include="Objeto.cpp" />
     <ClCompile Include="Personaje.cpp" />
     <ClCompile Include="Progreso.cpp" />
@@ -59,6 +60,7 @@
     <ClInclude Include="NivelCocina.h" />
     <ClInclude Include="NivelHabitacion.h" />
     <ClInclude Include="NivelLiving.h" />
+    <ClInclude Include="NivelPatio.h" />
     <ClInclude Include="Objeto.h" />
     <ClInclude Include="Personaje.h" />
     <ClInclude Include="Progreso.h" />

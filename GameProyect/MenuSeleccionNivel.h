@@ -19,7 +19,7 @@ private:
     sf::FloatRect _zonas[CANTIDAD_NIVELES];
 
     bool _disponibles[CANTIDAD_NIVELES] =
-    { true, true, false, true, false, false };
+    { true, true, true, true, false, false };
     int _ultimoNivelDesbloqueado = 3;
     int _seleccion = 0;
 

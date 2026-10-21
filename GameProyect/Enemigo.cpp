@@ -77,32 +77,93 @@ Enemigo::Enemigo(const std::string& rutaTextura,
     const sf::Vector2f& posicion,
     int frameAncho,
     int frameAlto,
-    const sf::Vector2f& escala)
+    const sf::Vector2f& escala,
+    const std::string& rutaSonidoAlerta,
+    float volumenAlerta)
     : _textura(cargarTextura(rutaTextura)),
-      _sprite(_textura),
-      _frameAncho(frameAncho),
-      _frameAlto(frameAlto)
+    _sprite(_textura),
+    _frameAncho(frameAncho),
+    _frameAlto(frameAlto)
 {
-    _sprite.setTextureRect(sf::IntRect(0, 0, _frameAncho, _frameAlto));
+    validarMedidasFrame();
+    mostrarFrame(FRAME_ENEMIGO_REPOSO);
     _sprite.setOrigin(obtenerOrigenVisible(_textura, _frameAncho, _frameAlto));
     _sprite.setPosition(posicion);
     _sprite.setScale(escala);
 
-    if (!_bufferAlerta.loadFromFile("sound effects/enemigos/huu_duenio.wav"))
+    if (!rutaSonidoAlerta.empty())
     {
-        std::cout << "ERROR: NO SE PUDO CARGAR EL SONIDO DE ALERTA DEL ENEMIGO\n";
-    }
-    else
-    {
-        _sonidoAlerta.setBuffer(_bufferAlerta);
-        _sonidoAlerta.setVolume(5.f);
+        _tieneSonidoAlerta = _bufferAlerta.loadFromFile(rutaSonidoAlerta);
+        if (_tieneSonidoAlerta)
+        {
+            _sonidoAlerta.setBuffer(_bufferAlerta);
+            _sonidoAlerta.setVolume(volumenAlerta);
+        }
+        else
+        {
+            std::cout << "ERROR: NO SE PUDO CARGAR EL SONIDO DE ALERTA "
+                << rutaSonidoAlerta << '\n';
+        }
     }
 
     cambiarEstado(EstadoEnemigo::DeEspalda);
 }
 
+void Enemigo::configurarTiempos(int reposoMinimo, int reposoMaximo,
+    float alerta, float vigilancia)
+{
+    if (reposoMinimo <= 0 || reposoMaximo < reposoMinimo ||
+        alerta <= 0.f || vigilancia <= 0.f)
+    {
+        std::cout << "ERROR: TIEMPOS DE ENEMIGO INVALIDOS\n";
+        std::exit(-1);
+    }
+
+    _reposoMinimo = reposoMinimo;
+    _reposoMaximo = reposoMaximo;
+    _duracionAlerta = alerta;
+    _duracionVigilancia = vigilancia;
+
+    // Se llama al crear el nivel, antes de iniciar la partida.
+    cambiarEstado(EstadoEnemigo::DeEspalda);
+}
+
+void Enemigo::configurarRuido(bool reaccionaAlRuido, bool usaReaccionEspecial)
+{
+    _reaccionaAlRuido = reaccionaAlRuido;
+    _usaReaccionEspecial = usaReaccionEspecial;
+}
+
+void Enemigo::configurarPresentacion(int frameDeteccion,
+    bool usarOrigenVisible)
+{
+    const int cantidadFrames =
+        static_cast<int>(_textura.getSize().x) / _frameAncho;
+    if (frameDeteccion != FRAME_ENEMIGO_SIN_CAMBIO &&
+        (frameDeteccion < 0 || frameDeteccion >= cantidadFrames))
+    {
+        std::cout << "ERROR: FRAME DE DETECCION INVALIDO\n";
+        std::exit(-1);
+    }
+
+    _frameDeteccion = frameDeteccion;
+    if (usarOrigenVisible)
+    {
+        _sprite.setOrigin(obtenerOrigenVisible(_textura, _frameAncho, _frameAlto));
+    }
+    else
+    {
+        _sprite.setOrigin(0.f, 0.f);
+    }
+}
+
 void Enemigo::actualizar()
 {
+    if (_estado == EstadoEnemigo::Detectado)
+    {
+        return;
+    }
+
     if (_seAsomaPorPuerta)
     {
         actualizarAsomada();
@@ -118,7 +179,7 @@ void Enemigo::actualizar()
         cambiarEstado(EstadoEnemigo::Alerta);
     }
     else if (_estado == EstadoEnemigo::Alerta &&
-        tiempoTranscurrido >= TIEMPO_ENEMIGO_ALERTA)
+        tiempoTranscurrido >= _duracionAlerta)
     {
         cambiarEstado(EstadoEnemigo::DadoVuelta);
     }
@@ -129,7 +190,7 @@ void Enemigo::actualizar()
     }
     else if ((_estado == EstadoEnemigo::DadoVuelta ||
         _estado == EstadoEnemigo::DadoVueltaEnojado) &&
-        tiempoTranscurrido >= TIEMPO_ENEMIGO_DADO_VUELTA)
+        tiempoTranscurrido >= _duracionVigilancia)
     {
         cambiarEstado(EstadoEnemigo::DeEspalda);
     }
@@ -137,6 +198,11 @@ void Enemigo::actualizar()
 
 void Enemigo::reaccionarACaida()
 {
+    if (_estado == EstadoEnemigo::Detectado || !_reaccionaAlRuido)
+    {
+        return;
+    }
+
     if (_seAsomaPorPuerta)
     {
         _asomadaEnojada = true;
@@ -154,6 +220,16 @@ void Enemigo::reaccionarACaida()
 
         return;
     }
+    if (!_usaReaccionEspecial)
+    {
+        // El ruido adelanta la alerta normal sin reiniciar el ciclo en curso.
+        if (_estado == EstadoEnemigo::DeEspalda)
+        {
+            cambiarEstado(EstadoEnemigo::Alerta);
+        }
+        return;
+    }
+
     // Otra caida no reinicia una reaccion que ya esta en curso.
     if (_estado == EstadoEnemigo::DeEspaldaEnojado ||
         _estado == EstadoEnemigo::DadoVueltaEnojado)
@@ -191,19 +267,19 @@ void Enemigo::cambiarEstado(EstadoEnemigo nuevoEstado)
 
     if (_estado == EstadoEnemigo::DeEspalda)
     {
-        const int cantidadDeTiempos =
-            TIEMPO_ENEMIGO_DE_ESPALDA_MAX - TIEMPO_ENEMIGO_DE_ESPALDA_MIN + 1;
-
+        const int cantidadDeTiempos = _reposoMaximo -
+            _reposoMinimo + 1;
         _tiempoDeEspalda = static_cast<float>(
-            TIEMPO_ENEMIGO_DE_ESPALDA_MIN + std::rand() % cantidadDeTiempos
-        );
+            _reposoMinimo + std::rand() % cantidadDeTiempos);
     }
-    else if (_estado == EstadoEnemigo::Alerta)
+    else if (_estado == EstadoEnemigo::Alerta &&
+        _tieneSonidoAlerta)
     {
         _sonidoAlerta.play();
     }
     else if (_estado == EstadoEnemigo::DeEspaldaEnojado ||
-        _estado == EstadoEnemigo::DadoVueltaEnojado)
+        _estado == EstadoEnemigo::DadoVueltaEnojado ||
+        _estado == EstadoEnemigo::Detectado)
     {
         _sonidoAlerta.stop();
     }
@@ -214,31 +290,35 @@ void Enemigo::cambiarEstado(EstadoEnemigo nuevoEstado)
 
 void Enemigo::actualizarSprite()
 {
-    int frame = 0;
+    if (_estado == EstadoEnemigo::Detectado)
+    {
+        // -1 conserva el cuadro desde el que vio al gato.
+        if (_frameDeteccion != FRAME_ENEMIGO_SIN_CAMBIO)
+        {
+            mostrarFrame(_frameDeteccion);
+        }
+        return;
+    }
 
+    int frame = FRAME_ENEMIGO_REPOSO;
     if (_estado == EstadoEnemigo::Alerta)
     {
-        frame = 1;
+        frame = FRAME_ENEMIGO_ALERTA;
     }
     else if (_estado == EstadoEnemigo::DadoVuelta)
     {
-        frame = 2;
+        frame = FRAME_ENEMIGO_VIGILANCIA;
     }
     else if (_estado == EstadoEnemigo::DeEspaldaEnojado)
     {
-        frame = 3;
+        frame = FRAME_ENEMIGO_REACCION_CAIDA;
     }
     else if (_estado == EstadoEnemigo::DadoVueltaEnojado)
     {
-        frame = 4;
+        frame = FRAME_ENEMIGO_VIGILANCIA_ENOJADO;
     }
 
-    _sprite.setTextureRect(sf::IntRect(
-        frame * _frameAncho,
-        0,
-        _frameAncho,
-        _frameAlto
-    ));
+    mostrarFrame(frame);
 }
 
 void Enemigo::dibujar(sf::RenderWindow& ventana) const
@@ -253,25 +333,37 @@ void Enemigo::dibujar(sf::RenderWindow& ventana) const
 
 bool Enemigo::detectaAl(
     const Personaje& gato,
-    const sf::FloatRect& areaVisible) const
+    const sf::FloatRect& areaVisible)
 {
+    if (_estado == EstadoEnemigo::Detectado)
+    {
+        return true;
+    }
+
+    bool estaMirando = false;
     if (_seAsomaPorPuerta)
     {
-        return _estadoAsomada == EstadoEnemigoHabitacion::Mirando &&
-            !gato.estaEscondido();
+        estaMirando = _estadoAsomada == EstadoEnemigoHabitacion::Mirando;
     }
-    // Si el sprite queda completamente fuera de pantalla,
-    // este enemigo no puede descubrir al gato.
-    if (!areaVisible.intersects(_sprite.getGlobalBounds()))
+    else
+    {
+        // Conserva la regla actual de los enemigos fuera de la camara.
+        if (!areaVisible.intersects(_sprite.getGlobalBounds()))
+        {
+            return false;
+        }
+        estaMirando = _estado == EstadoEnemigo::DadoVuelta ||
+            _estado == EstadoEnemigo::DadoVueltaEnojado;
+    }
+
+    if (!estaMirando || gato.estaEscondido())
     {
         return false;
     }
 
-    const bool estaMirando =
-        _estado == EstadoEnemigo::DadoVuelta ||
-        _estado == EstadoEnemigo::DadoVueltaEnojado;
-
-    return estaMirando && !gato.estaEscondido();
+    // Actualiza el cuarto frame del perro antes de que Juego abra la derrota.
+    cambiarEstado(EstadoEnemigo::Detectado);
+    return true;
 }
 
 void Enemigo::configurarAsomada()
@@ -329,6 +421,11 @@ void Enemigo::cambiarEstadoAsomada(EstadoEnemigoHabitacion nuevoEstado)
     {
         _asomadaEnojada = false;
     }
+    else if (_estadoAsomada == EstadoEnemigoHabitacion::Asomando &&
+        _tieneSonidoAlerta)
+    {
+        _sonidoAlerta.play();
+    }
 
     _relojEstado.restart();
     actualizarSpriteAsomada();
@@ -336,17 +433,37 @@ void Enemigo::cambiarEstadoAsomada(EstadoEnemigoHabitacion nuevoEstado)
 
 void Enemigo::actualizarSpriteAsomada()
 {
-    int frame = 0;
+    int frame = FRAME_PUERTA_MANO;
 
     if (_estadoAsomada == EstadoEnemigoHabitacion::Mirando)
     {
-        frame = _asomadaEnojada ? 2 : 1;
+        frame = _asomadaEnojada ? FRAME_PUERTA_ENOJADA : FRAME_PUERTA_MIRANDO;
+    }
+
+    mostrarFrame(frame);
+}
+
+void Enemigo::validarMedidasFrame() const
+{
+    const sf::Vector2u tamano = _textura.getSize();
+    if (_frameAncho <= 0 || _frameAlto <= 0 ||
+        static_cast<unsigned int>(_frameAncho) > tamano.x ||
+        static_cast<unsigned int>(_frameAlto) > tamano.y)
+    {
+        std::cout << "ERROR: MEDIDAS DE FRAME INVALIDAS\n";
+        std::exit(-1);
+    }
+}
+
+void Enemigo::mostrarFrame(int frame)
+{
+    const int cantidadFrames = static_cast<int>(_textura.getSize().x) / _frameAncho;
+    if (frame < 0 || frame >= cantidadFrames)
+    {
+        std::cout << "ERROR: INDICE DE FRAME FUERA DE LA TEXTURA\n";
+        std::exit(-1);
     }
 
     _sprite.setTextureRect(sf::IntRect(
-        frame * _frameAncho,
-        0,
-        _frameAncho,
-        _frameAlto
-    ));
+        frame * _frameAncho, 0, _frameAncho, _frameAlto));
 }

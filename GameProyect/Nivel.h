@@ -28,8 +28,8 @@ public:
 
     bool gatoFueDetectado(
         const Personaje& gato,
-        const sf::View& camara
-    ) const;
+        const sf::View& camara);
+
     bool todosLosObjetosEnElPiso() const;
 
     float getAnchoNivel() const;
@@ -40,12 +40,14 @@ protected:
     void cargarFondo(const std::string& rutaTextura);
     void setAnchoNivel(float ancho);
 
-    void agregarEnemigo(
+    Enemigo* agregarEnemigo(
         const std::string& rutaTextura,
         const sf::Vector2f& posicion,
         int frameAncho,
         int frameAlto,
         const sf::Vector2f& escala,
+        const std::string& rutaSonidoAlerta,
+        float volumenAlerta,
         bool seAsomaPorPuerta = false);
     void agregarMueble(const std::string& rutaTextura,
         const sf::Vector2f& posicion,

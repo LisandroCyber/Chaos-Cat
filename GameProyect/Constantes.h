@@ -38,3 +38,34 @@ const float TIEMPO_PUERTA_RETIRADA = 1.f;
 
 //Seleccion de niveles
 const int CANTIDAD_NIVELES = 6;
+
+//Ciclo del perro: tiempos en segundos.
+const int TIEMPO_PERRO_REPOSO = 8;
+const float TIEMPO_PERRO_ALERTA = 2.f;
+const float TIEMPO_PERRO_VIGILANCIA = 3.f;
+
+//Ciclo de la camara: tiempos en segundos.
+const int TIEMPO_CAMARA_REPOSO = 5;
+const float TIEMPO_CAMARA_ALERTA = 5.f;
+const float TIEMPO_CAMARA_VIGILANCIA = 5.f;
+
+//Indices del spritesheet: se cuentan desde cero.
+const int FRAME_ENEMIGO_REPOSO = 0;
+const int FRAME_ENEMIGO_ALERTA = 1;
+const int FRAME_ENEMIGO_VIGILANCIA = 2;
+const int FRAME_ENEMIGO_REACCION_CAIDA = 3;
+const int FRAME_ENEMIGO_VIGILANCIA_ENOJADO = 4;
+const int FRAME_ENEMIGO_SIN_CAMBIO = -1;
+const int FRAME_PERRO_DETECCION = 3;
+
+//Cuadros propios de la duenia de Habitacion.
+const int FRAME_PUERTA_MANO = 0;
+const int FRAME_PUERTA_MIRANDO = 1;
+const int FRAME_PUERTA_ENOJADA = 2;
+
+//Volumenes independientes: valores iniciales que podes ajustar por enemigo.
+const float VOLUMEN_ALERTA_DUENIO = 5.f;
+const float VOLUMEN_ALERTA_DUENIA_LIVING = 5.f;
+const float VOLUMEN_ALERTA_DUENIA_HABITACION = 5.f;
+const float VOLUMEN_ALERTA_PERRO = 5.f;
+const float VOLUMEN_ALERTA_CAMARA = 5.f;

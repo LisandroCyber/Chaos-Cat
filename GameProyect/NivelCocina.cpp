@@ -15,7 +15,9 @@ NivelCocina::NivelCocina()
         { 672.f, 664.f },
         600,
         724,
-        { 0.7f, 0.82f });
+        { 0.7f, 0.82f },
+        "sound effects/enemigos/huu_duenio.wav",
+        VOLUMEN_ALERTA_DUENIO);
 
     agregarMueble("images/1-Cocina/Muebles/heladera.png",
         { 3.f, 300.f },
