@@ -93,11 +93,6 @@ NivelPatio::NivelPatio()
         "images/3-Patio/objetos/rotos/regadera_rota.png",
         "sound effects/objetos/golpeMetal.wav");
 
-    agregarObjeto("images/3-Patio/objetos/toalla.png",
-        { 562.36f, 444.24f }, 0.06f, 1,
-        "images/3-Patio/objetos/rotos/toalla_rota.png",
-        "sound effects/objetos/golpeFruta.wav");
-
     //jarra y vaso sobre la mesa
     agregarObjeto("images/3-Patio/objetos/jarra_agua.png",
         { 317.38f, 510.8f }, 0.05f, 1,
@@ -124,11 +119,6 @@ NivelPatio::NivelPatio()
     agregarObjeto("images/3-Patio/objetos/maceta_chica_02.png",
         { 1114.8f, 511.4f }, 0.09f, 3,
         "images/3-Patio/objetos/rotos/maceta_chica_02_rota.png",
-        "sound effects/objetos/vidrioRoto.wav");
-
-    agregarObjeto("images/3-Patio/objetos/maceta_chica_03.png",
-        { 169.77f, 404.8f }, 0.05f, 2,
-        "images/3-Patio/objetos/rotos/maceta_chica_03_rota.png",
         "sound effects/objetos/vidrioRoto.wav");
 
     //la pelota es golpeable pero al hacerlo se pierde la partida porque el perro se despierta de una jajajj

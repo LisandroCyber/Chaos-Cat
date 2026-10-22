@@ -11,11 +11,6 @@ NivelHabitacion::NivelHabitacion()
         std::cout << "ERROR AL CARGAR LA MUSICA\n";
     }
 
-    /// cargar aca la camara de seguridad
-    /// zona escondite arriba del placard, aca iria la camara
-    agregarSuperficie(sf::FloatRect(1200.f, 138.f, 80.f, 8.f));
-    agregarZonaEscondite(sf::FloatRect(1180.f, 18.f, 100.f, 128.f));
-
     /// La enemiga se asoma por la puerta y reacciona a los objetos que caen.
     agregarEnemigo(
         "images/Enemigos/duenia_puerta_estados_nocturna.png",
@@ -27,6 +22,24 @@ NivelHabitacion::NivelHabitacion()
         VOLUMEN_ALERTA_DUENIA_HABITACION,
         true
     );
+
+    Enemigo* camara = agregarEnemigo("images/Enemigos/camara_estados_nocturna.png",
+        { 1150.f, 32.f },
+        724,
+        724,
+        { 0.17f, 0.17f },
+        "sound effects/enemigos/camara_moviendose.wav",
+        VOLUMEN_ALERTA_CAMARA);
+
+    camara->configurarTiempos(
+        TIEMPO_CAMARA_REPOSO,
+        TIEMPO_CAMARA_REPOSO,
+        TIEMPO_CAMARA_ALERTA,
+        TIEMPO_CAMARA_VIGILANCIA);
+
+    //ignora las caidas y conserva el tercer frame al detecta
+    camara->configurarRuido(false, false);
+    camara->configurarPresentacion(FRAME_ENEMIGO_SIN_CAMBIO, false);
 
 
     /// mesa de cama y television con escondite
@@ -47,8 +60,6 @@ NivelHabitacion::NivelHabitacion()
     agregarZonaEscondite(sf::FloatRect(513.f, 500.f, 296.f, 144.f)); // zona escondite television
    
     /// 3 Estantes de la parte izquierda y sus objetos
-
-    // agregarZonaEscondite(sf::FloatRect(330.f, 58.f, 140.f, 120.f)); // zona escondite estante de arriba
     agregarMueble(
         "images/4-Habitacion/muebles/soporte_planta_v2.png",
         { 108.3f, 121.6f },
