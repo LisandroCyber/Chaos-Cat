@@ -661,6 +661,28 @@ void Nivel::alternarHitboxes()
     _mostrarHitboxes = !_mostrarHitboxes;
 }
 
+void Nivel::alternarRelojesEnemigos()
+{
+    setRelojesEnemigosCongelados(!_relojesEnemigosCongelados);
+}
+
+void Nivel::setRelojesEnemigosCongelados(bool congelados)
+{
+    if (_relojesEnemigosCongelados == congelados)
+    {
+        return;
+    }
+
+    _relojesEnemigosCongelados = congelados;
+    for (Enemigo* enemigo : _enemigos)
+    {
+        enemigo->setRelojCongelado(congelados);
+    }
+
+    std::cout << "Congelacion de relojes enemigos: "
+        << (congelados ? "activada\n" : "desactivada\n");
+}
+
 bool Nivel::todosLosObjetosEnElPiso() const
 {
     if (_objetos.empty())

@@ -26,6 +26,8 @@ public:
     void setVolumenMusica(float volumen);
     void ocultarHitboxes();
     void alternarHitboxes();
+    void alternarRelojesEnemigos();
+    void setRelojesEnemigosCongelados(bool congelados);
 
     bool gatoFueDetectado(
         const Personaje& gato,
@@ -95,6 +97,7 @@ private:
     void limitarMovimientoGato(Personaje& gato);
 
     bool _mostrarHitboxes;
+    bool _relojesEnemigosCongelados = false;
 
     void resolverColisiones(Personaje& gato);
     void resolverColisionGatoObjeto(Personaje& gato, Objeto& objeto);

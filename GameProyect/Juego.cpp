@@ -313,6 +313,10 @@ void Juego::procesarEventos()
             {
                 _nivel->reiniciarObjetos();
             }
+            else if (evento.key.code == sf::Keyboard::P)
+            {
+                _nivel->alternarRelojesEnemigos();
+            }
             else if (evento.key.code == sf::Keyboard::M)
             {
                 std::cout << "Posicion en x: "
@@ -475,6 +479,7 @@ void Juego::aplicarConfiguracion()
     if (!_configuracion.debugActivado())
     {
         _nivel->ocultarHitboxes();
+        _nivel->setRelojesEnemigosCongelados(false);
     }
 }
 

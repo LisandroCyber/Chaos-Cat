@@ -44,6 +44,7 @@ public:
     void actualizar();
     void reaccionarACaida();
     void setPausado(bool pausado);
+    void setRelojCongelado(bool congelado);
     void dibujar(sf::RenderWindow& ventana) const;
     void configurarAsomada();
 
@@ -76,6 +77,7 @@ private:
     bool _reiniciarFueraDeCamara = false;
     bool _fueraDeCamara = false;
     bool _pausado = true;
+    bool _relojCongelado = false;
 
     sf::SoundBuffer _bufferAlerta;
     sf::Sound _sonidoAlerta;

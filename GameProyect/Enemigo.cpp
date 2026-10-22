@@ -207,7 +207,7 @@ void Enemigo::actualizarVisibilidad(const sf::FloatRect& areaVisible)
     else
     {
         _relojEstado.restart();
-        _relojEstado.setPausado(_pausado);
+        _relojEstado.setPausado(_pausado || _relojCongelado);
     }
 }
 
@@ -227,7 +227,7 @@ void Enemigo::reiniciarCiclo()
 
 void Enemigo::actualizar()
 {
-    if (_estado == EstadoEnemigo::Detectado || _fueraDeCamara)
+    if (_estado == EstadoEnemigo::Detectado || _fueraDeCamara || _relojCongelado)
     {
         return;
     }
@@ -319,7 +319,7 @@ void Enemigo::setPausado(bool pausado)
 {
     _pausado = pausado;
     const bool detenido = pausado || _fueraDeCamara;
-    _relojEstado.setPausado(detenido);
+    _relojEstado.setPausado(detenido || _relojCongelado);
 
     if (detenido && _sonidoAlerta.getStatus() == sf::SoundSource::Playing)
     {
@@ -329,6 +329,13 @@ void Enemigo::setPausado(bool pausado)
     {
         _sonidoAlerta.play();
     }
+}
+
+void Enemigo::setRelojCongelado(bool congelado)
+{
+    _relojCongelado = congelado;
+    // Reanudar con P no debe quitar la pausa del menu ni la de fuera de camara.
+    _relojEstado.setPausado(_pausado || _fueraDeCamara || _relojCongelado);
 }
 
 void Enemigo::cambiarEstado(EstadoEnemigo nuevoEstado)
