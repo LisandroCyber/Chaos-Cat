@@ -51,28 +51,28 @@ NivelPatio::NivelPatio()
         sf::FloatRect(160.f, 170.f, 1220.f, 100.f));
 
     agregarMueble("images/3-Patio/muebles/estante_plantas.png",
-        { 832.f, 515.f }, { 0.17f, 0.17f },
+        { 781.1f, 474.8f }, { 0.204f, 0.204f },
         sf::FloatRect(180.f, 220.f, 870.f, 65.f));
 
     agregarMueble("images/3-Patio/muebles/cajon.png",
-        { 1061.f, 594.f },
-        { 0.15f, 0.15f },
+        { 1027.2f, 566.9f },
+        { 0.1815f, 0.1815f },
         sf::FloatRect(210.f, 240.f, 1100.f, 75.f));
 
     agregarMueble("images/3-Patio/objetos/maceton_grande.png",
         { -8.f, 461.f },
         { 0.18f, 0.18f },
-        sf::FloatRect(160.f, 1120.f, 700.f, 140.f));
+        sf::FloatRect());
 
     //superficies adicionales
-    agregarSuperficie(sf::FloatRect(215.f, 413.f, 375.f, 12.f));
-    agregarSuperficie(sf::FloatRect(580.f, 470.f, 48.f, 12.f));
-    agregarSuperficie(sf::FloatRect(863.f, 634.f, 148.f, 11.f));
-    agregarSuperficie(sf::FloatRect(171.f, 480.f, 46.f, 10.f));
+    agregarSuperficie(sf::FloatRect(215.f, 413.f, 375.f, 12.f)); //parte superir del banco
+    agregarSuperficie(sf::FloatRect(580.f, 470.f, 48.f, 12.f)); //apoyabrazo derecho del banco
+    agregarSuperficie(sf::FloatRect(818.3f, 617.6f, 177.6f, 13.2f)); //repisa inferior del estante de planta
+    agregarSuperficie(sf::FloatRect(171.f, 480.f, 46.f, 10.f)); //apoyabrazo izquierdo del banco
 
     //escondite
     agregarZonaEscondite(sf::FloatRect(0.f, 535.f, 165.f, 185.f)); //maceton
-    agregarZonaEscondite(sf::FloatRect(1092.5f, 600.f, 165.f, 120.f)); // cajon de madera
+    agregarZonaEscondite(sf::FloatRect(1065.315f, 574.8f, 199.65f, 145.2f)); // cajon de madera
 
     //macetas sobre el respaldo del banco
     agregarObjeto("images/3-Patio/objetos/maceta_mediana_amarillas.png",
@@ -109,18 +109,18 @@ NivelPatio::NivelPatio()
 
     //maceta con flores arriba y suculenta en la repisa inferior
     agregarObjeto("images/3-Patio/objetos/maceta_mediana_blancas.png",
-        { 868.64f, 455.16f }, 0.085f, 3,
+        { 835.22f, 422.44f }, 0.085f, 3,
         "images/3-Patio/objetos/rotos/maceta_mediana_blancas_rota.png",
         "sound effects/objetos/vidrioRoto.wav");
 
     agregarObjeto("images/3-Patio/objetos/maceta_chica_04.png",
-        { 915.35f, 594.64f }, 0.04f, 2,
+        { 887.02f, 578.24f }, 0.04f, 2,
         "images/3-Patio/objetos/rotos/maceta_chica_04_rota.png",
         "sound effects/objetos/vidrioRoto.wav");
 
     //planta sobre el cajon y maceta chica junto al banco
     agregarObjeto("images/3-Patio/objetos/maceta_chica_02.png",
-        { 1124.44f, 466.32f }, 0.09f, 3,
+        { 1114.8f, 511.4f }, 0.09f, 3,
         "images/3-Patio/objetos/rotos/maceta_chica_02_rota.png",
         "sound effects/objetos/vidrioRoto.wav");
 

@@ -435,6 +435,11 @@ void Nivel::resolverColisionGatoObjeto(Personaje& gato, Objeto& objeto)
 bool Nivel::gatoPuedeApoyarseEn(Personaje& gato,
     const sf::FloatRect& superficie) const
 {
+    if (superficie.width <= 0.f || superficie.height <= 0.f)
+    {
+        return false;
+    }
+
     const sf::FloatRect areaGato = gato.getGlobalBounds();
 
     const float baseAnterior = gato.getBaseAnterior();
@@ -552,6 +557,11 @@ void Nivel::dibujarHitbox(sf::RenderWindow& ventana,
     const sf::FloatRect& hitbox,
     const sf::Color& color)
 {
+    if (hitbox.width <= 0.f || hitbox.height <= 0.f)
+    {
+        return;
+    }
+
     sf::RectangleShape rectangulo(sf::Vector2f(hitbox.width, hitbox.height));
     rectangulo.setPosition(hitbox.left, hitbox.top);
     rectangulo.setFillColor(sf::Color::Transparent);

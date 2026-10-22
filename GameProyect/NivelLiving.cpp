@@ -91,7 +91,7 @@ NivelLiving::NivelLiving()
         "sound effects/objetos/golpeFruta.wav"
     );
 
-    // Compensa los margenes del PNG nuevo y baja el conjunto hasta el piso.
+    //compensa los margenes del PNG nuevo y baja el conjunto hasta el piso.
     agregarMueble(
         "images/2-Living/Muebles/mueble_tele.png",
         { 1732.f, 495.f },
@@ -99,7 +99,7 @@ NivelLiving::NivelLiving()
         sf::FloatRect(68.f, 257.f, 1962.f, 24.5f)
     );
 
-    // Bloquea el cuerpo del mueble sin impedir apoyarse sobre su tapa.
+    //bLoquea el cuerpo del mueble sin impedir apoyarse sobre su tapa.
     agregarBarreraLateral(
         sf::FloatRect(1755.f, 600.f, 689.f, ALTO_VENTANA - 600.f),
         true
