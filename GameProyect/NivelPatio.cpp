@@ -14,7 +14,8 @@ NivelPatio::NivelPatio()
 
     Enemigo* perro = agregarEnemigo("images/Enemigos/perro.png",
         { 680.f, 320.f }, 512, 768, { 0.38f, 0.38f },
-        "", VOLUMEN_ALERTA_PERRO); // Pendiente: ruta del audio del perro
+        "sound effects/enemigos/perro_despertando.wav",
+        VOLUMEN_ALERTA_PERRO);
 
     perro->configurarTiempos(
         TIEMPO_PERRO_REPOSO,
@@ -29,7 +30,8 @@ NivelPatio::NivelPatio()
 
     Enemigo* camara = agregarEnemigo("images/Enemigos/camara_estados.png",
         { 1050.f, 62.f }, 724, 724, { 0.17f, 0.17f },
-        "", VOLUMEN_ALERTA_CAMARA); //Pendiente: ruta del audio de la camara
+        "sound effects/enemigos/camara_moviendose.wav",
+        VOLUMEN_ALERTA_CAMARA);
 
     camara->configurarTiempos(
         TIEMPO_CAMARA_REPOSO,

@@ -72,7 +72,7 @@ const int FRAME_PUERTA_ENOJADA = 2;
 
 //Volumenes independientes: valores iniciales que podes ajustar por enemigo.
 const float VOLUMEN_ALERTA_DUENIO = 5.f;
-const float VOLUMEN_ALERTA_DUENIA_LIVING = 10.f;
-const float VOLUMEN_ALERTA_DUENIA_HABITACION = 10.f;
+const float VOLUMEN_ALERTA_DUENIA_LIVING = 15.f;
+const float VOLUMEN_ALERTA_DUENIA_HABITACION = 15.f;
 const float VOLUMEN_ALERTA_PERRO = 5.f;
-const float VOLUMEN_ALERTA_CAMARA = 5.f;
+const float VOLUMEN_ALERTA_CAMARA = 15.f;
