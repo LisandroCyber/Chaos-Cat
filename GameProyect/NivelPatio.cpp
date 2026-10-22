@@ -45,11 +45,11 @@ NivelPatio::NivelPatio()
 
     //muebles
     agregarMueble("images/3-Patio/muebles/banco.png",
-        { 176.f, 382.f }, { 0.26f, 0.26f },
+        { 186.f, 362.f }, { 0.26f, 0.26f },
         sf::FloatRect(160.f, 500.f, 1450.f, 55.f));
 
     agregarMueble("images/3-Patio/muebles/mesa.png",
-        { 263.f, 524.f }, { 0.16f, 0.16f },
+        { 263.f, 539.f }, { 0.16f, 0.16f },
         sf::FloatRect(160.f, 170.f, 1220.f, 100.f));
 
     agregarMueble("images/3-Patio/muebles/estante_plantas.png",
@@ -67,10 +67,10 @@ NivelPatio::NivelPatio()
         sf::FloatRect());
 
     //superficies adicionales
-    agregarSuperficie(sf::FloatRect(215.f, 413.f, 375.f, 12.f)); //parte superir del banco
-    agregarSuperficie(sf::FloatRect(580.f, 470.f, 48.f, 12.f)); //apoyabrazo derecho del banco
-    agregarSuperficie(sf::FloatRect(818.3f, 617.6f, 177.6f, 13.2f)); //repisa inferior del estante de planta
-    agregarSuperficie(sf::FloatRect(171.f, 480.f, 46.f, 10.f)); //apoyabrazo izquierdo del banco
+    agregarSuperficie(sf::FloatRect(225.f, 393.f, 375.f, 1.f)); //parte superir del banco
+    agregarSuperficie(sf::FloatRect(590.f, 450.f, 48.f, 1.f)); //apoyabrazo derecho del banco
+    agregarSuperficie(sf::FloatRect(818.3f, 617.6f, 177.6f, 1.f)); //repisa inferior del estante de planta
+    agregarSuperficie(sf::FloatRect(181.f, 460.f, 36.f, 1.f)); //apoyabrazo izquierdo del banco
 
     //escondite
     agregarZonaEscondite(sf::FloatRect(0.f, 535.f, 165.f, 185.f)); //maceton
@@ -78,34 +78,34 @@ NivelPatio::NivelPatio()
 
     //macetas sobre el respaldo del banco
     agregarObjeto("images/3-Patio/objetos/maceta_mediana_amarillas.png",
-        { 266.86f, 314.06f }, 0.083f, 3,
+        { 343.5f, 294.06f }, 0.083f, 3,
         "images/3-Patio/objetos/rotos/maceta_mediana_amarillas_rota.png",
         "sound effects/objetos/vidrioRoto.wav");
 
     agregarObjeto("images/3-Patio/objetos/maceta_mediana_rosadas.png",
-        { 449.79f, 311.68f }, 0.085f, 3,
+        { 459.79f, 291.68f }, 0.085f, 3,
         "images/3-Patio/objetos/rotos/maceta_mediana_rosadas_rota.png",
         "sound effects/objetos/vidrioRoto.wav");
 
     //regadera sobre el asiento y toalla sobre el apoyabrazos
     agregarObjeto("images/3-Patio/objetos/regadera.png",
-        { 251.12f, 464.4f }, 0.05f, 2,
+        { 261.12f, 444.4f }, 0.05f, 2,
         "images/3-Patio/objetos/rotos/regadera_rota.png",
         "sound effects/objetos/golpeMetal.wav");
 
     agregarObjeto("images/3-Patio/objetos/toalla.png",
-        { 552.36f, 464.24f }, 0.06f, 1,
+        { 562.36f, 444.24f }, 0.06f, 1,
         "images/3-Patio/objetos/rotos/toalla_rota.png",
         "sound effects/objetos/golpeFruta.wav");
 
     //jarra y vaso sobre la mesa
     agregarObjeto("images/3-Patio/objetos/jarra_agua.png",
-        { 317.38f, 491.8f }, 0.05f, 1,
+        { 317.38f, 510.8f }, 0.05f, 1,
         "images/3-Patio/objetos/rotos/jarra_agua_rota.png",
         "sound effects/objetos/vidrioRoto.wav");
 
     agregarObjeto("images/3-Patio/objetos/vaso.png",
-        { 406.57f, 515.36f }, 0.033f, 1,
+        { 406.57f, 535.36f }, 0.033f, 1,
         "images/3-Patio/objetos/rotos/vaso_roto.png",
         "sound effects/objetos/vidrioRoto.wav");
 
@@ -127,13 +127,13 @@ NivelPatio::NivelPatio()
         "sound effects/objetos/vidrioRoto.wav");
 
     agregarObjeto("images/3-Patio/objetos/maceta_chica_03.png",
-        { 159.77f, 424.8f }, 0.05f, 2,
+        { 169.77f, 404.8f }, 0.05f, 2,
         "images/3-Patio/objetos/rotos/maceta_chica_03_rota.png",
         "sound effects/objetos/vidrioRoto.wav");
 
     //la pelota es golpeable pero al hacerlo se pierde la partida porque el perro se despierta de una jajajj
     agregarObjeto("images/3-Patio/objetos/pelota.png",
-        { 633.59f, 642.f }, 0.05f, 1,
+        { 633.59f, 665.5f }, 0.05f, 1,
         "images/3-Patio/objetos/pelota.png",
         "sound effects/objetos/golpeFruta.wav");
 }

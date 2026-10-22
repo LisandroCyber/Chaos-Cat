@@ -20,6 +20,25 @@ sf::Texture Objeto::cargarTextura(const std::string& rutaTextura)
 	return textura;
 }
 
+float Objeto::obtenerBaseVisible(const sf::Texture& textura)
+{
+	const sf::Image imagen = textura.copyToImage();
+	const sf::Vector2u tamano = imagen.getSize();
+
+	for (int y = static_cast<int>(tamano.y) - 1; y >= 0; y--)
+	{
+		for (unsigned int x = 0; x < tamano.x; x++)
+		{
+			if (imagen.getPixel(x, y).a >= 128)
+			{
+				return static_cast<float>(y + 1);
+			}
+		}
+	}
+
+	return static_cast<float>(tamano.y);
+}
+
 Objeto::Objeto(const std::string& rutaTextura, const sf::Vector2f& posicion, float escala,
 	int golpesNecesarios, const std::string& rutaTexturaCaida, const std::string& rutaSonidoCaida)
 	: _texture(cargarTextura(rutaTextura)),
@@ -29,7 +48,8 @@ Objeto::Objeto(const std::string& rutaTextura, const sf::Vector2f& posicion, flo
 	_velocidad({ 0.f, 0.f }),
 	_tirado(false),
 	_visible(true),
-	_golpesNecesarios(golpesNecesarios > 0 ? golpesNecesarios : 1)
+	_golpesNecesarios(golpesNecesarios > 0 ? golpesNecesarios : 1),
+	_baseVisibleCaida(obtenerBaseVisible(_texturaCaida))
 {
 	_sprite.setPosition(posicion);
 	_sprite.setScale({ escala, escala });
@@ -177,9 +197,11 @@ void Objeto::update(float anchoNivel)
 
 	if (_velocidad.y > 0.f && baseObjeto >= pisoY)
 	{
-		// Alinear la base del objeto con el borde inferior.
 		_sprite.setTexture(_texturaCaida, true);
-		_sprite.move(0.f, pisoY - baseObjeto);
+		// Alinear el sprite caido sin contar su margen transparente inferior.
+		const float baseVisible = _sprite.getTransform().transformPoint(
+			0.f, _baseVisibleCaida).y;
+		_sprite.move(0.f, pisoY - baseVisible);
 
 		_velocidad = sf::Vector2f(0.f, 0.f);
 		_enElPiso = true;

@@ -20,11 +20,13 @@ private:
 	int _golpesNecesarios;
 	int _golpesRecibidos = 0;
 	int _ultimoGolpeRecibido = -1;
+	float _baseVisibleCaida;
 
 	sf::SoundBuffer _bufferCaida;
 	sf::Sound _sonidoCaida;
 	
 	static sf::Texture cargarTextura(const std::string& rutaTextura);
+	static float obtenerBaseVisible(const sf::Texture& textura);
 	void crearContorno();
 
 public:
