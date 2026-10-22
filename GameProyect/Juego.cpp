@@ -352,6 +352,8 @@ void Juego::actualizar()
     }
 
     _gato.update();
+    actualizarCamara();
+    _nivel->actualizarVisibilidadEnemigos(_camara);
     _nivel->actualizar(_gato);
     actualizarCamara();
 

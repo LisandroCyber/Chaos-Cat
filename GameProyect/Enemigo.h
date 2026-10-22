@@ -52,12 +52,16 @@ public:
     void configurarRuido(bool reaccionaAlRuido, bool usaReaccionEspecial);
     void configurarPresentacion(int frameDeteccion,
         bool usarOrigenVisible);
+    void configurarReinicioFueraDeCamara();
+    void actualizarVisibilidad(const sf::FloatRect& areaVisible);
 
 private:
     sf::Texture _textura;
     sf::Sprite _sprite;
     int _frameAncho;
     int _frameAlto;
+    sf::Vector2f _posicionInicial;
+    sf::FloatRect _limitesVisibles;
     EstadoEnemigo _estado = EstadoEnemigo::DeEspalda;
     RelojJuego _relojEstado;
     float _tiempoDeEspalda = 0.f;
@@ -69,6 +73,9 @@ private:
     bool _reaccionaAlRuido = true;
     bool _usaReaccionEspecial = true;
     int _frameDeteccion = FRAME_ENEMIGO_SIN_CAMBIO;
+    bool _reiniciarFueraDeCamara = false;
+    bool _fueraDeCamara = false;
+    bool _pausado = true;
 
     sf::SoundBuffer _bufferAlerta;
     sf::Sound _sonidoAlerta;
@@ -77,7 +84,9 @@ private:
     static sf::Texture cargarTextura(const std::string& rutaTextura);
     static sf::Vector2f obtenerOrigenVisible(const sf::Texture& textura,
         int frameAncho,
-        int frameAlto);
+        int frameAlto,
+        sf::FloatRect& limitesVisibles);
+    void reiniciarCiclo();
     void cambiarEstado(EstadoEnemigo nuevoEstado);
     void actualizarSprite();
     void validarMedidasFrame() const;

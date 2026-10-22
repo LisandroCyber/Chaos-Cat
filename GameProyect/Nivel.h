@@ -18,6 +18,7 @@ public:
     void pausarMusica();
     void continuarMusica();
     void actualizar(Personaje& gato);
+    void actualizarVisibilidadEnemigos(const sf::View& camara);
     void setPausado(bool pausado);
     void reiniciarObjetos();
     void dibujar(sf::RenderWindow& ventana,
@@ -72,6 +73,7 @@ protected:
 
 private:
     static constexpr int RADIO_HALO_ESCONDITE = 12;
+    static sf::FloatRect obtenerAreaVisible(const sf::View& camara);
 
     sf::Texture _texturaFondo;
     sf::Sprite _spriteFondo;

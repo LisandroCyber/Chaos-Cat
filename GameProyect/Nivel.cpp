@@ -161,6 +161,15 @@ void Nivel::agregarZonaEscondite(const sf::FloatRect& zona)
     }
 }
 
+void Nivel::actualizarVisibilidadEnemigos(const sf::View& camara)
+{
+    const sf::FloatRect areaVisible = obtenerAreaVisible(camara);
+    for (Enemigo* enemigo : _enemigos)
+    {
+        enemigo->actualizarVisibilidad(areaVisible);
+    }
+}
+
 void Nivel::actualizar(Personaje& gato)
 {
     for (Enemigo* enemigo : _enemigos)
@@ -597,21 +606,28 @@ void Nivel::continuarMusica()
     }
 }
 
-bool Nivel::gatoFueDetectado(
-    const Personaje& gato,
-    const sf::View& camara)
+sf::FloatRect Nivel::obtenerAreaVisible(const sf::View& camara)
 {
     const sf::Vector2f centro = camara.getCenter();
     const sf::Vector2f tamanio = camara.getSize();
 
-    const sf::FloatRect areaVisible(
+    return sf::FloatRect(
         centro.x - tamanio.x / 2.f,
         centro.y - tamanio.y / 2.f,
         tamanio.x,
         tamanio.y);
+}
+
+bool Nivel::gatoFueDetectado(
+    const Personaje& gato,
+    const sf::View& camara)
+{
+    const sf::FloatRect areaVisible = obtenerAreaVisible(camara);
 
     for (Enemigo* enemigo : _enemigos)
     {
+        // Las colisiones pueden haber corregido la camara de este fotograma.
+        enemigo->actualizarVisibilidad(areaVisible);
         if (enemigo->detectaAl(gato, areaVisible))
         {
             return true;

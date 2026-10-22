@@ -22,10 +22,12 @@ sf::Texture Enemigo::cargarTextura(const std::string& rutaTextura)
 // otras. De esta forma da el efecto correcto que el enemigo se da vuelta sobre su propio eje
 sf::Vector2f Enemigo::obtenerOrigenVisible(const sf::Texture& textura,
     int frameAncho,
-    int frameAlto)
+    int frameAlto,
+    sf::FloatRect& limitesVisibles)
 {
     const sf::Image imagen = textura.copyToImage();
     unsigned int izquierda = static_cast<unsigned int>(frameAncho);
+    unsigned int arriba = static_cast<unsigned int>(frameAlto);
     unsigned int derecha = 0;
     unsigned int abajo = 0;
     bool encontroPixelVisible = false;
@@ -48,6 +50,11 @@ sf::Vector2f Enemigo::obtenerOrigenVisible(const sf::Texture& textura,
                     derecha = x;
                 }
 
+                if (y < arriba)
+                {
+                    arriba = y;
+                }
+
                 if (y > abajo)
                 {
                     abajo = y;
@@ -61,11 +68,18 @@ sf::Vector2f Enemigo::obtenerOrigenVisible(const sf::Texture& textura,
     //si el frame es completamente transparente devuelve un numero fijo asi no explota todo
     if (!encontroPixelVisible)
     {
+        limitesVisibles = sf::FloatRect(0.f, 0.f,
+            static_cast<float>(frameAncho), static_cast<float>(frameAlto));
         return {
             frameAncho / 2.f,
             static_cast<float>(frameAlto)
         };
     }
+
+    limitesVisibles = sf::FloatRect(
+        static_cast<float>(izquierda), static_cast<float>(arriba),
+        static_cast<float>(derecha - izquierda + 1),
+        static_cast<float>(abajo - arriba + 1));
 
     return {
         (izquierda + derecha) / 2.f,
@@ -83,11 +97,13 @@ Enemigo::Enemigo(const std::string& rutaTextura,
     : _textura(cargarTextura(rutaTextura)),
     _sprite(_textura),
     _frameAncho(frameAncho),
-    _frameAlto(frameAlto)
+    _frameAlto(frameAlto),
+    _posicionInicial(posicion)
 {
     validarMedidasFrame();
     mostrarFrame(FRAME_ENEMIGO_REPOSO);
-    _sprite.setOrigin(obtenerOrigenVisible(_textura, _frameAncho, _frameAlto));
+    _sprite.setOrigin(obtenerOrigenVisible(
+        _textura, _frameAncho, _frameAlto, _limitesVisibles));
     _sprite.setPosition(posicion);
     _sprite.setScale(escala);
 
@@ -149,7 +165,8 @@ void Enemigo::configurarPresentacion(int frameDeteccion,
     _frameDeteccion = frameDeteccion;
     if (usarOrigenVisible)
     {
-        _sprite.setOrigin(obtenerOrigenVisible(_textura, _frameAncho, _frameAlto));
+        _sprite.setOrigin(obtenerOrigenVisible(
+            _textura, _frameAncho, _frameAlto, _limitesVisibles));
     }
     else
     {
@@ -157,9 +174,60 @@ void Enemigo::configurarPresentacion(int frameDeteccion,
     }
 }
 
+void Enemigo::configurarReinicioFueraDeCamara()
+{
+    _reiniciarFueraDeCamara = true;
+    _fueraDeCamara = true;
+    _relojEstado.setPausado(true);
+    reiniciarCiclo();
+}
+
+void Enemigo::actualizarVisibilidad(const sf::FloatRect& areaVisible)
+{
+    if (!_reiniciarFueraDeCamara)
+    {
+        return;
+    }
+
+    // Usa el dibujo del primer frame, sin margenes ni cambios entre gestos.
+    const sf::FloatRect areaEnemigo =
+        _sprite.getTransform().transformRect(_limitesVisibles);
+    const bool fueraDeCamara = !areaVisible.intersects(areaEnemigo);
+    if (_fueraDeCamara == fueraDeCamara)
+    {
+        return;
+    }
+
+    _fueraDeCamara = fueraDeCamara;
+    if (_fueraDeCamara)
+    {
+        _relojEstado.setPausado(true);
+        reiniciarCiclo();
+    }
+    else
+    {
+        _relojEstado.restart();
+        _relojEstado.setPausado(_pausado);
+    }
+}
+
+void Enemigo::reiniciarCiclo()
+{
+    _sonidoAlerta.stop();
+    _sprite.setPosition(_posicionInicial);
+    if (_seAsomaPorPuerta)
+    {
+        cambiarEstadoAsomada(EstadoEnemigoHabitacion::Fuera);
+    }
+    else
+    {
+        cambiarEstado(EstadoEnemigo::DeEspalda);
+    }
+}
+
 void Enemigo::actualizar()
 {
-    if (_estado == EstadoEnemigo::Detectado)
+    if (_estado == EstadoEnemigo::Detectado || _fueraDeCamara)
     {
         return;
     }
@@ -198,7 +266,7 @@ void Enemigo::actualizar()
 
 void Enemigo::reaccionarACaida()
 {
-    if (_estado == EstadoEnemigo::Detectado || !_reaccionaAlRuido)
+    if (_estado == EstadoEnemigo::Detectado || !_reaccionaAlRuido || _fueraDeCamara)
     {
         return;
     }
@@ -249,13 +317,15 @@ void Enemigo::reaccionarACaida()
 
 void Enemigo::setPausado(bool pausado)
 {
-    _relojEstado.setPausado(pausado);
+    _pausado = pausado;
+    const bool detenido = pausado || _fueraDeCamara;
+    _relojEstado.setPausado(detenido);
 
-    if (pausado && _sonidoAlerta.getStatus() == sf::SoundSource::Playing)
+    if (detenido && _sonidoAlerta.getStatus() == sf::SoundSource::Playing)
     {
         _sonidoAlerta.pause();
     }
-    else if (!pausado && _sonidoAlerta.getStatus() == sf::SoundSource::Paused)
+    else if (!detenido && _sonidoAlerta.getStatus() == sf::SoundSource::Paused)
     {
         _sonidoAlerta.play();
     }
@@ -335,6 +405,11 @@ bool Enemigo::detectaAl(
     const Personaje& gato,
     const sf::FloatRect& areaVisible)
 {
+    if (_fueraDeCamara)
+    {
+        return false;
+    }
+
     if (_estado == EstadoEnemigo::Detectado)
     {
         return true;
