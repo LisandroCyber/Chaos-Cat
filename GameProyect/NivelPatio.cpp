@@ -6,8 +6,7 @@ NivelPatio::NivelPatio()
     cargarFondo("images/3-Patio/patio.png");
     setAnchoNivel(static_cast<float>(ANCHO_VENTANA));
 
-    //TODO: buscar musica
-    if (!cargarMusicaFondo("music/EnPartida/Cocina/LoopNivelCocina.wav", 20.f))
+    if (!cargarMusicaFondo("music/EnPartida/Patio/LoopNivelPatio.wav", 22.f))
     {
         std::cout << "No se pudo cargar la musica del Patio\n";
     }
@@ -63,7 +62,7 @@ NivelPatio::NivelPatio()
 
     agregarMueble("images/3-Patio/objetos/maceton_grande.png",
         { -8.f, 461.f },
-        { 0.18f, 0.18f },
+        { 0.36f, 0.36f },
         sf::FloatRect());
 
     //superficies adicionales
@@ -78,52 +77,52 @@ NivelPatio::NivelPatio()
 
     //macetas sobre el respaldo del banco
     agregarObjeto("images/3-Patio/objetos/maceta_mediana_amarillas.png",
-        { 343.5f, 294.06f }, 0.083f, 3,
+        { 347.82f, 294.06f }, 0.166f, 3,
         "images/3-Patio/objetos/rotos/maceta_mediana_amarillas_rota.png",
         "sound effects/objetos/vidrioRoto.wav");
 
     agregarObjeto("images/3-Patio/objetos/maceta_mediana_rosadas.png",
-        { 459.79f, 291.68f }, 0.085f, 3,
+        { 464.32f, 291.68f }, 0.17f, 3,
         "images/3-Patio/objetos/rotos/maceta_mediana_rosadas_rota.png",
         "sound effects/objetos/vidrioRoto.wav");
 
     //regadera sobre el asiento y toalla sobre el apoyabrazos
     agregarObjeto("images/3-Patio/objetos/regadera.png",
-        { 261.12f, 444.4f }, 0.05f, 2,
+        { 263.04f, 444.4f }, 0.1f, 2,
         "images/3-Patio/objetos/rotos/regadera_rota.png",
         "sound effects/objetos/golpeMetal.wav");
 
     //jarra y vaso sobre la mesa
     agregarObjeto("images/3-Patio/objetos/jarra_agua.png",
-        { 317.38f, 510.8f }, 0.05f, 1,
+        { 318.97f, 510.8f }, 0.1f, 1,
         "images/3-Patio/objetos/rotos/jarra_agua_rota.png",
         "sound effects/objetos/vidrioRoto.wav");
 
     agregarObjeto("images/3-Patio/objetos/vaso.png",
-        { 406.57f, 535.36f }, 0.033f, 1,
+        { 407.26f, 535.36f }, 0.066f, 1,
         "images/3-Patio/objetos/rotos/vaso_roto.png",
         "sound effects/objetos/vidrioRoto.wav");
 
     //maceta con flores arriba y suculenta en la repisa inferior
     agregarObjeto("images/3-Patio/objetos/maceta_mediana_blancas.png",
-        { 835.22f, 422.44f }, 0.085f, 3,
+        { 839.96f, 422.44f }, 0.17f, 3,
         "images/3-Patio/objetos/rotos/maceta_mediana_blancas_rota.png",
         "sound effects/objetos/vidrioRoto.wav");
 
     agregarObjeto("images/3-Patio/objetos/maceta_chica_04.png",
-        { 887.02f, 578.24f }, 0.04f, 2,
+        { 888.25f, 578.24f }, 0.08f, 2,
         "images/3-Patio/objetos/rotos/maceta_chica_04_rota.png",
         "sound effects/objetos/vidrioRoto.wav");
 
     //planta sobre el cajon y maceta chica junto al banco
     agregarObjeto("images/3-Patio/objetos/maceta_chica_02.png",
-        { 1114.8f, 511.4f }, 0.09f, 3,
+        { 1120.08f, 511.4f }, 0.18f, 3,
         "images/3-Patio/objetos/rotos/maceta_chica_02_rota.png",
         "sound effects/objetos/vidrioRoto.wav");
 
     //la pelota es golpeable pero al hacerlo se pierde la partida porque el perro se despierta de una jajajj
     agregarObjeto("images/3-Patio/objetos/pelota.png",
-        { 633.59f, 665.5f }, 0.05f, 1,
+        { 635.18f, 665.5f }, 0.1f, 1,
         "images/3-Patio/objetos/pelota.png",
         "sound effects/objetos/golpeFruta.wav");
 }

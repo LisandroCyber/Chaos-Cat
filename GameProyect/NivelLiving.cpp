@@ -1,8 +1,14 @@
 #include "NivelLiving.h"
+#include <iostream>
 
 NivelLiving::NivelLiving()
 {
     cargarFondo("images/2-Living/living.png");
+
+    if (!cargarMusicaFondo("music/EnPartida/Living/LoopNivelLiving.wav", 22.f))
+    {
+        std::cout << "ERROR AL CARGAR LA MUSICA\n";
+    }
     
     Enemigo* duenia = agregarEnemigo("images/Enemigos/frames_enemiga.png", //dueña
         { 1600.f, 500.f },
