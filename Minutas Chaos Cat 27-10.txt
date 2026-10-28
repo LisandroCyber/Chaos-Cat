@@ -1,0 +1,9 @@
+Minutas Chaos Cat 27-10-2026
+
+Hablamos de los detalles que nos falta, ya tenemos los sprites del fondo de la cocina y el living de noche,
+tenemos los muebles, los objetos. Falta los objetos rotos del living.
+Tambien definimos como va a ser el tutorial, va a ser una seleccion del menu principal "Como jugar" que te muestre
+con imagenes estaticas las distintas mecanicas del juego, usando a la cocina de ejemplo.
+Tambien ya definimos como va a ser el juego en modo infinito, va a ser en el living de dia, vamos a ir armando como
+para que empiece con un enemigo y objetos que se rompen de 1 o 2 golpes, luego se suma otro enemigo, aumentan los golpes
+y asi hasta que esten los 4 enemigos del juego junto con el nivel mas dificil de los golpes (le mandamos unos 6 u 8 golpes)
