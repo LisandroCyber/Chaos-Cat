@@ -290,9 +290,14 @@ void Juego::procesarEventos()
             }
             else if (opcion == 1)
             {
-                volverAlMenuPrincipal();
+                _enConfiguracion = true;
+                _menuConfiguracion.abrir();
             }
             else if (opcion == 2)
+            {
+                volverAlMenuPrincipal();
+            }
+            else if (opcion == 3)
             {
                 solicitarSalida();
             }
@@ -399,16 +404,13 @@ void Juego::dibujar()
     _window.setView(_window.getDefaultView());
     _window.clear(sf::Color(30, 30, 40));
 
-    if (_enMenu)
+    if (_enConfiguracion)
     {
-        if (_enConfiguracion)
-        {
-            _window.draw(_menuConfiguracion);
-        }
-        else
-        {
-            _window.draw(_menuPrincipal);
-        }
+        _window.draw(_menuConfiguracion);
+    }
+    else if (_enMenu)
+    {
+        _window.draw(_menuPrincipal);
     }
     else if (_enSeleccionNivel)
     {

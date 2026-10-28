@@ -4,12 +4,14 @@
 #include <SFML/Audio.hpp>
 
 MenuPausa::MenuPausa()
-    : Menu(3)
+    : Menu(4)
 {
     _titulo.setString("PAUSA");
+
     _opciones[0].setString("Continuar");
-    _opciones[1].setString("Volver al menu principal");
-    _opciones[2].setString("Salir");
+    _opciones[1].setString("Configuracion");
+    _opciones[2].setString("Volver al menu principal");
+    _opciones[3].setString("Salir");
 
     const sf::FloatRect limitesTitulo = _titulo.getLocalBounds();
     _titulo.setOrigin(
