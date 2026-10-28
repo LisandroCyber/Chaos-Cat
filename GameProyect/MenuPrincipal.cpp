@@ -3,12 +3,14 @@
 #include <iostream>
 
 MenuPrincipal::MenuPrincipal()
-    : Menu(3)
+    : Menu(4)
 {
     _titulo.setString("CHAOS CAT");
+
     _opciones[0].setString("Jugar");
-    _opciones[1].setString("Configuracion");
-    _opciones[2].setString("Salir");
+    _opciones[1].setString("Tutorial");
+    _opciones[2].setString("Configuracion");
+    _opciones[3].setString("Salir");
 
 
     if (!_texturaFondo.loadFromFile("images/UI/MenuPrincipal.png"))

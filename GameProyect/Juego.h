@@ -1,5 +1,5 @@
 #pragma once
-
+#include "Tutorial.h"
 #include <SFML/Graphics.hpp>
 #include "Nivel.h"
 #include "Personaje.h"
@@ -15,6 +15,11 @@
 
 class Juego
 {
+public:
+    Juego();
+    ~Juego();
+
+    void ejecutar();
 private:
     sf::RenderWindow _window;
 
@@ -63,9 +68,7 @@ private:
     bool iniciarNivel(int numero);
     void abrirSeleccionNivel();
 
-public:
-    Juego();
-    ~Juego();
+    Tutorial _menuTutorial;
+    bool _enTutorial = false;
 
-    void ejecutar();
 };

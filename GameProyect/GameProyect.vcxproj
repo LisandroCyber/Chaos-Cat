@@ -41,6 +41,7 @@
     <ClCompile Include="Personaje.cpp" />
     <ClCompile Include="Progreso.cpp" />
     <ClCompile Include="RelojJuego.cpp" />
+    <ClCompile Include="Tutorial.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Configuracion.h" />
@@ -65,6 +66,7 @@
     <ClInclude Include="Personaje.h" />
     <ClInclude Include="Progreso.h" />
     <ClInclude Include="RelojJuego.h" />
+    <ClInclude Include="Tutorial.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>18.0</VCProjectVersion>

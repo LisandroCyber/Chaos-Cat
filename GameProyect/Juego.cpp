@@ -1,3 +1,4 @@
+#include "Tutorial.h"
 #include "Juego.h"
 #include "Constantes.h"
 #include "NivelCocina.h"
@@ -153,6 +154,24 @@ void Juego::procesarEventos()
             continue;
         }
 
+        if (_enTutorial)
+        {
+            const int opcion =
+                _menuTutorial.procesarEvento(evento, _window);
+
+            if (opcion == 0)
+            {
+                _enTutorial = false;
+            }
+            else if (opcion == 1)
+            {
+                _enTutorial = false;
+                volverAlMenuPrincipal();
+            }
+
+            continue;
+        }
+
         if (_enSeleccionNivel)
         {
             const int opcion = _menuSeleccionNivel.procesarEvento(evento, _window);
@@ -244,10 +263,15 @@ void Juego::procesarEventos()
             }
             else if (opcion == 1)
             {
+                _enTutorial = true;
+                _menuTutorial.abrir();
+            }
+            else if (opcion == 2)
+            {
                 _enConfiguracion = true;
                 _menuConfiguracion.abrir();
             }
-            else if (opcion == 2)
+            else if (opcion == 3)
             {
                 solicitarSalida();
             }
@@ -403,8 +427,11 @@ void Juego::dibujar()
 {
     _window.setView(_window.getDefaultView());
     _window.clear(sf::Color(30, 30, 40));
-
-    if (_enConfiguracion)
+    if (_enTutorial)
+    {
+        _window.draw(_menuTutorial);
+    }
+    else if (_enConfiguracion)
     {
         _window.draw(_menuConfiguracion);
     }
