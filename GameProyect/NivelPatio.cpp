@@ -119,10 +119,10 @@ NivelPatio::NivelPatio()
         { 1120.08f, 511.4f }, 0.18f, 3,
         "images/3-Patio/objetos/rotos/maceta_chica_02_rota.png",
         "sound effects/objetos/vidrioRoto.wav");
-
+    /*
     //la pelota es golpeable pero al hacerlo se pierde la partida porque el perro se despierta de una jajajj
     agregarObjeto("images/3-Patio/objetos/pelota.png",
         { 635.18f, 665.5f }, 0.1f, 1,
         "images/3-Patio/objetos/pelota.png",
-        "sound effects/objetos/golpeFruta.wav");
+        "sound effects/objetos/golpeFruta.wav");*/
 }
