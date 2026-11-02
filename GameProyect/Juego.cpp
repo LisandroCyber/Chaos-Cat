@@ -7,6 +7,7 @@
 #include "NivelPatio.h"
 #include "NivelHabitacion.h"
 #include "NivelCocinaNoche.h"
+#include "NivelLivingNoche.h"
 #include <iostream>
 #include <algorithm>
 
@@ -570,6 +571,8 @@ Nivel* Juego::crearNivel(int numero)
         return new NivelHabitacion();
     case 5:
         return new NivelCocinaNoche();
+    case 6:
+        return new NivelLivingNoche();
     default:
         return nullptr;
     }

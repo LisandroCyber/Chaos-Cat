@@ -20,7 +20,7 @@ NivelLivingNoche::NivelLivingNoche()
     duenia->configurarReinicioFueraDeCamara();
 
     Enemigo* duenio = agregarEnemigo("images/Enemigos/frames_enemigo_sofa_borracho.png", //dueño
-        { 890.f, 530.f },
+        { 930.f, 570.f },
         600,
         724,
         { 0.52f, 0.53f },
@@ -109,15 +109,6 @@ NivelLivingNoche::NivelLivingNoche()
         { 0.13f , 0.13f },
         sf::FloatRect(0.f, 0.f, 100.f, 100.f)
     );
-
-    // Sillon individual
-    agregarMueble(
-        "images/6-living_noche/Muebles/sillon_individual_nocturno.png",
-        { 820.f, 400.f },
-        { 0.7f, 0.7f },
-        sf::FloatRect(42.f, 160.f, 0.f, 0.f)
-    );
-
 
     // Mesa chica izquierda
     agregarMueble(
