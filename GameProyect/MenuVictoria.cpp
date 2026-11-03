@@ -6,16 +6,6 @@
 MenuVictoria::MenuVictoria()
     : Menu(3)
 {
-    _titulo.setString("CAOS TOTAL !");
-    _titulo.setCharacterSize(55);
-
-    const sf::FloatRect limitesTitulo = _titulo.getLocalBounds();
-    _titulo.setOrigin(
-        limitesTitulo.left + limitesTitulo.width / 2.f,
-        limitesTitulo.top + limitesTitulo.height / 2.f
-    );
-    _titulo.setPosition(ANCHO_VENTANA / 2.f, 75.f);
-
     if (_texturaGato.loadFromFile("images/Gato/gato_ganador.png"))
     {
         _texturaGato.setSmooth(true);
@@ -30,29 +20,17 @@ MenuVictoria::MenuVictoria()
     }
     else
     {
-        std::cout << "No se pudo cargar la imagen de derrota\n";
+        std::cout << "No se pudo cargar la imagen de victoria\n";
     }
 
-    _opciones[0].setString("Continuar");
-    _opciones[1].setString("Volver al menu principal");
-    _opciones[2].setString("Salir");
+    _mensajeInfinito.setFont(_fuente);
+    _mensajeInfinito.setString(
+        "Ahora proba tus habilidades en el modo infinito");
+    _mensajeInfinito.setCharacterSize(28);
+    _mensajeInfinito.setFillColor(sf::Color(235, 235, 235));
+    centrarTexto(_mensajeInfinito, ANCHO_VENTANA / 2.f, 575.f);
 
-    for (int i = 0; i < _cantidadOpciones; i++)
-    {
-        _opciones[i].setCharacterSize(30);
-
-        const sf::FloatRect limites = _opciones[i].getLocalBounds();
-
-        _opciones[i].setOrigin(
-            limites.left + limites.width / 2.f,
-            limites.top + limites.height / 2.f
-        );
-
-        _opciones[i].setPosition(
-            ANCHO_VENTANA / 2.f,
-            560.f + i * 60.f
-        );
-    }
+    configurarVictoriaFinal(false);
 
     //El mismo filtro se aplica primero en horizontal y luego en vertical.
     //Esto esta armado en el lenguaje de los shaders, es mas que nada para aplicar los filtros
@@ -84,6 +62,44 @@ MenuVictoria::MenuVictoria()
     }
 }
 
+void MenuVictoria::centrarTexto(sf::Text& texto, float x, float y)
+{
+    const sf::FloatRect limites = texto.getLocalBounds();
+    texto.setOrigin(limites.left + limites.width / 2.f,
+        limites.top + limites.height / 2.f);
+    texto.setPosition(x, y);
+}
+
+void MenuVictoria::configurarVictoriaFinal(bool victoriaFinal)
+{
+    _victoriaFinal = victoriaFinal;
+    _cantidadOpciones = victoriaFinal ? 1 : 3;
+
+    _titulo.setString(victoriaFinal ?
+        "FELICITACIONES, SOS EL REY DEL CAOS!" : "CAOS TOTAL !");
+    _titulo.setCharacterSize(victoriaFinal ? 42 : 55);
+    while (_titulo.getLocalBounds().width > ANCHO_VENTANA - 80.f &&
+        _titulo.getCharacterSize() > 24)
+    {
+        _titulo.setCharacterSize(_titulo.getCharacterSize() - 1);
+    }
+    centrarTexto(_titulo, ANCHO_VENTANA / 2.f, 75.f);
+
+    _opciones[0].setString(victoriaFinal ?
+        "Volver a la pantalla de titulo" : "Continuar");
+    _opciones[1].setString("Volver al menu principal");
+    _opciones[2].setString("Salir");
+
+    for (int i = 0; i < _cantidadOpciones; i++)
+    {
+        _opciones[i].setCharacterSize(30);
+        centrarTexto(_opciones[i], ANCHO_VENTANA / 2.f,
+            victoriaFinal ? 650.f : 560.f + i * 60.f);
+    }
+
+    reiniciarSeleccion();
+}
+
 void MenuVictoria::prepararFondo(const sf::RenderWindow& ventana)
 {
     if (_fondoPreparado)
@@ -106,7 +122,7 @@ void MenuVictoria::prepararFondo(const sf::RenderWindow& ventana)
         !pasoHorizontal.create(tamanoReducido.x, tamanoReducido.y) ||
         !_fondoDesenfocado.create(tamanoReducido.x, tamanoReducido.y))
     {
-        std::cout << "No se pudo preparar el fondo de derrota\n";
+        std::cout << "No se pudo preparar el fondo de victoria\n";
         return;
     }
 
@@ -177,5 +193,9 @@ void MenuVictoria::draw(
 
     destino.draw(fondo, estados);
     destino.draw(_spriteGato, estados);
+    if (_victoriaFinal)
+    {
+        destino.draw(_mensajeInfinito, estados);
+    }
     Menu::draw(destino, estados);
 }

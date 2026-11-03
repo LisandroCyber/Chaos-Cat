@@ -416,7 +416,7 @@ void Juego::actualizar()
             std::cout << "No se pudo guardar el progreso\n";
         }
 
-        _menuVictoria.reiniciarSeleccion();
+        _menuVictoria.configurarVictoriaFinal(_nivelActual == CANTIDAD_NIVELES);
 
         actualizarPausaPartida();
         _nivel->pausarMusica();
