@@ -74,11 +74,12 @@ protected:
         bool bloqueaDescenso = false);
 
 private:
-    static constexpr int RADIO_HALO_ESCONDITE = 12;
+    static constexpr int MARGEN_HALO_ESCONDITE = 12;
     static sf::FloatRect obtenerAreaVisible(const sf::View& camara);
 
     sf::Texture _texturaFondo;
     sf::Sprite _spriteFondo;
+    sf::Texture _texturaHaloEscondite;
     sf::Music _musicaFondo;
     sf::Sound _sonido;
 
@@ -88,7 +89,7 @@ private:
     std::vector<sf::FloatRect> _superficiesFijas;
     std::vector<sf::FloatRect> _superficiesSolidas;
     std::vector<sf::FloatRect> _zonasEscondite;
-    std::vector<sf::Texture> _halosEscondite;
+    std::vector<sf::Sprite> _halosEscondite;
     std::vector<sf::FloatRect> _barrerasLaterales;
 
     void resolverBarrerasLaterales(Personaje& gato);

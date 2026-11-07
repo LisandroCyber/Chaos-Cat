@@ -1,6 +1,5 @@
 #include "Nivel.h"
 
-#include <cmath>
 #include <cstdlib>
 #include <iostream>
 
@@ -8,6 +7,14 @@ Nivel::Nivel()
     : _spriteFondo(_texturaFondo),
       _mostrarHitboxes(false)
 {
+    if (!_texturaHaloEscondite.loadFromFile("images/UI/halo_escondite.png"))
+    {
+        std::cout << "ERROR: NO SE PUDO CARGAR EL HALO DEL ESCONDITE\n";
+    }
+    else
+    {
+        _texturaHaloEscondite.setSmooth(true);
+    }
 }
 
 Nivel::~Nivel()
@@ -119,46 +126,24 @@ void Nivel::agregarZonaEscondite(const sf::FloatRect& zona)
     }
 
     _zonasEscondite.push_back(zona);
-    _halosEscondite.emplace_back();
 
-    const int ancho = static_cast<int>(std::ceil(zona.width)) + RADIO_HALO_ESCONDITE * 2;
-    const int alto = static_cast<int>(std::ceil(zona.height)) + RADIO_HALO_ESCONDITE * 2;
-    const float mitadAncho = zona.width / 2.f;
-    const float mitadAlto = zona.height / 2.f;
-    const float radioEsquina = std::min(12.f, std::min(mitadAncho, mitadAlto));
-    const float suavidad = 4.5f;
-    const float opacidadMaxima = 85.f;
-    sf::Image halo;
-    halo.create(ancho, alto, sf::Color::Transparent);
-
-    // La distancia al borde redondeado permite difuminar sin rellenar la zona.
-    for (int y = 0; y < alto; y++)
+    const sf::Vector2u tamano = _texturaHaloEscondite.getSize();
+    if (tamano.x <= MARGEN_HALO_ESCONDITE * 2 ||
+        tamano.y <= MARGEN_HALO_ESCONDITE * 2)
     {
-        for (int x = 0; x < ancho; x++)
-        {
-            const float dx = std::abs(x - RADIO_HALO_ESCONDITE + 0.5f - mitadAncho) -
-                (mitadAncho - radioEsquina);
-            const float dy = std::abs(y - RADIO_HALO_ESCONDITE + 0.5f - mitadAlto) -
-                (mitadAlto - radioEsquina);
-            const float exteriorX = std::max(dx, 0.f);
-            const float exteriorY = std::max(dy, 0.f);
-            const float distancia = std::sqrt(exteriorX * exteriorX + exteriorY * exteriorY) +
-                std::min(std::max(dx, dy), 0.f) - radioEsquina;
-            const float intensidad = std::exp(-distancia * distancia / (2.f * suavidad * suavidad));
-            const sf::Uint8 opacidad = static_cast<sf::Uint8>(opacidadMaxima * intensidad);
-            halo.setPixel(x, y, sf::Color(255, 255, 255, opacidad));
-        }
+        return;
     }
 
-    sf::Texture& textura = _halosEscondite.back();
-    if (!textura.loadFromImage(halo))
-    {
-        std::cout << "ERROR: NO SE PUDO CREAR EL HALO DEL ESCONDITE\n";
-    }
-    else
-    {
-        textura.setSmooth(true);
-    }
+    _halosEscondite.emplace_back(_texturaHaloEscondite);
+    sf::Sprite& halo = _halosEscondite.back();
+    const sf::Vector2f escala(
+        zona.width / (tamano.x - MARGEN_HALO_ESCONDITE * 2.f),
+        zona.height / (tamano.y - MARGEN_HALO_ESCONDITE * 2.f));
+    halo.setScale(escala);
+    
+    //el margen del halo blanco tambien escala para alinear el contorno con la zona
+    halo.setPosition(zona.left - MARGEN_HALO_ESCONDITE * escala.x,
+        zona.top - MARGEN_HALO_ESCONDITE * escala.y);
 }
 
 void Nivel::actualizarVisibilidadEnemigos(const sf::View& camara)
@@ -497,17 +482,8 @@ void Nivel::dibujar(sf::RenderWindow& ventana,
 
 void Nivel::dibujarZonasEscondite(sf::RenderWindow& ventana) const
 {
-    for (std::size_t i = 0; i < _zonasEscondite.size(); i++)
+    for (const sf::Sprite& halo : _halosEscondite)
     {
-        if (_halosEscondite[i].getSize().x == 0)
-        {
-            continue;
-        }
-
-        sf::Sprite halo(_halosEscondite[i]);
-        halo.setPosition(
-            _zonasEscondite[i].left - RADIO_HALO_ESCONDITE,
-            _zonasEscondite[i].top - RADIO_HALO_ESCONDITE);
         ventana.draw(halo);
     }
 }
