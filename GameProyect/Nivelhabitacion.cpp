@@ -18,7 +18,7 @@ NivelHabitacion::NivelHabitacion()
         724,
         724,
         { 0.22f, 0.22f },
-        "sound effects/enemigos/mmh_duenia_habitacion.wav",
+        "sound effects/enemigos/mmh_duenia.wav",
         VOLUMEN_ALERTA_DUENIA_HABITACION,
         true
     );
