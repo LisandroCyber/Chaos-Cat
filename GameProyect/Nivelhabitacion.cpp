@@ -3,6 +3,14 @@
 
 NivelHabitacion::NivelHabitacion()
 {
+    cargarEscenario();
+    cargarEnemigos();
+    cargarMuebles();
+    cargarObjetos();
+}
+
+void NivelHabitacion::cargarEscenario()
+{
     cargarFondo("images/4-Habitacion/habitacion.png");
     setAnchoNivel(static_cast<float>(ANCHO_VENTANA));
 
@@ -10,7 +18,10 @@ NivelHabitacion::NivelHabitacion()
     {
         std::cout << "ERROR AL CARGAR LA MUSICA\n";
     }
+}
 
+void NivelHabitacion::cargarEnemigos()
+{
     /// La enemiga se asoma por la puerta y reacciona a los objetos que caen.
     agregarEnemigo(
         "images/Enemigos/duenia_puerta_estados_nocturna.png",
@@ -40,8 +51,10 @@ NivelHabitacion::NivelHabitacion()
     //ignora las caidas y conserva el tercer frame al detecta
     camara->configurarRuido(false, false);
     camara->configurarPresentacion(FRAME_ENEMIGO_SIN_CAMBIO, false);
+}
 
-
+void NivelHabitacion::cargarMuebles()
+{
     /// mesa de cama y television con escondite
     agregarMueble(
         "images/4-Habitacion/muebles/mueble_tele_nocturno.png",
@@ -55,10 +68,10 @@ NivelHabitacion::NivelHabitacion()
         { 505.5f, 489.4f },
         { 0.18f, 0.18f },
         sf::FloatRect(0.f, 0.f, 0.f, 0.f)
-        );
+    );
 
     agregarZonaEscondite(sf::FloatRect(513.f, 500.f, 296.f, 144.f)); // zona escondite television
-   
+
     /// 3 Estantes de la parte izquierda y sus objetos
     agregarMueble(
         "images/4-Habitacion/muebles/soporte_planta_v2.png",
@@ -66,13 +79,6 @@ NivelHabitacion::NivelHabitacion()
         { 0.11f, 0.11f },
         sf::FloatRect(300.f, 416.f, 815.f, 30.f)
     );
-
-    agregarObjeto("images/4-Habitacion/objetos/maceta_colgante.png",
-        { 170.6f, 130.5f },
-        0.065f,
-        2, 
-        "images/4-Habitacion/objetos/rotos/maceta_colgante_rota.png", 
-        "sound effects/objetos/golpeFruta.wav");
     //
     agregarMueble(
         "images/4-Habitacion/muebles/soporte_planta_v2.png",
@@ -80,12 +86,6 @@ NivelHabitacion::NivelHabitacion()
         { 0.11f, 0.11f },
         sf::FloatRect(300.f, 416.f, 815.f, 30.f)
     );
-    agregarObjeto("images/4-Habitacion/objetos/maceta_Hojas_grandes.png",
-        { 246.2f, 216.6f },
-        0.065f,
-        2,
-        "images/4-Habitacion/objetos/rotos/maceta_hojas_grandes_rota.png",
-        "sound effects/objetos/golpeFruta.wav");
 
     //
     agregarMueble(
@@ -94,6 +94,36 @@ NivelHabitacion::NivelHabitacion()
         { 0.11f, 0.11f },
         sf::FloatRect(300.f, 416.f, 815.f, 30.f)
     );
+
+    /// Mesa de luz derecha
+    agregarSuperficie(sf::FloatRect(817.f, 480.f, 113.f, 8.f));
+
+    /// Mesa de luz izquierda
+    agregarSuperficie(sf::FloatRect(369.f, 480.f, 113.f, 8.f));
+
+    /// Estante derecho
+    agregarMueble(
+        "images/4-Habitacion/muebles/soporte_planta_v2.png",
+        { 923.3f, 314.2f },
+        { 0.11f, 0.11f },
+        sf::FloatRect(300.f, 416.f, 815.f, 30.f)
+    );
+}
+
+void NivelHabitacion::cargarObjetos()
+{
+    agregarObjeto("images/4-Habitacion/objetos/maceta_colgante.png",
+        { 170.6f, 130.5f },
+        0.065f,
+        2,
+        "images/4-Habitacion/objetos/rotos/maceta_colgante_rota.png",
+        "sound effects/objetos/golpeFruta.wav");
+    agregarObjeto("images/4-Habitacion/objetos/maceta_Hojas_grandes.png",
+        { 246.2f, 216.6f },
+        0.065f,
+        2,
+        "images/4-Habitacion/objetos/rotos/maceta_hojas_grandes_rota.png",
+        "sound effects/objetos/golpeFruta.wav");
     agregarObjeto(
         "images/4-Habitacion/objetos/cuadroFoto.png",
         { 174.1f , 406.2f },
@@ -102,9 +132,6 @@ NivelHabitacion::NivelHabitacion()
         "images/4-Habitacion/objetos/rotos/cuadroFotoRoto.png",
         "sound effects/objetos/vidrioRoto.wav"
     );
-    
-    /// Mesa de luz derecha
-    agregarSuperficie(sf::FloatRect(817.f, 480.f, 113.f, 8.f));
     agregarObjeto(
         "images/4-Habitacion/objetos/vaso_agua.png",
         { 828.5f , 460.4f },
@@ -121,9 +148,6 @@ NivelHabitacion::NivelHabitacion()
         "images/4-Habitacion/objetos/rotos/lampara_derecha_rota.png",
         "sound effects/objetos/GolpeMetal.wav"
     );
-
-    /// Mesa de luz izquierda
-    agregarSuperficie(sf::FloatRect(369.f, 480.f, 113.f, 8.f));
     agregarObjeto(
         "images/4-Habitacion/objetos/lampara_izquierda_apagada.png",
         { 401.3f , 418.1f },
@@ -131,14 +155,6 @@ NivelHabitacion::NivelHabitacion()
         2,
         "images/4-Habitacion/objetos/rotos/lampara_izquierda_rota.png",
         "sound effects/objetos/GolpeMetal.wav"
-    );
-
-    /// Estante derecho
-    agregarMueble(
-        "images/4-Habitacion/muebles/soporte_planta_v2.png",
-        { 923.3f, 314.2f },
-        { 0.11f, 0.11f },
-        sf::FloatRect(300.f, 416.f, 815.f, 30.f)
     );
     agregarObjeto(
         "images/4-Habitacion/objetos/reloj_despertador.png",
@@ -158,5 +174,5 @@ NivelHabitacion::NivelHabitacion()
         "images/4-Habitacion/objetos/rotos/canasto_ropa_tirado.png",
         "sound effects/objetos/GolpeFruta.wav"
     );
-
 }
+

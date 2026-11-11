@@ -354,7 +354,7 @@ void Juego::procesarEventos()
                 std::cout << "Posicion en x: "
                     << _gato.getPosx() << '\n';
 
-                    std::cout << "Posicion en y: "
+                std::cout << "Posicion en y: "
                     << _gato.getPosy() << '\n';
             }
         }
@@ -586,7 +586,8 @@ bool Juego::iniciarNivel(int numero)
         return false;
     }
 
-    Nivel* nuevoNivel = crearNivel(numero);
+    sf::Clock relojCarga;
+    Nivel* nuevoNivel = numero == _nivelActual ? _nivel : crearNivel(numero);
     if (nuevoNivel == nullptr)
     {
         std::cout << "El nivel " << numero << " aun no esta implementado\n";
@@ -600,8 +601,15 @@ bool Juego::iniciarNivel(int numero)
     _nivel->pausarMusica();
     _gato.setPausado(true);
 
-    delete _nivel;
-    _nivel = nuevoNivel;
+    if (nuevoNivel != _nivel)
+    {
+        delete _nivel;
+        _nivel = nuevoNivel;
+    }
+    else
+    {
+        reiniciarPartida();
+    }
     _nivelActual = numero;
     _gato.reiniciar();
     aplicarConfiguracion();
@@ -622,6 +630,8 @@ bool Juego::iniciarNivel(int numero)
     _partidaPausada = true;
     actualizarPausaPartida();
     _nivel->continuarMusica();
+    std::cout << "[Preparar nivel " << numero << "] "
+        << relojCarga.getElapsedTime().asMilliseconds() << " ms\n";
     return true;
 }
 

@@ -5,7 +5,7 @@
 
 Nivel::Nivel()
     : _spriteFondo(_texturaFondo),
-      _mostrarHitboxes(false)
+    _mostrarHitboxes(false)
 {
     if (!_texturaHaloEscondite.loadFromFile("images/UI/halo_escondite.png"))
     {
@@ -140,7 +140,7 @@ void Nivel::agregarZonaEscondite(const sf::FloatRect& zona)
         zona.width / (tamano.x - MARGEN_HALO_ESCONDITE * 2.f),
         zona.height / (tamano.y - MARGEN_HALO_ESCONDITE * 2.f));
     halo.setScale(escala);
-    
+
     //el margen del halo blanco tambien escala para alinear el contorno con la zona
     halo.setPosition(zona.left - MARGEN_HALO_ESCONDITE * escala.x,
         zona.top - MARGEN_HALO_ESCONDITE * escala.y);
@@ -248,8 +248,8 @@ void Nivel::resolverColisiones(Personaje& gato)
 
     // Reunimos las superficies sobre las que puede apoyarse.
     std::vector<sf::FloatRect> superficies;
-    
-    if(!gato.quiereBajarDeSuperficie())
+
+    if (!gato.quiereBajarDeSuperficie())
     {
         for (Mueble* mueble : _muebles)
         {
@@ -350,7 +350,7 @@ void Nivel::resolverColisionGatoObjeto(Personaje& gato, Objeto& objeto)
     }
 
     // Si viene cayendo desde arriba, la función principal resuelve el apoyo.
-    
+
     if (puedeApoyarse)
     {
         return;

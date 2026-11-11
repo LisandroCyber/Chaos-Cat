@@ -3,6 +3,14 @@
 
 NivelPatio::NivelPatio()
 {
+    cargarEscenario();
+    cargarEnemigos();
+    cargarMuebles();
+    cargarObjetos();
+}
+
+void NivelPatio::cargarEscenario()
+{
     cargarFondo("images/3-Patio/patio.png");
     setAnchoNivel(static_cast<float>(ANCHO_VENTANA));
 
@@ -10,7 +18,10 @@ NivelPatio::NivelPatio()
     {
         std::cout << "No se pudo cargar la musica del Patio\n";
     }
+}
 
+void NivelPatio::cargarEnemigos()
+{
     Enemigo* perro = agregarEnemigo("images/Enemigos/perro.png",
         { 680.f, 320.f }, 512, 768, { 0.38f, 0.38f },
         "sound effects/enemigos/perro_despertando.wav",
@@ -41,7 +52,10 @@ NivelPatio::NivelPatio()
     //ignora las caidas y conserva el tercer frame al detecta
     camara->configurarRuido(false, false);
     camara->configurarPresentacion(FRAME_ENEMIGO_SIN_CAMBIO, false);
+}
 
+void NivelPatio::cargarMuebles()
+{
     //muebles
     agregarMueble("images/3-Patio/muebles/banco.png",
         { 186.f, 362.f }, { 0.26f, 0.26f },
@@ -74,7 +88,10 @@ NivelPatio::NivelPatio()
     //escondite
     agregarZonaEscondite(sf::FloatRect(0.f, 535.f, 165.f, 185.f)); //maceton
     agregarZonaEscondite(sf::FloatRect(1065.315f, 574.8f, 199.65f, 145.2f)); // cajon de madera
+}
 
+void NivelPatio::cargarObjetos()
+{
     //macetas sobre el respaldo del banco
     agregarObjeto("images/3-Patio/objetos/maceta_mediana_amarillas.png",
         { 347.82f, 294.06f }, 0.166f, 3,
@@ -126,3 +143,4 @@ NivelPatio::NivelPatio()
         "images/3-Patio/objetos/pelota.png",
         "sound effects/objetos/golpeFruta.wav");*/
 }
+
