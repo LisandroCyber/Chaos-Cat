@@ -5,6 +5,12 @@
 class NivelCocinaNoche : public Nivel
 {
 public:
-	NivelCocinaNoche();
+    NivelCocinaNoche();
+
+private:
+    void cargarEscenario();
+    void cargarEnemigos();
+    void cargarMuebles();
+    void cargarObjetos();
 };
 

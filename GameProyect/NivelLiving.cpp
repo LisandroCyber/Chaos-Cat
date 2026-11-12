@@ -3,13 +3,24 @@
 
 NivelLiving::NivelLiving()
 {
+    cargarEscenario();
+    cargarEnemigos();
+    cargarMuebles();
+    cargarObjetos();
+}
+
+void NivelLiving::cargarEscenario()
+{
     cargarFondo("images/2-Living/living.png");
 
     if (!cargarMusicaFondo("music/EnPartida/Living/LoopNivelLiving.wav", 22.f))
     {
         std::cout << "ERROR AL CARGAR LA MUSICA\n";
     }
-    
+}
+
+void NivelLiving::cargarEnemigos()
+{
     Enemigo* duenia = agregarEnemigo("images/Enemigos/frames_enemiga.png", //dueña
         { 1600.f, 500.f },
         600,
@@ -27,29 +38,14 @@ NivelLiving::NivelLiving()
         "sound effects/enemigos/huu_duenio.wav",
         VOLUMEN_ALERTA_DUENIO);
     duenio->configurarReinicioFueraDeCamara();
+}
 
-    agregarMueble("images/2-living/Muebles/mesa_ratona.png", 
+void NivelLiving::cargarMuebles()
+{
+    agregarMueble("images/2-living/Muebles/mesa_ratona.png",
         { 430.f, 500.f },
         { 1.2f, 1.f },
         sf::FloatRect(6.f, 19.f, 400.f, 30.f)
-    );
-
-    agregarObjeto(
-        "images/2-Living/Objetos/Florero.png",
-        { 550.f, 390.f },
-        0.17f,
-        2,
-        "images/2-Living/Objetos/rotos/FloreroRoto.png",
-        "sound effects/objetos/vidrioRoto.wav"
-    );
-
-    agregarObjeto(
-        "images/2-Living/Objetos/TazaCafe.png",
-        { 855.f, 484.f },
-        0.25f,
-        1,
-        "images/2-Living/Objetos/rotos/TazaCafe_rota.png",
-        "sound effects/objetos/vidrioRoto.wav"
     );
 
     /// Sillon individual
@@ -87,15 +83,6 @@ NivelLiving::NivelLiving()
         { 1.2f, 1.2f },
         sf::FloatRect(9.f, 25.f, 116.f, 15.f)
     );
-    
-    agregarObjeto(
-        "images/2-Living/Objetos/PilaDeLibros.png",
-        { 1350.f, 433.f },
-        0.15f,
-        2,
-        "images/2-Living/Objetos/rotos/pilaDeLibrosTirados.png",
-        "sound effects/objetos/golpeFruta.wav"
-    );
 
     //compensa los margenes del PNG nuevo y baja el conjunto hasta el piso.
     agregarMueble(
@@ -113,27 +100,18 @@ NivelLiving::NivelLiving()
 
     agregarMueble(
         "images/2-Living/Muebles/tele.png",
-        { 1980.f, 400.f  },
+        { 1980.f, 400.f },
         { 1.f, 1.f },
-        sf::FloatRect(0.f , 20.f , 400.f, 200.f)
+        sf::FloatRect(0.f, 20.f, 400.f, 200.f)
     );
 
     agregarZonaEscondite(
         sf::FloatRect(1990.f, 400.f, 390.f, 220.f)
     );
 
-    agregarSuperficie(
-        sf::FloatRect(1143.6f, 490.f, 40.f, 20.f)
-    );
-
-    agregarObjeto(
-        "images/2-Living/Objetos/control_remoto.png",
-        { 1820.f , 580.f},
-        0.08f,
-        1,
-        "images/2-Living/Objetos/rotos/control_remoto_tirado.png",
-        "sound effects/objetos/golpeFruta.wav"
-    );
+    //agregarSuperficie(
+    //    sf::FloatRect(1143.6f, 490.f, 40.f, 20.f)
+    //);
 
     agregarMueble(
         "images/2-Living/Muebles/baul.png",
@@ -146,6 +124,52 @@ NivelLiving::NivelLiving()
         sf::FloatRect(10.f, 576.f, 260.f, 220.f)
     );
 
+    agregarMueble(
+        "images/2-Living/Muebles/cuadroMessi.png",
+        { 575.f , 180.f },
+        { 0.13f , 0.13f },
+        sf::FloatRect(0.f, 0.f, 100.f, 100.f)
+    );
+}
+
+void NivelLiving::cargarObjetos()
+{
+    agregarObjeto(
+        "images/2-Living/Objetos/Florero.png",
+        { 550.f, 390.f },
+        0.17f,
+        2,
+        "images/2-Living/Objetos/rotos/FloreroRoto.png",
+        "sound effects/objetos/vidrioRoto.wav"
+    );
+
+    agregarObjeto(
+        "images/2-Living/Objetos/TazaCafe.png",
+        { 855.f, 484.f },
+        0.25f,
+        1,
+        "images/2-Living/Objetos/rotos/TazaCafe_rota.png",
+        "sound effects/objetos/vidrioRoto.wav"
+    );
+
+    agregarObjeto(
+        "images/2-Living/Objetos/PilaDeLibros.png",
+        { 1350.f, 433.f },
+        0.15f,
+        2,
+        "images/2-Living/Objetos/rotos/pilaDeLibrosTirados.png",
+        "sound effects/objetos/golpeFruta.wav"
+    );
+
+    agregarObjeto(
+        "images/2-Living/Objetos/control_remoto.png",
+        { 1820.f , 580.f },
+        0.08f,
+        1,
+        "images/2-Living/Objetos/rotos/control_remoto_tirado.png",
+        "sound effects/objetos/golpeFruta.wav"
+    );
+
     agregarObjeto(
         "images/2-Living/Objetos/cuadroFoto.png",
         { 98.f , 525.f },
@@ -153,12 +177,5 @@ NivelLiving::NivelLiving()
         1,
         "images/2-Living/Objetos/rotos/cuadroFotoRoto.png",
         "sound effects/objetos/vidrioRoto.wav"
-    );
-
-    agregarMueble(
-        "images/2-Living/Muebles/cuadroMessi.png",
-        { 575.f , 180.f },
-        { 0.13f , 0.13f },
-        sf::FloatRect(0.f, 0.f, 100.f, 100.f)
     );
 }

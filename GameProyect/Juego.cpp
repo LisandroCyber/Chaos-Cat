@@ -68,10 +68,6 @@ Juego::Juego()
         std::cout << "Sin progreso valido guardado: comienza en Cocina\n";
     }
 
-    _progreso.desbloquearSiguiente(1);
-    _progreso.desbloquearSiguiente(2);
-    _progreso.desbloquearSiguiente(3);
-
     _nivel->setPausado(true);
     _gato.setPausado(true);
     _partidaPausada = true;
@@ -354,7 +350,7 @@ void Juego::procesarEventos()
                 std::cout << "Posicion en x: "
                     << _gato.getPosx() << '\n';
 
-                    std::cout << "Posicion en y: "
+                std::cout << "Posicion en y: "
                     << _gato.getPosy() << '\n';
             }
         }
@@ -586,6 +582,7 @@ bool Juego::iniciarNivel(int numero)
         return false;
     }
 
+    sf::Clock relojCarga;
     Nivel* nuevoNivel = crearNivel(numero);
     if (nuevoNivel == nullptr)
     {
@@ -602,6 +599,7 @@ bool Juego::iniciarNivel(int numero)
 
     delete _nivel;
     _nivel = nuevoNivel;
+
     _nivelActual = numero;
     _gato.reiniciar();
     aplicarConfiguracion();
@@ -622,6 +620,8 @@ bool Juego::iniciarNivel(int numero)
     _partidaPausada = true;
     actualizarPausaPartida();
     _nivel->continuarMusica();
+    std::cout << "[Preparar nivel " << numero << "] "
+        << relojCarga.getElapsedTime().asMilliseconds() << " ms\n";
     return true;
 }
 
