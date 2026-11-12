@@ -68,10 +68,6 @@ Juego::Juego()
         std::cout << "Sin progreso valido guardado: comienza en Cocina\n";
     }
 
-    _progreso.desbloquearSiguiente(1);
-    _progreso.desbloquearSiguiente(2);
-    _progreso.desbloquearSiguiente(3);
-
     _nivel->setPausado(true);
     _gato.setPausado(true);
     _partidaPausada = true;
@@ -587,7 +583,7 @@ bool Juego::iniciarNivel(int numero)
     }
 
     sf::Clock relojCarga;
-    Nivel* nuevoNivel = numero == _nivelActual ? _nivel : crearNivel(numero);
+    Nivel* nuevoNivel = crearNivel(numero);
     if (nuevoNivel == nullptr)
     {
         std::cout << "El nivel " << numero << " aun no esta implementado\n";
@@ -601,15 +597,9 @@ bool Juego::iniciarNivel(int numero)
     _nivel->pausarMusica();
     _gato.setPausado(true);
 
-    if (nuevoNivel != _nivel)
-    {
-        delete _nivel;
-        _nivel = nuevoNivel;
-    }
-    else
-    {
-        reiniciarPartida();
-    }
+    delete _nivel;
+    _nivel = nuevoNivel;
+
     _nivelActual = numero;
     _gato.reiniciar();
     aplicarConfiguracion();

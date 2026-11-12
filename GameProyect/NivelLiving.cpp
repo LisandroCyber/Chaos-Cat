@@ -109,9 +109,9 @@ void NivelLiving::cargarMuebles()
         sf::FloatRect(1990.f, 400.f, 390.f, 220.f)
     );
 
-    agregarSuperficie(
-        sf::FloatRect(1143.6f, 490.f, 40.f, 20.f)
-    );
+    //agregarSuperficie(
+    //    sf::FloatRect(1143.6f, 490.f, 40.f, 20.f)
+    //);
 
     agregarMueble(
         "images/2-Living/Muebles/baul.png",
