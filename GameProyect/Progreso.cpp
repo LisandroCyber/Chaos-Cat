@@ -15,7 +15,7 @@ bool Progreso::cargar()
 	const bool leido = fread(&ultimo, sizeof(int), 1, archivo) == 1;
 	fclose(archivo);
 
-	if (!leido || ultimo < 1 || ultimo > CANTIDAD_NIVELES)
+	if (!leido || ultimo < 1 || ultimo > NIVEL_INFINITO)
 	{
 		return false;
 	}
@@ -44,7 +44,7 @@ int Progreso::getUltimoNivelDesbloqueado() const
 
 void Progreso::desbloquearSiguiente(int nivelCompletado)
 {
-	if (nivelCompletado < 1 || nivelCompletado >= CANTIDAD_NIVELES)
+	if (nivelCompletado < 1 || nivelCompletado >= NIVEL_INFINITO)
 	{
 		return;
 	}

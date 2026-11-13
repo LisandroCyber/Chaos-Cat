@@ -90,6 +90,9 @@
     <ClCompile Include="NivelLivingNoche.cpp">
       <Filter>Archivos de origen</Filter>
     </ClCompile>
+    <ClCompile Include="NivelModoInfinito.cpp">
+      <Filter>Archivos de origen</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Constantes.h">
@@ -165,6 +168,9 @@
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
     <ClInclude Include="NivelLivingNoche.h">
+      <Filter>Archivos de encabezado</Filter>
+    </ClInclude>
+    <ClInclude Include="NivelModoInfinito.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
   </ItemGroup>

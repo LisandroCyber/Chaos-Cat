@@ -38,6 +38,7 @@
     <ClCompile Include="Nivelhabitacion.cpp" />
     <ClCompile Include="NivelLiving.cpp" />
     <ClCompile Include="NivelLivingNoche.cpp" />
+    <ClCompile Include="NivelModoInfinito.cpp" />
     <ClCompile Include="NivelPatio.cpp" />
     <ClCompile Include="Objeto.cpp" />
     <ClCompile Include="Personaje.cpp" />
@@ -65,6 +66,7 @@
     <ClInclude Include="NivelHabitacion.h" />
     <ClInclude Include="NivelLiving.h" />
     <ClInclude Include="NivelLivingNoche.h" />
+    <ClInclude Include="NivelModoInfinito.h" />
     <ClInclude Include="NivelPatio.h" />
     <ClInclude Include="Objeto.h" />
     <ClInclude Include="Personaje.h" />

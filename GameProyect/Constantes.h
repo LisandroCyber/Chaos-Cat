@@ -45,6 +45,8 @@ const float TIEMPO_PUERTA_RETIRADA = 1.f;
 
 //Seleccion de niveles
 const int CANTIDAD_NIVELES = 6;
+//Nivel Infinito
+const int NIVEL_INFINITO = CANTIDAD_NIVELES + 1;
 
 //Ciclo del perro: tiempos en segundos.
 const int TIEMPO_PERRO_REPOSO = 8;

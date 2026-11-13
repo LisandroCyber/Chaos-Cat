@@ -1,20 +1,21 @@
-#include "Tutorial.h"
+#include <iostream>
+#include <algorithm>
+
 #include "Juego.h"
 #include "Constantes.h"
+#include "Tutorial.h"
 #include "NivelCocina.h"
 #include "NivelLiving.h"
-#include "NivelLivingNoche.h"
 #include "NivelPatio.h"
 #include "NivelHabitacion.h"
 #include "NivelCocinaNoche.h"
 #include "NivelLivingNoche.h"
-#include <iostream>
-#include <algorithm>
+#include "NivelModoInfinito.h"
 
 Juego::Juego()
     : _window(
         sf::VideoMode(ANCHO_VENTANA, ALTO_VENTANA),
-        "Chaos Cat SFML 2.5"
+        "Chaos Cat SFML - Release 0.3"
     ),
     _gato(),
     _nivel(new NivelCocina()),
@@ -93,6 +94,100 @@ void Juego::ejecutar()
         dibujar();
     }
 }
+
+void Juego::abrirSeleccionNivel()
+{
+    _nivel->pausarMusica();
+    _menuPausa.pausarMusica();
+
+    _enMenu = false;
+    _enSeleccionNivel = true;
+    _enConfiguracion = false;
+    _enPausa = false;
+    _confirmarSalida = false;
+    _perdio = false;
+    _gano = false;
+    _victoriaMostrada = false;
+
+    _menuSeleccionNivel.abrir(_progreso.getUltimoNivelDesbloqueado());
+    actualizarPausaPartida();
+    _menuPrincipal.continuarMusica();
+}
+
+Nivel* Juego::crearNivel(int numero)
+{
+    switch (numero)
+    {
+    case 1:
+        return new NivelCocina();
+    case 2:
+        return new NivelLiving();
+    case 3:
+        return new NivelPatio();
+    case 4:
+        return new NivelHabitacion();
+    case 5:
+        return new NivelCocinaNoche();
+    case 6:
+        return new NivelLivingNoche();
+    case NIVEL_INFINITO:
+        return new NivelModoInfinito();
+    default:
+        return nullptr;
+    }
+}
+
+bool Juego::iniciarNivel(int numero)
+{
+    if (numero < 1 || numero > NIVEL_INFINITO ||
+        numero > _progreso.getUltimoNivelDesbloqueado())
+    {
+        return false;
+    }
+
+    sf::Clock relojCarga;
+    Nivel* nuevoNivel = crearNivel(numero);
+    if (nuevoNivel == nullptr)
+    {
+        std::cout << "El nivel " << numero << " aun no esta implementado\n";
+        return false;
+    }
+
+    nuevoNivel->pausarMusica();
+    nuevoNivel->setPausado(true);
+    _menuPrincipal.pausarMusica();
+    _menuPausa.pausarMusica();
+    _nivel->pausarMusica();
+    _gato.setPausado(true);
+
+    delete _nivel;
+    _nivel = nuevoNivel;
+
+    _nivelActual = numero;
+    _gato.reiniciar();
+    aplicarConfiguracion();
+
+    _enMenu = false;
+    _enSeleccionNivel = false;
+    _enConfiguracion = false;
+    _enPausa = false;
+    _confirmarSalida = false;
+    _perdio = false;
+    _gano = false;
+    _victoriaMostrada = false;
+
+    _menuDerrota.reiniciarSeleccion();
+    _menuVictoria.reiniciarSeleccion();
+
+    //Los relojes del gato y el enemigo estan en pausa, ahora que esta todo listo se saca la pausa
+    _partidaPausada = true;
+    actualizarPausaPartida();
+    _nivel->continuarMusica();
+    std::cout << "[Preparar nivel " << numero << "] "
+        << relojCarga.getElapsedTime().asMilliseconds() << " ms\n";
+    return true;
+}
+
 
 void Juego::solicitarSalida()
 {
@@ -552,94 +647,5 @@ void Juego::actualizarCamara()
     _camara.setCenter(centroX, ALTO_VENTANA / 2.f);
 }
 
-//TODO: Ir modificandolo a medida que agreguemos niveles. No agregar nivel hasta que no este completo
-Nivel* Juego::crearNivel(int numero)
-{
-    switch (numero)
-    {
-    case 1:
-        return new NivelCocina();
-    case 2:
-        return new NivelLiving();
-    case 3:
-        return new NivelPatio();
-    case 4:
-        return new NivelHabitacion();
-    case 5:
-        return new NivelCocinaNoche();
-    case 6:
-        return new NivelLivingNoche();
-    default:
-        return nullptr;
-    }
-}
 
-bool Juego::iniciarNivel(int numero)
-{
-    if (numero < 1 || numero > CANTIDAD_NIVELES ||
-        numero > _progreso.getUltimoNivelDesbloqueado())
-    {
-        return false;
-    }
 
-    sf::Clock relojCarga;
-    Nivel* nuevoNivel = crearNivel(numero);
-    if (nuevoNivel == nullptr)
-    {
-        std::cout << "El nivel " << numero << " aun no esta implementado\n";
-        return false;
-    }
-
-    nuevoNivel->pausarMusica();
-    nuevoNivel->setPausado(true);
-    _menuPrincipal.pausarMusica();
-    _menuPausa.pausarMusica();
-    _nivel->pausarMusica();
-    _gato.setPausado(true);
-
-    delete _nivel;
-    _nivel = nuevoNivel;
-
-    _nivelActual = numero;
-    _gato.reiniciar();
-    aplicarConfiguracion();
-
-    _enMenu = false;
-    _enSeleccionNivel = false;
-    _enConfiguracion = false;
-    _enPausa = false;
-    _confirmarSalida = false;
-    _perdio = false;
-    _gano = false;
-    _victoriaMostrada = false;
-
-    _menuDerrota.reiniciarSeleccion();
-    _menuVictoria.reiniciarSeleccion();
-
-    //Los relojes del gato y el enemigo estan en pausa, ahora que esta todo listo se saca la pausa
-    _partidaPausada = true;
-    actualizarPausaPartida();
-    _nivel->continuarMusica();
-    std::cout << "[Preparar nivel " << numero << "] "
-        << relojCarga.getElapsedTime().asMilliseconds() << " ms\n";
-    return true;
-}
-
-void Juego::abrirSeleccionNivel()
-{
-    _nivel->pausarMusica();
-    _menuPausa.pausarMusica();
-
-    _enMenu = false;
-    _enSeleccionNivel = true;
-    _enConfiguracion = false;
-    _enPausa = false;
-    _confirmarSalida = false;
-    _perdio = false;
-    _gano = false;
-    _victoriaMostrada = false;
-
-    _menuSeleccionNivel.abrir(_progreso.getUltimoNivelDesbloqueado());
-    actualizarPausaPartida();
-    _menuPrincipal.continuarMusica();
-}
