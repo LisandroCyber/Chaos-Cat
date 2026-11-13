@@ -236,9 +236,9 @@ void MenuSeleccionNivel::draw(sf::RenderTarget& destino,
     for (int i = 0; i <= CANTIDAD_OPCIONES; i++)
     {
         const bool esVolver = i == CANTIDAD_OPCIONES;
-        const bool habilitado = esVolver || estaHabilitado(i);
-        const bool seleccionado = habilitado && i == _seleccion;
-        const sf::FloatRect& zona = _zonas[i];
+    const bool habilitado = esVolver || estaHabilitado(i);
+    const bool seleccionado = habilitado && i == _seleccion;
+    const sf::FloatRect& zona = _zonas[i];
 
         if (!habilitado || seleccionado)
         {
@@ -251,6 +251,8 @@ void MenuSeleccionNivel::draw(sf::RenderTarget& destino,
                 indicador.setOutlineColor(sf::Color(255, 220, 100));
                 indicador.setOutlineThickness(2.f);
             }    
+            
+            destino.draw(indicador, estados);
         }
 
 
