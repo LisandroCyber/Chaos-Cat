@@ -586,7 +586,8 @@ void Nivel::pausarMusica()
 
 void Nivel::continuarMusica()
 {
-    if (_musicaFondo.getStatus() != sf::SoundSource::Playing)
+    if (_musicaFondo.getDuration() > sf::Time::Zero &&
+        _musicaFondo.getStatus() != sf::SoundSource::Playing)
     {
         _musicaFondo.play();
     }

@@ -68,12 +68,16 @@ MenuSeleccionNivel::MenuSeleccionNivel()
     _zonas[3] = sf::FloatRect(965.f, 375.f, 215.f, 110.f);
     _zonas[4] = sf::FloatRect(110.f, 505.f, 225.f, 110.f);
     _zonas[5] = sf::FloatRect(390.f, 505.f, 500.f, 110.f);
+    _zonas[NIVEL_INFINITO - 1] = sf::FloatRect(100.f, 190.f, 200.f, 105.f);
+    _zonas[CANTIDAD_OPCIONES] = sf::FloatRect(948.f, 529.f, 118.f, 90.f);
 
-    const std::string nombres[CANTIDAD_NIVELES] = {
-        "1. COCINA", "2. LIVING", "3. PATIO", "4. HABITACION", "5. COCINA (NOCHE)", "6. LIVING (NOCHE)"
+    const std::string nombres[CANTIDAD_OPCIONES + 1] = {
+        "1. COCINA", "2. LIVING", "3. PATIO", "4. HABITACION",
+        "5. COCINA (NOCHE)", "6. LIVING (NOCHE)", "MODO INFINITO", 
+        "VOLVER"
     };
 
-    for (int i = 0; i < CANTIDAD_NIVELES; i++)
+    for (int i = 0; i < CANTIDAD_OPCIONES; i++)
     {
         _nombres[i].setFont(_fuente);
         _nombres[i].setString(nombres[i]);
@@ -99,7 +103,7 @@ MenuSeleccionNivel::MenuSeleccionNivel()
     _volver.setCharacterSize(24);
     _volver.setOutlineColor(sf::Color::Black);
     _volver.setOutlineThickness(2.f);
-    centrarTexto(_volver, 100.f, 690.f);
+    centrarTexto(_volver, 1007.f, 574.f);
 }
 
 void MenuSeleccionNivel::centrarTexto(sf::Text& texto, float x, float y)
@@ -113,12 +117,17 @@ void MenuSeleccionNivel::centrarTexto(sf::Text& texto, float x, float y)
 void MenuSeleccionNivel::abrir(int ultimoNivelDesbloqueado)
 {
     _ultimoNivelDesbloqueado = std::max(1,
-        std::min(ultimoNivelDesbloqueado, CANTIDAD_NIVELES));
+        std::min(ultimoNivelDesbloqueado, NIVEL_INFINITO));
     _seleccion = 0;
 }
 
 bool MenuSeleccionNivel::estaHabilitado(int indice) const
 {
+    if (indice == NIVEL_INFINITO - 1)
+    {
+        return _ultimoNivelDesbloqueado >= NIVEL_INFINITO;
+    }
+
     return indice >= 0 && indice < CANTIDAD_NIVELES &&
         _disponibles[indice] && indice + 1 <= _ultimoNivelDesbloqueado;
 }
@@ -126,7 +135,7 @@ bool MenuSeleccionNivel::estaHabilitado(int indice) const
 int MenuSeleccionNivel::obtenerNivelEn(
     const sf::Vector2f& posicionMouse) const
 {
-    for (int i = 0; i < CANTIDAD_NIVELES; i++)
+    for (int i = 0; i < CANTIDAD_OPCIONES; i++)
     {
         if (_zonas[i].contains(posicionMouse.x, posicionMouse.y))
         {
@@ -139,10 +148,10 @@ int MenuSeleccionNivel::obtenerNivelEn(
 void MenuSeleccionNivel::moverSeleccion(int direccion)
 {
     int candidato = _seleccion;
-    for (int i = 0; i < CANTIDAD_NIVELES; i++)
+    for (int i = 0; i < CANTIDAD_OPCIONES; i++)
     {
-        candidato = (candidato + direccion + CANTIDAD_NIVELES) %
-            CANTIDAD_NIVELES;
+        candidato = (candidato + direccion + CANTIDAD_OPCIONES) %
+            CANTIDAD_OPCIONES;
         if (estaHabilitado(candidato))
         {
             _seleccion = candidato;
@@ -159,6 +168,11 @@ int MenuSeleccionNivel::procesarEvento(const sf::Event& evento,
         const sf::Vector2f mouse = ventana.mapPixelToCoords(
             sf::Vector2i(evento.mouseMove.x, evento.mouseMove.y),
             ventana.getDefaultView());
+        if (_zonas[CANTIDAD_OPCIONES].contains(mouse.x, mouse.y))
+        {
+            _seleccion = CANTIDAD_OPCIONES;
+            return -1;
+        }
         const int indice = obtenerNivelEn(mouse);
         if (estaHabilitado(indice))
         {
@@ -173,7 +187,7 @@ int MenuSeleccionNivel::procesarEvento(const sf::Event& evento,
             sf::Vector2i(evento.mouseButton.x, evento.mouseButton.y),
             ventana.getDefaultView());
 
-        if (_volver.getGlobalBounds().contains(mouse.x, mouse.y))
+        if (_zonaVolver.contains(mouse))
         {
             return 0;
         }
@@ -219,11 +233,12 @@ void MenuSeleccionNivel::draw(sf::RenderTarget& destino,
     destino.draw(_mapa, estados);
     destino.draw(_titulo, estados);
 
-    for (int i = 0; i < CANTIDAD_NIVELES; i++)
+    for (int i = 0; i <= CANTIDAD_OPCIONES; i++)
     {
-        const bool habilitado = estaHabilitado(i);
-        const bool seleccionado = habilitado && i == _seleccion;
-        const sf::FloatRect& zona = _zonas[i];
+        const bool esVolver = i == CANTIDAD_OPCIONES;
+    const bool habilitado = esVolver || estaHabilitado(i);
+    const bool seleccionado = habilitado && i == _seleccion;
+    const sf::FloatRect& zona = _zonas[i];
 
         if (!habilitado || seleccionado)
         {
@@ -235,9 +250,11 @@ void MenuSeleccionNivel::draw(sf::RenderTarget& destino,
             {
                 indicador.setOutlineColor(sf::Color(255, 220, 100));
                 indicador.setOutlineThickness(2.f);
-            }
+            }    
+            
             destino.draw(indicador, estados);
         }
+
 
         sf::Text nombre = _nombres[i];
         nombre.setFillColor(habilitado ?

@@ -5,18 +5,19 @@
 class MenuSeleccionNivel : public sf::Drawable
 {
 private:
+    static constexpr int CANTIDAD_OPCIONES = NIVEL_INFINITO;
     sf::Texture _texturaFondo;
     sf::Texture _texturaMapa;
     sf::Texture _texturaMarcador;
     sf::Sprite _fondo;
     sf::Sprite _mapa;
     sf::Sprite _marcador;
-
     sf::Font _fuente;
     sf::Text _titulo;
-    sf::Text _nombres[CANTIDAD_NIVELES];
+    sf::Text _nombres[CANTIDAD_OPCIONES + 1];
     sf::Text _volver;
-    sf::FloatRect _zonas[CANTIDAD_NIVELES];
+    sf::FloatRect _zonas[CANTIDAD_OPCIONES + 1];
+    sf::FloatRect _zonaVolver{ 948.f, 529.f, 118.f, 90.f };
 
     bool _disponibles[CANTIDAD_NIVELES] =
     { true, true, true, true, true, true };
