@@ -15,7 +15,7 @@
 Juego::Juego()
     : _window(
         sf::VideoMode(ANCHO_VENTANA, ALTO_VENTANA),
-        "Chaos Cat SFML - Release 0.3"
+        "Chaos Cat SFML"
     ),
     _gato(),
     _nivel(new NivelCocina()),
@@ -72,6 +72,15 @@ Juego::Juego()
     _nivel->setPausado(true);
     _gato.setPausado(true);
     _partidaPausada = true;
+    
+    if (_fuentePuntos.loadFromFile("fonts/Starcatcher.ttf"))
+    {
+        _textoPuntos.setFont(_fuentePuntos);
+        _textoPuntos.setCharacterSize(26);
+        _textoPuntos.setPosition(30.f, 20.f);
+        _textoPuntos.setOutlineColor(sf::Color::Black);
+        _textoPuntos.setOutlineThickness(2.f);
+    }
 }
 
 Juego::~Juego()
@@ -237,12 +246,33 @@ void Juego::procesarEventos()
 
             if (opcion == 0)
             {
+                if (_nivelActual == NIVEL_INFINITO &&
+                    !_enMenu && !_enSeleccionNivel && !_perdio)
+                {
+                    _tablaPuntos.registrar(_nivel->getPuntos());
+                }
+
                 _window.close();
                 return;
             }
             else if (opcion == 1)
             {
                 cancelarSalida();
+            }
+
+            continue;
+        }
+
+        if (_enPuntajes)
+        {
+            if (evento.type == sf::Event::KeyPressed &&
+                evento.key.code == sf::Keyboard::Escape)
+            {
+                _enPuntajes = false;
+            }
+            else if (_tablaPuntos.procesarEvento(evento, _window) == 0)
+            {
+                _enPuntajes = false;
             }
 
             continue;
@@ -300,6 +330,7 @@ void Juego::procesarEventos()
             }
             else if (opcion == 1)
             {
+                
                 volverAlMenuPrincipal();
             }
             else if (opcion == 2)
@@ -367,6 +398,10 @@ void Juego::procesarEventos()
             }
             else if (opcion == 3)
             {
+                _enPuntajes = true;
+            }
+            else if (opcion == 4)
+            {
                 solicitarSalida();
             }
 
@@ -413,6 +448,10 @@ void Juego::procesarEventos()
             }
             else if (opcion == 2)
             {
+                if (_nivelActual == NIVEL_INFINITO)
+                {
+                    _tablaPuntos.registrar(_nivel->getPuntos());
+                }
                 volverAlMenuPrincipal();
             }
             else if (opcion == 3)
@@ -492,10 +531,15 @@ void Juego::actualizar()
         _menuDerrota.reiniciarSeleccion();
         _nivel->pausarMusica();
 
+        if (_nivelActual == NIVEL_INFINITO)
+        {
+            _tablaPuntos.registrar(_nivel->getPuntos());
+        }
+
         return;
     }
 
-    if (!_victoriaMostrada &&
+    if (_nivelActual != NIVEL_INFINITO && !_victoriaMostrada &&
         _nivel->todosLosObjetosEnElPiso())
     {
         _gano = true;
@@ -528,6 +572,10 @@ void Juego::dibujar()
     else if (_enConfiguracion)
     {
         _window.draw(_menuConfiguracion);
+    }
+    else if (_enPuntajes)
+    {
+        _window.draw(_tablaPuntos);
     }
     else if (_enMenu)
     {
@@ -569,6 +617,12 @@ void Juego::dibujar()
     {
         _menuVictoria.prepararFondo(_window);
         _window.draw(_menuVictoria);
+    }
+
+    if (_nivelActual == NIVEL_INFINITO && !_perdio)
+    {
+        _textoPuntos.setString("Puntos: " + std::to_string(_nivel->getPuntos()));
+        _window.draw(_textoPuntos);
     }
 
     if (_confirmarSalida)

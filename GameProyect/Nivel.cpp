@@ -171,6 +171,8 @@ void Nivel::actualizar(Personaje& gato)
         //avisa solo en el momento del impacto, no en cada actualizacion.
         if (!estabaEnElPiso && objeto->estaEnElPiso())
         {
+            _puntos++;
+
             for (Enemigo* enemigo : _enemigos)
             {
                 enemigo->reaccionarACaida();
@@ -745,4 +747,9 @@ void Nivel::resolverBarrerasLaterales(Personaje& gato)
                 });
         }
     }
+}
+
+int Nivel::getPuntos() const
+{ 
+    return _puntos;
 }

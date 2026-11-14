@@ -109,4 +109,5 @@ void NivelModoInfinito::cargarMuebles()
 
 void NivelModoInfinito::cargarObjetos()
 {
+    
 }

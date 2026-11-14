@@ -28,6 +28,7 @@ public:
     void alternarHitboxes();
     void alternarRelojesEnemigos();
     void setRelojesEnemigosCongelados(bool congelados);
+    int getPuntos() const;
 
     bool gatoFueDetectado(
         const Personaje& gato,
@@ -76,6 +77,8 @@ protected:
 private:
     static constexpr int MARGEN_HALO_ESCONDITE = 12;
     static sf::FloatRect obtenerAreaVisible(const sf::View& camara);
+
+    int _puntos = 0;
 
     sf::Texture _texturaFondo;
     sf::Sprite _spriteFondo;

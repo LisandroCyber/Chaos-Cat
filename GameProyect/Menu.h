@@ -6,7 +6,7 @@ class Menu : public sf::Drawable
 protected:
     sf::Font _fuente;
     sf::Text _titulo;
-    sf::Text _opciones[4];
+    sf::Text _opciones[5];
     int _cantidadOpciones;
     int _seleccion = 0;
 

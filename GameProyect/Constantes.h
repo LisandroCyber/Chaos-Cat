@@ -79,3 +79,6 @@ const float VOLUMEN_ALERTA_DUENIA_HABITACION = 15.f;
 const float VOLUMEN_ALERTA_DUENIA_COCINA = 15.f;
 const float VOLUMEN_ALERTA_PERRO = 5.f;
 const float VOLUMEN_ALERTA_CAMARA = 15.f;
+
+//Tabla de puntos: Modo Infinito
+const int PUNTAJES = 5;

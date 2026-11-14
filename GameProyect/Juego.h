@@ -12,6 +12,7 @@
 #include "MenuVictoria.h"
 #include "MenuSeleccionNivel.h"
 #include "Progreso.h"
+#include "TablaPuntos.h"
 
 class Juego
 {
@@ -40,6 +41,10 @@ private:
     MenuVictoria _menuVictoria;
     MenuSeleccionNivel _menuSeleccionNivel;
     Progreso _progreso;
+    TablaPuntos _tablaPuntos;
+    bool _enPuntajes = false;
+    sf::Font _fuentePuntos;
+    sf::Text _textoPuntos;
 
     int _nivelActual = 1;
     bool _enSeleccionNivel = false;
