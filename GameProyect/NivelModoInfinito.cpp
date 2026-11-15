@@ -82,7 +82,7 @@ void NivelModoInfinito::cargarEnemigo(int indice)
     case 1: // Dueña
         enemigo = agregarEnemigo(
             "images/Enemigos/frames_enemiga.png",
-            { 1250.f, 500.f }, 600, 724, { 0.52f, 0.53f },
+            { 1430.f, 500.f }, 600, 724, { 0.52f, 0.53f },
             "sound effects/enemigos/mmh_duenia.wav",
             VOLUMEN_ALERTA_DUENIA_LIVING);
         break;
