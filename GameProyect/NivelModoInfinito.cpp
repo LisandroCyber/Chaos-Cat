@@ -22,7 +22,6 @@ namespace
 NivelModoInfinito::NivelModoInfinito()
 {
     cargarEscenario();
-    cargarEnemigos();
     cargarMuebles();
     cargarObjetos();
     for (ObjetoActivo& espacio : _objetosActivos)
@@ -44,6 +43,13 @@ void NivelModoInfinito::actualizar(Personaje& gato)
 {
     Nivel::actualizar(gato);
 
+    while (_enemigosAgregados < CANTIDAD_ENEMIGOS &&
+        getPuntos() >= (_enemigosAgregados + 1) * PUNTOS_POR_ENEMIGO)
+    {
+        cargarEnemigo(_enemigosAgregados);
+        ++_enemigosAgregados;
+    }
+
     for (ObjetoActivo& espacio : _objetosActivos)
     {
         if (espacio.objeto->estaEnElPiso() && !espacio.objeto->estaSonandoCaida())
@@ -59,8 +65,63 @@ void NivelModoInfinito::cargarEscenario()
     cargarFondo("images/ModoInfinito/living.png");
 }
 
-void NivelModoInfinito::cargarEnemigos()
+void NivelModoInfinito::cargarEnemigo(int indice)
 {
+    Enemigo* enemigo = nullptr;
+
+    switch (indice)
+    {
+    case 0: // Dueño
+        enemigo = agregarEnemigo(
+            "images/Enemigos/frames_enemigo_limpiando.png",
+            { 310.f, 500.f }, 600, 724, { 0.52f, 0.53f },
+            "sound effects/enemigos/huu_duenio.wav",
+            VOLUMEN_ALERTA_DUENIO);
+        break;
+
+    case 1: // Dueña
+        enemigo = agregarEnemigo(
+            "images/Enemigos/frames_enemiga.png",
+            { 1250.f, 500.f }, 600, 724, { 0.52f, 0.53f },
+            "sound effects/enemigos/mmh_duenia.wav",
+            VOLUMEN_ALERTA_DUENIA_LIVING);
+        break;
+
+    case 2: // Perro
+        enemigo = agregarEnemigo(
+            "images/Enemigos/perro.png",
+            { 2150.f, 425.f }, 512, 768, { 0.38f, 0.38f },
+            "sound effects/enemigos/perro_despertando.wav",
+            VOLUMEN_ALERTA_PERRO);
+
+        enemigo->configurarTiempos(
+            TIEMPO_PERRO_REPOSO, TIEMPO_PERRO_REPOSO,
+            TIEMPO_PERRO_ALERTA, TIEMPO_PERRO_VIGILANCIA);
+        enemigo->configurarRuido(true, false);
+        enemigo->configurarPresentacion(FRAME_PERRO_DETECCION, false);
+        break;
+
+    case 3: // Cámara
+        enemigo = agregarEnemigo(
+            "images/Enemigos/camara_estados.png",
+            { 1050.f, 62.f }, 724, 724, { 0.17f, 0.17f },
+            "sound effects/enemigos/camara_moviendose.wav",
+            VOLUMEN_ALERTA_CAMARA);
+
+        enemigo->configurarTiempos(
+            TIEMPO_CAMARA_REPOSO, TIEMPO_CAMARA_REPOSO,
+            TIEMPO_CAMARA_ALERTA, TIEMPO_CAMARA_VIGILANCIA);
+        enemigo->configurarRuido(false, false);
+        enemigo->configurarPresentacion(FRAME_ENEMIGO_SIN_CAMBIO, false);
+        break;
+
+    default:
+        return;
+    }
+
+    // Los enemigos aparecen durante una partida que ya está en marcha.
+    enemigo->configurarReinicioFueraDeCamara();
+    enemigo->setPausado(false);
 }
 
 void NivelModoInfinito::cargarMuebles()

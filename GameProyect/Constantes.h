@@ -82,3 +82,5 @@ const float VOLUMEN_ALERTA_CAMARA = 15.f;
 
 //Tabla de puntos: Modo Infinito
 const int PUNTAJES = 5;
+const int PUNTOS_POR_ENEMIGO = 5;
+const int CANTIDAD_ENEMIGOS = 4;

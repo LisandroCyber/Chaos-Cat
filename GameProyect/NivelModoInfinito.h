@@ -27,9 +27,10 @@ private:
     std::array<ObjetoActivo, CANTIDAD_OBJETOS> _objetosActivos{};
     std::vector<Objeto*> _reserva;
     std::uint64_t _objetosGenerados = 0;
+    int _enemigosAgregados = 0;
 
+    void cargarEnemigo(int indice);
     void cargarEscenario();
-    void cargarEnemigos();
     void cargarMuebles();
     void cargarObjetos();
     void generarObjeto(ObjetoActivo& espacio);

@@ -41,6 +41,14 @@ TablaPuntos::TablaPuntos()
 
 void TablaPuntos::registrar(int puntos)
 {
+    for (int i = 0; i < CANTIDAD; i++)
+    {
+        if (_mejores[i] == puntos)
+        {
+            return; // Este puntaje ya está en la tabla.
+        }
+    }
+
     if (puntos <= _mejores[PUNTAJES - 1])
     {
         return;

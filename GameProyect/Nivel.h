@@ -53,26 +53,28 @@ protected:
         const std::string& rutaSonidoAlerta,
         float volumenAlerta,
         bool seAsomaPorPuerta = false);
+
     void agregarMueble(const std::string& rutaTextura,
         const sf::Vector2f& posicion,
         const sf::Vector2f& escala,
         const sf::FloatRect& hitboxLocal);
+
     Objeto* agregarObjeto(const std::string& rutaTextura,
         const sf::Vector2f& posicion,
         float escala,
         int golpesNecesarios,
         const std::string& rutaTexturaCaida,
         const std::string& rutaSonidoCaida);
+
     void incorporarObjeto(Objeto* objeto);
     void retirarObjeto(Objeto* objeto);
-
     void agregarSuperficie(const sf::FloatRect& superficie);
     void agregarZonaEscondite(const sf::FloatRect& zona);
-
     bool cargarMusicaFondo(const std::string& rutaMusica, float volumen);
     bool cargarSonido(const std::string& rutaSonido, float volumen);
     void configurarLoopMusica(sf::Time inicioLoop, sf::Time duracionLoop);
     void reproducirMusicaFondo(sf::Time inicioReproduccion);
+
     void agregarBarreraLateral(const sf::FloatRect& barrera,
         bool bloqueaDescenso = false);
 
