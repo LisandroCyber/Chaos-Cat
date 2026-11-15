@@ -14,6 +14,7 @@ private:
 	sf::Sprite _sprite;
 	sf::Vector2f _posicionInicial;
 	sf::Vector2f _velocidad;
+	sf::FloatRect _hitboxApoyado;
 	bool _tirado;
 	bool _visible;
 	bool _enElPiso = false;
@@ -28,6 +29,7 @@ private:
 	static sf::Texture cargarTextura(const std::string& rutaTextura);
 	static float obtenerBaseVisible(const sf::Texture& textura);
 	void crearContorno();
+	void calcularHitboxApoyado();
 
 public:
 	
@@ -35,12 +37,15 @@ public:
 		int golpesNecesarios, const std::string& rutaTexturaCaida, const std::string& rutaSonidoCaida);
 
 	sf::FloatRect getGlobalBounds() const;
+	void colocarSobre(const sf::Vector2f& apoyo);
+	void setGolpesNecesarios(int golpesNecesarios);
 	void update(float anchoNivel);
 	void setPausado(bool pausado);
 	void tirar(float direccion);
 	void reiniciar();
 	bool estaTirado() const;
 	bool estaEnElPiso() const;
+	bool estaSonandoCaida() const;
 	void recibirGolpe(float direccion, int numeroGolpe);
 
 	void dibujar(sf::RenderWindow& ventana) const;

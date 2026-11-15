@@ -164,7 +164,67 @@ void Objeto::dibujar(sf::RenderWindow& ventana) const
 
 sf::FloatRect Objeto::getGlobalBounds() const
 {
+	if (!_enElPiso && _hitboxApoyado.width > 0.f)
+	{
+		return _sprite.getTransform().transformRect(_hitboxApoyado);
+	}
+
 	return _sprite.getGlobalBounds();
+}
+
+void Objeto::calcularHitboxApoyado()
+{
+	const sf::Image imagen = _texture.copyToImage();
+	const sf::Vector2u tamano = imagen.getSize();
+	unsigned int izquierda = tamano.x;
+	unsigned int arriba = tamano.y;
+	unsigned int derecha = 0;
+	unsigned int abajo = 0;
+
+	for (unsigned int y = 0; y < tamano.y; ++y)
+	{
+		for (unsigned int x = 0; x < tamano.x; ++x)
+		{
+			if (imagen.getPixel(x, y).a < 128)
+			{
+				continue;
+			}
+
+			izquierda = std::min(izquierda, x);
+			arriba = std::min(arriba, y);
+			derecha = std::max(derecha, x + 1);
+			abajo = std::max(abajo, y + 1);
+		}
+	}
+
+	if (derecha > izquierda && abajo > arriba)
+	{
+		_hitboxApoyado = sf::FloatRect(
+			static_cast<float>(izquierda), static_cast<float>(arriba),
+			static_cast<float>(derecha - izquierda), static_cast<float>(abajo - arriba));
+	}
+	else
+	{
+		_hitboxApoyado = _sprite.getLocalBounds();
+	}
+}
+
+void Objeto::colocarSobre(const sf::Vector2f& apoyo)
+{
+	if (_hitboxApoyado.width <= 0.f)
+	{
+		calcularHitboxApoyado();
+	}
+
+	const sf::FloatRect area = getGlobalBounds();
+	const sf::Vector2f base(area.left + area.width / 2.f, area.top + area.height);
+	_sprite.move(apoyo - base);
+	_posicionInicial = _sprite.getPosition();
+}
+
+void Objeto::setGolpesNecesarios(int golpesNecesarios)
+{
+	_golpesNecesarios = std::max(1, golpesNecesarios);
 }
 
 void Objeto::update(float anchoNivel)
@@ -177,7 +237,7 @@ void Objeto::update(float anchoNivel)
 	_sprite.move(_velocidad);
 	_velocidad.y += 0.45f;
 
-	const sf::FloatRect limites = _sprite.getGlobalBounds();
+	const sf::FloatRect limites = getGlobalBounds();
 	const float ventanaX = anchoNivel;
 
 	if (limites.left < 0.f)
@@ -191,7 +251,7 @@ void Objeto::update(float anchoNivel)
 		_velocidad.x = 0.f;
 	}
 
-	const sf::FloatRect area = _sprite.getGlobalBounds();
+	const sf::FloatRect area = getGlobalBounds();
 	const float baseObjeto = area.top + area.height;
 	const float pisoY = static_cast<float>(ALTO_VENTANA);
 
@@ -257,6 +317,11 @@ bool Objeto::estaTirado() const
 bool Objeto::estaEnElPiso() const
 {
 	return _enElPiso;
+}
+
+bool Objeto::estaSonandoCaida() const
+{
+	return _sonidoCaida.getStatus() == sf::SoundSource::Playing;
 }
 
 void Objeto::recibirGolpe(float direccion, int numeroGolpe)

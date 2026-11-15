@@ -17,7 +17,7 @@ public:
     virtual ~Nivel();
     void pausarMusica();
     void continuarMusica();
-    void actualizar(Personaje& gato);
+    virtual void actualizar(Personaje& gato);
     void actualizarVisibilidadEnemigos(const sf::View& camara);
     void setPausado(bool pausado);
     void reiniciarObjetos();
@@ -57,12 +57,14 @@ protected:
         const sf::Vector2f& posicion,
         const sf::Vector2f& escala,
         const sf::FloatRect& hitboxLocal);
-    void agregarObjeto(const std::string& rutaTextura,
+    Objeto* agregarObjeto(const std::string& rutaTextura,
         const sf::Vector2f& posicion,
         float escala,
         int golpesNecesarios,
         const std::string& rutaTexturaCaida,
         const std::string& rutaSonidoCaida);
+    void incorporarObjeto(Objeto* objeto);
+    void retirarObjeto(Objeto* objeto);
 
     void agregarSuperficie(const sf::FloatRect& superficie);
     void agregarZonaEscondite(const sf::FloatRect& zona);

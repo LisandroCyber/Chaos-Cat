@@ -96,21 +96,37 @@ void Nivel::agregarMueble(const std::string& rutaTextura,
     ));
 }
 
-void Nivel::agregarObjeto(const std::string& rutaTextura,
+Objeto* Nivel::agregarObjeto(const std::string& rutaTextura,
     const sf::Vector2f& posicion,
     float escala,
     int golpesNecesarios,
     const std::string& rutaTexturaCaida,
     const std::string& rutaSonidoCaida)
 {
-    _objetos.push_back(new Objeto(
+    Objeto* objeto = new Objeto(
         rutaTextura,
         posicion,
         escala,
         golpesNecesarios,
         rutaTexturaCaida,
         rutaSonidoCaida
-    ));
+    );
+    incorporarObjeto(objeto);
+    return objeto;
+}
+
+void Nivel::incorporarObjeto(Objeto* objeto)
+{
+    _objetos.push_back(objeto);
+}
+
+void Nivel::retirarObjeto(Objeto* objeto)
+{
+    const auto encontrado = std::find(_objetos.begin(), _objetos.end(), objeto);
+    if (encontrado != _objetos.end())
+    {
+        _objetos.erase(encontrado);
+    }
 }
 
 void Nivel::agregarSuperficie(const sf::FloatRect& superficie)
