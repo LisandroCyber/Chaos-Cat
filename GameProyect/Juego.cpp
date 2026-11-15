@@ -153,6 +153,14 @@ bool Juego::iniciarNivel(int numero)
     {
         return false;
     }
+    
+    sf::Text cargando("Cargando...", _fuentePuntos, 36);
+    cargando.setPosition(540.f, 330.f);
+
+    _window.setView(_window.getDefaultView());
+    _window.clear(sf::Color::Black);
+    _window.draw(cargando);
+    _window.display();
 
     sf::Clock relojCarga;
     Nivel* nuevoNivel = crearNivel(numero);
@@ -196,7 +204,6 @@ bool Juego::iniciarNivel(int numero)
         << relojCarga.getElapsedTime().asMilliseconds() << " ms\n";
     return true;
 }
-
 
 void Juego::solicitarSalida()
 {
