@@ -1,58 +1,75 @@
-# Chaos Cat 🐈
+# Chaos Cat
 
-**Chaos Cat** es un videojuego arcade en 2D desarrollado en **C++** con **SFML 3**.
+Chaos Cat es un juego 2D en pixel art desarrollado en C++ con SFML. Controlás a un gato que puede recorrer una habitación, saltar sobre muebles y tirar objetos para causar un desastre.
 
-El jugador controla a un gato travieso dentro de una casa. Su objetivo será recorrer las habitaciones y tirar distintos objetos antes de que el dueño lo descubra.
+Este README describe el estado actual de la rama `CambioMau`: un prototipo jugable con un nivel de cocina, movimiento, colisiones, sonidos y menús.
 
-> El proyecto se encuentra actualmente en desarrollo.
+## Funciones implementadas
 
-🎮 Cómo se jugará
-El gato se moverá sobre la mesa de la habitación y empujará los objetos para hacerlos caer.
-El dueño hará otras actividades, pero podrá darse vuelta en cualquier momento. Se evalúa avisar al jugador con una animación o un sonido antes de que mire.
-Cuando un objeto caiga, hará ruido y el dueño se dará vuelta necesariamente.
-Mientras el dueño esté mirando, el gato deberá permanecer quieto: si se mueve, será descubierto y perderá. Después de aproximadamente 3 segundos, el dueño volverá a su actividad.
-Para completar un nivel, habrá que tirar los objetos requeridos antes de que se agote el tiempo, sin ser descubierto.
-La idea es combinar el caos de tirar cosas con una mecánica de «quedarse inmóvil» en el momento justo.
-
-## Estado actual
-
-Todas las implementaciones y modificaciones se hacen en la rama `EnProceso`.
-
-## ✅ Qué funciona hoy
-
-- Movimiento del gato en cuatro direcciones.
-- Diferentes velocidades: caminar, correr y agacharse.
-- Salto y gravedad.
-- Animaciones según el estado del gato.
-- Límites de movimiento dentro de la ventana.
-- Hitboxes adaptadas a las distintas animaciones.
-- Colisión entre el gato y una taza.
-- Posibilidad de saltar y apoyarse sobre objetos.
-- Fondo y sprites cargados desde archivos externos.
-
-Actualmente, al tocar la taza se muestra el mensaje `TIRAR TAZA` en la consola. El movimiento físico y la caída del objeto todavía no están implementados.
+- Menú principal con imagen de fondo y opciones **Jugar** y **Salir**.
+- Menú de pausa con **Continuar** y **Salir**, sobre la partida oscurecida con una capa semitransparente.
+- Confirmación de salida con **Sí** y **No**, tanto al elegir Salir como al cerrar con la X. No aparece seleccionado inicialmente.
+- La actualización de la partida se detiene en los menús y durante la confirmación.
+- Música de fondo en bucle: comienza al jugar, se pausa en la pausa y en la confirmación, y continúa al regresar a la partida.
+- Gato con animaciones de reposo, caminar, agacharse, saltar, sentarse y golpear.
+- Nivel de cocina con dueño visible, heladera, mesa, superficie fija y cuatro objetos: taza, frutero, cacerola y torre de platos.
+- Golpe del gato con efecto de sonido.
+- Objetos que se pueden tirar, caen por gravedad y permanecen visibles en el borde inferior de la ventana.
+- Sonido de impacto al llegar al piso, reproducido una sola vez por caída.
+- Reinicio de los objetos y visualización de hitboxes para depuración.
 
 ## Controles
 
+### Durante la partida
+
 | Tecla | Acción |
 |---|---|
-| `W` | Moverse hacia arriba |
-| `A` | Moverse hacia la izquierda |
-| `S` | Moverse hacia abajo |
-| `D` | Moverse hacia la derecha |
-| `Shift izquierdo` | Correr |
-| `Ctrl izquierdo` | Agacharse |
-| `Espacio` | Saltar |
-| `M` | Mostrar la posición del gato en la consola |
+| A / D | Moverse a izquierda / derecha |
+| Shift izquierdo + A / D | Correr |
+| Ctrl izquierdo | Agacharse; con A / D, desplazarse lentamente |
+| Espacio | Saltar cuando el gato está apoyado |
+| E | Golpear cuando está apoyado y no está realizando otro golpe |
+| Escape | Pausar o continuar |
+| R | Devolver todos los objetos a sus posiciones iniciales |
+| M | Mostrar la posición del gato en la consola |
 
-### Decisiones abiertas
+### Menús y confirmación
 
-- **Perspectiva visual:** vista desde arriba o de frente. El prototipo actual usa movimiento en cuatro direcciones; la cámara final aún no está definida.
-- **Aviso de vigilancia:** animación, sonido o ambos antes de que el dueño se dé vuelta espontáneamente.
-- **Esconderse tras el ruido:** definir si será una alternativa a quedarse quieto o una mecánica adicional.
+| Tecla | Acción |
+|---|---|
+| Flechas arriba / abajo | Elegir una opción del menú |
+| Enter | Confirmar la opción |
+| Flechas izquierda / derecha | Elegir Sí o No en la confirmación de salida |
+| Escape | Cancelar la confirmación |
 
-## 🛠️ Tecnologías y estructura
+## Mecánicas y física
 
-- C++ y programación orientada a objetos.
-- SFML 3 para ventana, gráficos y entrada de teclado.
-- Visual Studio para el proyecto actual.
+### Gato y plataformas
+
+El movimiento horizontal y la gravedad se calculan en cada actualización. El salto comienza con velocidad vertical negativa y la gravedad la aumenta hasta producir la caída.
+
+Los muebles y las superficies fijas funcionan como plataformas: el gato puede atravesarlos desde abajo y apoyarse al descender. El apoyo se detecta comparando la base del gato en la actualización anterior con su posición actual. Si deja de tener una superficie debajo, comienza a caer.
+
+El cuerpo del gato usa una hitbox fija de **74 × 110 píxeles**, independiente de la animación. El ataque tiene otra hitbox, ubicada hacia el lado al que mira.
+
+### Objetos
+
+Los objetos que todavía no fueron tirados bloquean lateralmente al gato y pueden servir de apoyo. Un golpe frontal o un golpe desde arriba puede lanzarlos.
+
+Al tirarlos reciben velocidad horizontal según la dirección del golpe y un impulso hacia arriba. Luego caen por gravedad. Sus posiciones se corrigen en los bordes laterales de la ventana y su base queda alineada con el borde inferior al aterrizar.
+
+Después del impacto se detienen. Permanecen marcados como tirados y dejan de participar en las colisiones con el gato. No hay rebotes, rotación, fragmentos ni colisiones de los objetos lanzados contra los muebles.
+
+Todos los objetos usan actualmente el mismo sonido `sound effects/vidrioRoto.wav`; la imagen del objeto permanece intacta después de caer.
+
+## Estado actual y pendientes
+
+La idea final es causar caos en distintas habitaciones sin que el dueño descubra al gato. En esta rama, el dueño todavía es una representación gráfica: no se da vuelta, no detecta movimiento y no reacciona al ruido.
+
+Quedan pendientes el tiempo límite, el objetivo de objetos por habitación, el puntaje, las condiciones de victoria y derrota, más niveles, posiciones aleatorias, configuración de controles y audio, y los modos adicionales.
+
+## Integrantes
+
+- Gunter Bonwit
+- Mauricio Gutierres
+- Lisandro Romero

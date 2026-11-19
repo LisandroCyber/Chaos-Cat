@@ -1,28 +1,79 @@
 #pragma once
+#include "Tutorial.h"
 #include <SFML/Graphics.hpp>
+#include "Nivel.h"
 #include "Personaje.h"
-#include "ObjetoChico.h"
+#include "MenuPrincipal.h"
+#include "MenuPausa.h"
+#include "ConfirmacionSalida.h"
+#include "MenuDerrota.h"
+#include "Configuracion.h"
+#include "MenuConfig.h"
+#include "MenuVictoria.h"
+#include "MenuSeleccionNivel.h"
+#include "Progreso.h"
+#include "TablaPuntos.h"
 
 class Juego
 {
-private:
-    sf::RenderWindow _window;
-    sf::Texture _texturaFondo;
-    sf::Sprite _spriteFondo;
-
-    Personaje _gato;
-    ObjetoChico _taza;
-
-    bool _tocandoTaza;
-    bool _mostrarHitboxes;
-
-    void procesarEventos();
-    void actualizar();
-    void dibujar();
-    void resolverColisionGatoTaza();
-    void dibujarHitboxes();
-
 public:
     Juego();
+    ~Juego();
+
     void ejecutar();
+private:
+    sf::RenderWindow _window;
+
+    Personaje _gato;
+    Nivel* _nivel;
+    sf::View _camara;
+
+
+    sf::Texture _texturaOjoEscondido;
+    sf::Sprite _spriteOjoEscondido;
+
+    MenuPrincipal _menuPrincipal;
+    MenuPausa _menuPausa;
+    Configuracion _configuracion;
+    MenuConfiguracion _menuConfiguracion;
+    MenuDerrota _menuDerrota;
+    ConfirmacionSalida _menuSalida;
+    MenuVictoria _menuVictoria;
+    MenuSeleccionNivel _menuSeleccionNivel;
+    Progreso _progreso;
+    TablaPuntos _tablaPuntos;
+    bool _enPuntajes = false;
+    sf::Font _fuentePuntos;
+    sf::Text _textoPuntos;
+
+    int _nivelActual = 1;
+    bool _enSeleccionNivel = false;
+    bool _gano = false;
+    bool _victoriaMostrada = false;
+    bool _enConfiguracion = false;
+    bool _perdio = false;
+    bool _enMenu = true;
+    bool _enPausa = false;
+    bool _confirmarSalida = false;
+    bool _partidaPausada = true;
+
+    void actualizarCamara();
+    void aplicarConfiguracion();
+    void procesarEventos();
+    void actualizar();
+    void actualizarPausaPartida();
+    void dibujar();
+    void volverAlMenuPrincipal();
+
+    void solicitarSalida();
+    void cancelarSalida();
+    void reiniciarPartida();
+
+    Nivel* crearNivel(int numero);
+    bool iniciarNivel(int numero);
+    void abrirSeleccionNivel();
+
+    Tutorial _menuTutorial;
+    bool _enTutorial = false;
+
 };
