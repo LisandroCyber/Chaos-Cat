@@ -63,6 +63,11 @@ void NivelModoInfinito::actualizar(Personaje& gato)
 void NivelModoInfinito::cargarEscenario()
 {
     cargarFondo("images/ModoInfinito/living.png");
+
+    if (!cargarMusicaFondo("music/EnPartida/Cocina/LoopNivelCocina.wav", 22.f))
+    {
+        std::cout << "ERROR AL CARGAR LA MUSICA\n";
+    }
 }
 
 void NivelModoInfinito::cargarEnemigo(int indice)
@@ -119,7 +124,7 @@ void NivelModoInfinito::cargarEnemigo(int indice)
         return;
     }
 
-    // Los enemigos aparecen durante una partida que ya está en marcha.
+    //los enemigos aparecen durante una partida que ya está en marcha.
     enemigo->configurarReinicioFueraDeCamara();
     enemigo->setPausado(false);
 }
