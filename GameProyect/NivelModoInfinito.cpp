@@ -1,6 +1,7 @@
 #include "NivelModoInfinito.h"
 #include <algorithm>
 #include <climits>
+#include <iostream>
 
 namespace
 {

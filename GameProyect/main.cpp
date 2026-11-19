@@ -2,6 +2,7 @@
 
 int main()
 {
+    std::srand(time(NULL));
     Juego juego;
     juego.ejecutar();
 
